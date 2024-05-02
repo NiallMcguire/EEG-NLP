@@ -36,3 +36,15 @@ class Data:
         return Sentences, Sentence_Classes
 
 
+
+
+    def align_NER_sentences(self):
+        normal_reading_sentences, normal_reading_classes = self.read_sentences(path_normal_reading)
+        task_reading_sentences, task_reading_classes = self.read_sentences(path_task_reading)
+        sentiment_sentences, sentiment_classes = self.read_sentences(path_sentiment)
+
+        # combine
+        Sentences_labels = [item for sublist in [normal_reading_sentences, task_reading_sentences, sentiment_sentences]
+                            for item in sublist]
+        Sentence_Classes = [item for sublist in [normal_reading_classes, task_reading_classes, sentiment_classes] for
+                            item in sublist]
