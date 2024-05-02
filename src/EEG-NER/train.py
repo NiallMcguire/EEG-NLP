@@ -1,5 +1,6 @@
 from src import data
 from src import utils
+import numpy as np
 
 
 
@@ -20,7 +21,7 @@ if __name__ == "__main__":
     EEG_word_tokens, EEG_word_labels = d.read_EEG_embeddings_labels(EEG_path)
 
     # padding
-    X_train, y_train, NE_list = padding_x_y(train_EEG_segments, train_Classes, train_NE)
+    X_train, y_train, NE_list = util.NER_padding_x_y(train_EEG_segments, train_Classes, train_NE)
     X_train_numpy = np.array(X_train)
     X_train_numpy = reshape_data(X_train_numpy)
     y_train_categorical = encode_labels(y_train)
