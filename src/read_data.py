@@ -3,7 +3,7 @@ import numpy as np
 
 
 class ReadData:
-    def __init__(self, data_path, task_array):
+    def __init__(self, data_path, task_array, subject_choice = 'ALL', eeg_type = 'GD', eeg_bands = ['_t1','_t2','_a1','_a2','_b1','_b2','_g1','_g2'], data_setting = 'unique'):
         self.data_path = data_path
 
         if "task1-SR-dataset" in task_array:
@@ -39,6 +39,7 @@ class ReadData:
         elif self.task2_NRv2:
             self.task2_NRv2_data = self.read_file()
             task_data_list.append(self.task2_NRv2_data)
+
 
 
 
