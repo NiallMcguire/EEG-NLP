@@ -17,8 +17,8 @@ class BLSTM(nn.Module):
         h0 = torch.zeros(self.num_layers * 2, x.size(0), self.hidden_size).to(x.device)  # *2 for bidirectional
         c0 = torch.zeros(self.num_layers * 2, x.size(0), self.hidden_size).to(x.device)
 
-        for LSTM in self.lstms:
-            out, _ = LSTM(x, (h0, c0))
+        for lstms in self.LSTM:
+            out, _ = lstms(x, (h0, c0))
             x = self.dropout(out)
 
         out = self.fc(out[:, -1, :])
