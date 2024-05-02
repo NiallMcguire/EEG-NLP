@@ -23,11 +23,11 @@ if __name__ == "__main__":
     # padding
     X_train, y_train, NE_list = util.NER_padding_x_y(train_EEG_segments, train_Classes, train_NE)
     X_train_numpy = np.array(X_train)
-    X_train_numpy = reshape_data(X_train_numpy)
-    y_train_categorical = encode_labels(y_train)
+    X_train_numpy = util.NER_reshape_data(X_train_numpy)
+    y_train_categorical = util.encode_labels(y_train)
 
-    X_test, y_test, NE_list_test = padding_x_y(test_EEG_segments, test_Classes, test_NE)
+    X_test, y_test, NE_list_test = util.NER_padding_x_y(test_EEG_segments, test_Classes, test_NE)
     X_test_numpy = np.array(X_test)
-    X_test_numpy = reshape_data(X_test_numpy)
-    y_test_categorical = encode_labels(y_test)
+    X_test_numpy = util.NER_reshape_data(X_test_numpy)
+    y_test_categorical = util.encode_labels(y_test)
 
