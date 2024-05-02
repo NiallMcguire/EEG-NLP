@@ -40,6 +40,15 @@ class ReadData:
             self.task2_NRv2_data = self.read_file()
             task_data_list.append(self.task2_NRv2_data)
 
+        Task_Dataset_List = task_data_list
+        if not isinstance(task_data_list, list):
+            Task_Dataset_List = [task_data_list]
+
+
+
+
+
+
 
 
 
