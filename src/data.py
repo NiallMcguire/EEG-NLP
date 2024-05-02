@@ -75,6 +75,36 @@ class Data:
             list_of_words.append(words)
         return list_of_words
 
+    def is_named_entity_in_sentences(self, named_entity, sentences, embeddings):
+
+        named_entity_eeg_list = []
+        for sentence_index in range(len(sentences)):
+            sentence = sentences[sentence_index]
+            for i in range(len(sentence) - len(named_entity) + 1):
+                if sentence[i:i + len(named_entity)] == named_entity:
+                    named_entity_eeg = embeddings[sentence_index][i:i + len(named_entity)]
+                    if named_entity_eeg != [] and len(named_entity_eeg) == len(named_entity):
+                        named_entity_eeg_list.append(named_entity_eeg)
+
+        return named_entity_eeg_list
+
+    def NER_get_EEG_Class_NE(self, words, embeddings, List_of_NE, List_of_NE_Labels):
+        # Check if each named entity is in the list of sentences
+        NE_EEG_segment = []
+        NE_EEG_Class = []
+        NE_list = []
+
+        for i in range(len(List_of_NE)):
+            Class = List_of_NE_Labels[i]
+            NE = List_of_NE[i]
+            # print(NE)
+            EEG_list = self.is_named_entity_in_sentences(NE, words, embeddings)
+            if EEG_list != []:
+                NE_EEG_segment.append(EEG_list)
+                NE_EEG_Class.append(Class)
+                NE_list.append(NE)
+
+        return NE_EEG_segment, NE_EEG_Class, NE_list
 
     def NER_get_named_entities(self, Sentences_labels, Sentence_Classes):
         List_of_NE = []
@@ -130,3 +160,6 @@ class Data:
 
         # Get the named entities
         List_of_NE, List_of_NE_Labels = self.NER_get_named_entities(Sentences_labels, Sentence_Classes)
+
+        # Get the EEG embeddings for the named entities
+        NE_EEG_segment, NE_EEG_Class, NE = self.NER_get_EEG_Class_NE(list_of_words, EEG_sentence_embeddings, List_of_NE, List_of_NE_Labels)
