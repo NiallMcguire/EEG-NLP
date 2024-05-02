@@ -1,8 +1,8 @@
 from src import data
 from src import utils
 import numpy as np
-
-
+import torch
+from torch.utils.data import DataLoader, TensorDataset
 
 
 if __name__ == "__main__":
@@ -30,4 +30,12 @@ if __name__ == "__main__":
     X_test_numpy = np.array(X_test)
     X_test_numpy = util.NER_reshape_data(X_test_numpy)
     y_test_categorical = util.encode_labels(y_test)
+
+    # Convert numpy arrays to PyTorch tensors
+    x_train_tensor = torch.tensor(X_train_numpy, dtype=torch.float32)
+    y_train_tensor = torch.tensor(y_train_categorical, dtype=torch.float32)  # Assuming your labels are integers
+
+    # Create a custom dataset
+    train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
+
 
