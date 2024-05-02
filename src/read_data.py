@@ -134,7 +134,6 @@ class ReadData:
                             if none_switch == False:
                                 EEG_Sentences.append(sentence)
 
-
         return EEG_word_tokens, word_labels, EEG_Sentences
 
 

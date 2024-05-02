@@ -1,4 +1,5 @@
 import pickle
+import re
 
 class Data:
     def __init__(self, data):
@@ -61,6 +62,19 @@ class Data:
 
         return Sentences, EEG_Sentencs
 
+    def NER_combine_sentences(self, sentences):
+        # Combine each internal list into a string
+        combined_sentences = [' '.join(sentence) for sentence in sentences]
+        # Initialize an empty list to store the list of words for each sentence
+        list_of_words = []
+        # Iterate over each sentence in the list
+        for sentence in combined_sentences:
+            # Split the sentence into a list of words including punctuation
+            words = re.findall(r'\b\w+\b|[^\w\s]', sentence)
+            # Append the list of words to the list of lists
+            list_of_words.append(words)
+        return list_of_words
+
     def NER_align_sentences(self, path_normal_reading, path_task_reading, path_sentiment):
         normal_reading_sentences, normal_reading_classes = self.NER_read_sentences(path_normal_reading)
         task_reading_sentences, task_reading_classes = self.NER_read_sentences(path_task_reading)
@@ -81,3 +95,7 @@ class Data:
                                                                               EEG_word_labels)
         Test_EEG_word_level_sentences, Test_EEG_sentence_embeddings = self.NER_get_sentences_EEG(Test_EEG_word_tokens,
                                                                                         Test_EEG_word_labels)
+
+        # Combine the sentences
+        list_of_words = self.NER_combine_sentences(EEG_word_level_sentences)
+        Test_list_of_words = self.NER_combine_sentences(Test_EEG_word_level_sentences)
