@@ -89,6 +89,7 @@ class ReadData:
         return EEG_word_tokens, word_labels, EEG_Sentences
 
     def create_train_test_datasets(self, train_dev_test_status, train_test_split = 0.8, dev_split = 0.1):
+        EEG_word_tokens, word_labels, EEG_Sentences = [], [], []
 
 
         Task_Dataset_List = self.get_task_data()
