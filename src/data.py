@@ -149,7 +149,14 @@ class Data:
 
         return unique_entities, unique_EEG_segments, unique_Classes
 
-    def NER_align_sentences(self, path_normal_reading, path_task_reading, path_sentiment):
+    def NER_align_sentences(self, path_normal_reading, path_task_reading, path_sentiment, train_path, test_path):
+        path_normal_reading = r'C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\zuco1_normalreading_ner.txt'
+
+        path_task_reading = r"C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\zuco1_taskreading_ner.txt"
+
+        path_sentiment = r"C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\zuco1_sentiment_ner.txt"
+
+
         normal_reading_sentences, normal_reading_classes = self.NER_read_sentences(path_normal_reading)
         task_reading_sentences, task_reading_classes = self.NER_read_sentences(path_task_reading)
         sentiment_sentences, sentiment_classes = self.NER_read_sentences(path_sentiment)
