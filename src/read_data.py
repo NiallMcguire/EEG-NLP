@@ -1,5 +1,6 @@
 import pickle
 import numpy as np
+import torch
 
 
 class ReadData:
@@ -77,6 +78,28 @@ class ReadData:
 
             print(f'train size = {train_divider}')
             print(f'dev size = {dev_divider}')
+
+            print('[INFO]initializing a train set...')
+            for key in subjects:
+                print(f'key = {key}')
+                for i in range(train_divider):
+                    if Task_Dataset[key][i] is not None:
+                        sentence_object = Task_Dataset[key][i]
+                        sentence = sentence_object['content']
+
+                        # print(sentence_object['content'])
+                        none_switch = False
+
+                        for word in sentence_object['word']:
+                            word_eeg_embedding, EEG_word_level_label = get_eeg_word_embedding(word)
+                            if word_eeg_embedding is not None and torch.isnan(
+                                    torch.from_numpy(word_eeg_embedding)).any() == False:
+                                EEG_word_level_embeddings.append(word_eeg_embedding)
+                                EEG_word_level_labels.append(EEG_word_level_label)
+                            else:
+                                none_switch = True
+                        if none_switch == False:
+                            EEG_Sentences.append(sentence)
 
 
 
