@@ -1,5 +1,5 @@
 from src import data
-
+from src import utils
 
 
 
@@ -12,6 +12,7 @@ if __name__ == "__main__":
     EEG_path = r"C:\Users\gxb18167\PycharmProjects\EEG-To-Text\SIGIR_Development\EEG-GAN\EEG_Text_Pairs.pkl"
 
     d = data.Data()
+    util = utils.Utils()
 
     train_NE, train_EEG_segments, train_Classes = d.NER_save_lists_to_file(train_path)
     test_NE, test_EEG_segments, test_Classes = d.NER_save_lists_to_file(test_path)
