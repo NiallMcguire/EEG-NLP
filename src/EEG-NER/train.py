@@ -9,6 +9,8 @@ from torch.utils.data import DataLoader, TensorDataset
 if __name__ == "__main__":
     if torch.cuda.is_available():
         device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
 
 
     train_path = r"C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\train_NER.pkl"
