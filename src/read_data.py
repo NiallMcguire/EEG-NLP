@@ -15,6 +15,20 @@ class ReadData:
         elif "task2-NR-2.0-dataset" in task_array:
             self.task2_NRv2 = True
 
+    def get_eeg_word_embedding(self, word, eeg_type='GD', bands=['_t1', '_t2', '_a1', '_a2', '_b1', '_b2', '_g1', '_g2']):
+        EEG_frequency_features = []
+        EEG_word_level_label = word['content']
+        for band in bands:
+            EEG_frequency_features.append(word['word_level_EEG'][eeg_type][eeg_type + band])
+        word_eeg_embedding = np.concatenate(EEG_frequency_features)
+        if len(word_eeg_embedding) != 105 * len(bands):
+            print(
+                f'expect word eeg embedding dim to be {105 * len(bands)}, but got {len(word_eeg_embedding)}, return None')
+            word_eeg_embedding = None
+        else:
+            word_eeg_embedding = word_eeg_embedding.reshape(105, 8)
+
+        return word_eeg_embedding, EEG_word_level_label
 
     def read_file(self):
         with open(self.data_path, 'rb') as f:
@@ -43,6 +57,8 @@ class ReadData:
         Task_Dataset_List = task_data_list
         if not isinstance(task_data_list, list):
             Task_Dataset_List = [task_data_list]
+
+        return Task_Dataset_List
 
 
 
