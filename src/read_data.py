@@ -16,21 +16,6 @@ class ReadData:
         elif "task2-NR-2.0-dataset" in task_array:
             self.task2_NRv2 = True
 
-    def get_eeg_word_embedding(self, word, eeg_type='GD', bands=['_t1', '_t2', '_a1', '_a2', '_b1', '_b2', '_g1', '_g2']):
-        EEG_frequency_features = []
-        word_label = word['content']
-        for band in bands:
-            EEG_frequency_features.append(word['word_level_EEG'][eeg_type][eeg_type + band])
-        EEG_word_token = np.concatenate(EEG_frequency_features)
-        if len(EEG_word_token) != 105 * len(bands):
-            print(
-                f'expect word eeg embedding dim to be {105 * len(bands)}, but got {len(EEG_word_token)}, return None')
-            EEG_word_token = None
-        else:
-            EEG_word_token = EEG_word_token.reshape(105, 8)
-
-        return EEG_word_token, word_label
-
     def read_file(self):
         with open(self.data_path, 'rb') as f:
             data = pickle.load(f)
@@ -60,6 +45,21 @@ class ReadData:
             Task_Dataset_List = [task_data_list]
 
         return Task_Dataset_List
+
+    def get_eeg_word_embedding(self, word, eeg_type='GD', bands=['_t1', '_t2', '_a1', '_a2', '_b1', '_b2', '_g1', '_g2']):
+        EEG_frequency_features = []
+        word_label = word['content']
+        for band in bands:
+            EEG_frequency_features.append(word['word_level_EEG'][eeg_type][eeg_type + band])
+        EEG_word_token = np.concatenate(EEG_frequency_features)
+        if len(EEG_word_token) != 105 * len(bands):
+            print(
+                f'expect word eeg embedding dim to be {105 * len(bands)}, but got {len(EEG_word_token)}, return None')
+            EEG_word_token = None
+        else:
+            EEG_word_token = EEG_word_token.reshape(105, 8)
+
+        return EEG_word_token, word_label
 
     def create_train_test_datasets(self, train_test_split = 0.8, dev_split = 0.1):
         EEG_word_tokens = []
@@ -91,11 +91,11 @@ class ReadData:
                         none_switch = False
 
                         for word in sentence_object['word']:
-                            word_eeg_embedding, EEG_word_level_label = get_eeg_word_embedding(word)
+                            word_eeg_embedding, EEG_word_level_label = self.get_eeg_word_embedding(word)
                             if word_eeg_embedding is not None and torch.isnan(
                                     torch.from_numpy(word_eeg_embedding)).any() == False:
-                                EEG_word_level_embeddings.append(word_eeg_embedding)
-                                EEG_word_level_labels.append(EEG_word_level_label)
+                                EEG_word_tokens.append(word_eeg_embedding)
+                                word_labels.append(EEG_word_level_label)
                             else:
                                 none_switch = True
                         if none_switch == False:
