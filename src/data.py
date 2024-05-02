@@ -133,6 +133,22 @@ class Data:
                         Named_Entity_Label = []
         return List_of_NE, List_of_NE_Labels
 
+    def NER_get_unique_entities(self, entities, EEG_segments, Classes):
+        seen_entities = set()
+        unique_entities = []
+        unique_EEG_segments = []
+        unique_Classes = []
+
+        for i in range(len(entities)):
+            sublist = entities[i]
+            if tuple(sublist) not in seen_entities:
+                unique_entities.append(sublist)
+                seen_entities.add(tuple(sublist))
+                unique_EEG_segments.append(EEG_segments[i])
+                unique_Classes.append(Classes[i])
+
+        return unique_entities, unique_EEG_segments, unique_Classes
+
     def NER_align_sentences(self, path_normal_reading, path_task_reading, path_sentiment):
         normal_reading_sentences, normal_reading_classes = self.NER_read_sentences(path_normal_reading)
         task_reading_sentences, task_reading_classes = self.NER_read_sentences(path_task_reading)
@@ -167,3 +183,25 @@ class Data:
         # Test set
         Test_NE_EEG_segment, Test_NE_EEG_Class, Test_NE = self.NER_get_EEG_Class_NE(Test_list_of_words, Test_EEG_sentence_embeddings, List_of_NE, List_of_NE_Labels)
 
+        # Get the unique named entities
+        unique_entities, unique_EEG_segments, unique_Classes = self.NER_get_unique_entities(NE, NE_EEG_segment, NE_EEG_Class)
+
+        # Test set
+        Test_unique_entities, Test_unique_EEG_segments, Test_unique_Classes = self.NER_get_unique_entities(Test_NE, Test_NE_EEG_segment, Test_NE_EEG_Class)
+
+
+        #with open('train_NER.pkl', 'wb') as f:
+
+        #    pickle.dump(unique_entities, f)
+        #    pickle.dump(unique_EEG_segments, f)
+        #    pickle.dump(unique_Classes, f)
+
+        #with open('train_NER.pkl', 'wb') as f:
+
+        #    pickle.dump(unique_entities, f)
+        #    pickle.dump(unique_EEG_segments, f)
+        #    pickle.dump(unique_Classes, f)
+
+        
+            
+        return unique_entities, unique_EEG_segments, unique_Classes, Test_unique_entities, Test_unique_EEG_segments, Test_unique_Classes
