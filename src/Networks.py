@@ -6,7 +6,7 @@ import torch.nn as nn
 # Define the BLSTM classifier model
 # Define the BLSTM classifier model
 class BLSTM(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, num_classes, dropout=0.2):
+    def __init__(self, input_size, hidden_size, num_layers, num_classes, num_lstm_layers, dropout=0.2):
         super(BLSTM, self).__init__()
         self.hidden_size = hidden_size
         self.num_layers = num_layers
