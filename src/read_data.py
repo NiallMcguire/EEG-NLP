@@ -25,13 +25,15 @@ class ReadData:
         if self.task1:
             self.task1_data = self.read_file()
 
-        if self.task2:
+        elif self.task2:
             self.task2_data = self.read_file()
 
-        if self.task3:
+        elif self.task3:
             self.task3_data = self.read_file()
 
-        if self.task2_NRv2:
+        elif self.task2_NRv2:
             self.task2_NRv2_data = self.read_file()
 
-        
+
+
+
