@@ -3,18 +3,35 @@ import numpy as np
 
 
 class ReadData:
-    def __init__(self, data_path):
+    def __init__(self, data_path, task_array):
         self.data_path = data_path
 
-    def read_data(self):
+        if "task1-SR-dataset" in task_array:
+            self.task1 = True
+        elif "task2-NR-dataset" in task_array:
+            self.task2 = True
+        elif "task3-TSR-dataset" in task_array:
+            self.task3 = True
+        elif "task2-NR-2.0-dataset" in task_array:
+            self.task2_NRv2 = True
+
+
+    def read_file(self):
         with open(self.data_path, 'rb') as f:
             data = pickle.load(f)
         return data
 
-    def get_data(self):
-        data = self.read_data()
-        return data['X_train'], data['y_train'], data['X_test'], data['y_test']
+    def get_task_data(self):
+        if self.task1:
+            self.task1_data = self.read_file()
 
-    def get_labels(self):
-        data = self.read_data()
-        return data['labels']
+        if self.task2:
+            self.task2_data = self.read_file()
+
+        if self.task3:
+            self.task3_data = self.read_file()
+
+        if self.task2_NRv2:
+            self.task2_NRv2_data = self.read_file()
+
+        
