@@ -5,6 +5,9 @@ import numpy as np
 
 class Utils:
 
+    def __init__(self):
+        pass
+
     def encode_labels(self, y):
         label_encoder = {label: idx for idx, label in enumerate(set(y))}
         encoded_labels = [label_encoder[label] for label in y]
