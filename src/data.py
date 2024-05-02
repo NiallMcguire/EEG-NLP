@@ -75,6 +75,34 @@ class Data:
             list_of_words.append(words)
         return list_of_words
 
+
+    def NER_get_named_entities(self, Sentences_labels, Sentence_Classes):
+    List_of_NE = []
+    List_of_NE_Labels = []
+    Named_Entity = []
+    Named_Entity_Label = []
+
+    for i in range(len(Sentences_labels)):
+        current_sentence = Sentences_labels[i]
+        current_sentence_label = Sentence_Classes[i]
+
+        for j in range(len(current_sentence)):
+            current_word = current_sentence[j]
+            #print(current_word)
+            current_word_label = current_sentence_label[j]
+            #print(current_word_label)
+            if current_word_label != 'O':
+                Named_Entity.append(current_word)
+                Named_Entity_Label.append(current_word_label)
+            else:
+                if Named_Entity:
+                    List_of_NE.append(Named_Entity)
+                    List_of_NE_Labels.append(Named_Entity_Label)
+
+                    Named_Entity = []
+                    Named_Entity_Label = []
+    return List_of_NE, List_of_NE_Labels
+
     def NER_align_sentences(self, path_normal_reading, path_task_reading, path_sentiment):
         normal_reading_sentences, normal_reading_classes = self.NER_read_sentences(path_normal_reading)
         task_reading_sentences, task_reading_classes = self.NER_read_sentences(path_task_reading)
@@ -99,3 +127,6 @@ class Data:
         # Combine the sentences
         list_of_words = self.NER_combine_sentences(EEG_word_level_sentences)
         Test_list_of_words = self.NER_combine_sentences(Test_EEG_word_level_sentences)
+
+        # Get the named entities
+        List_of_NE, List_of_NE_Labels = self.NER_get_named_entities(Sentences_labels, Sentence_Classes)
