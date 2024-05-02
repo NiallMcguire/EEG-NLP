@@ -61,10 +61,35 @@ class ReadData:
 
         return EEG_word_token, word_label
 
-    def create_train_test_datasets(self, train_dev_test_status, train_test_split = 0.8, dev_split = 0.1):
+
+    def read_sentence(self, subjects, Task_Dataset, divider):
         EEG_word_tokens = []
         word_labels = []
         EEG_Sentences = []
+
+        for key in subjects:
+            print(f'key = {key}')
+            for i in range(divider):
+                if Task_Dataset[key][i] is not None:
+                    sentence_object = Task_Dataset[key][i]
+                    sentence = sentence_object['content']
+                    # print(sentence_object['content'])
+                    none_switch = False
+                    for word in sentence_object['word']:
+                        word_eeg_embedding, EEG_word_level_label = self.get_eeg_word_embedding(word)
+                        if word_eeg_embedding is not None and torch.isnan(
+                                torch.from_numpy(word_eeg_embedding)).any() == False:
+                            EEG_word_tokens.append(word_eeg_embedding)
+                            word_labels.append(EEG_word_level_label)
+                        else:
+                            none_switch = True
+                    if none_switch == False:
+                        EEG_Sentences.append(sentence)
+
+        return EEG_word_tokens, word_labels, EEG_Sentences
+
+    def create_train_test_datasets(self, train_dev_test_status, train_test_split = 0.8, dev_split = 0.1):
+
 
         Task_Dataset_List = self.get_task_data()
         for Task_Dataset in Task_Dataset_List:
@@ -83,26 +108,8 @@ class ReadData:
 
             if train_dev_test_status == 'train':
                 print('[INFO]initializing a train set...')
-                for key in subjects:
-                    print(f'key = {key}')
-                    for i in range(train_divider):
-                        if Task_Dataset[key][i] is not None:
-                            sentence_object = Task_Dataset[key][i]
-                            sentence = sentence_object['content']
+                EEG_word_tokens, word_labels, EEG_Sentences = self.read_sentence(subjects, Task_Dataset, train_divider)
 
-                            # print(sentence_object['content'])
-                            none_switch = False
-
-                            for word in sentence_object['word']:
-                                word_eeg_embedding, EEG_word_level_label = self.get_eeg_word_embedding(word)
-                                if word_eeg_embedding is not None and torch.isnan(
-                                        torch.from_numpy(word_eeg_embedding)).any() == False:
-                                    EEG_word_tokens.append(word_eeg_embedding)
-                                    word_labels.append(EEG_word_level_label)
-                                else:
-                                    none_switch = True
-                            if none_switch == False:
-                                EEG_Sentences.append(sentence)
 
 
             if train_dev_test_status == 'dev':
