@@ -36,15 +36,18 @@ class Data:
         return Sentences, Sentence_Classes
 
 
-
-
-    def NER_align_sentences(self):
+    def NER_align_sentences(self, path_normal_reading, path_task_reading, path_sentiment):
         normal_reading_sentences, normal_reading_classes = self.NER_read_sentences(path_normal_reading)
         task_reading_sentences, task_reading_classes = self.NER_read_sentences(path_task_reading)
         sentiment_sentences, sentiment_classes = self.NER_read_sentences(path_sentiment)
 
-        # combine
         Sentences_labels = [item for sublist in [normal_reading_sentences, task_reading_sentences, sentiment_sentences]
                             for item in sublist]
         Sentence_Classes = [item for sublist in [normal_reading_classes, task_reading_classes, sentiment_classes] for
                             item in sublist]
+
+        train_path = r"C:\Users\gxb18167\PycharmProjects\EEG-To-Text\SIGIR_Development\EEG-GAN\EEG_Text_Pairs_Sentence.pkl"
+        test_path = r"C:\Users\gxb18167\PycharmProjects\EEG-To-Text\SIGIR_Development\EEG-GAN\Test_EEG_Text_Pairs_Sentence.pkl"
+
+        EEG_word_level_embeddings, EEG_word_level_labels = self.read_EEG_embeddings_labels(train_path)
+        Test_EEG_word_level_embeddings, Test_EEG_word_level_labels = self.read_EEG_embeddings_labels(test_path)
