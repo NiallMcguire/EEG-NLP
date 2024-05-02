@@ -38,8 +38,8 @@ class Data:
 
 
 
-    def align_NER_sentences(self):
-        normal_reading_sentences, normal_reading_classes = self.read_sentences(path_normal_reading)
+    def NER_align_sentences(self):
+        normal_reading_sentences, normal_reading_classes = self.NER_read_sentences(path_normal_reading)
         task_reading_sentences, task_reading_classes = self.read_sentences(path_task_reading)
         sentiment_sentences, sentiment_classes = self.read_sentences(path_sentiment)
 
