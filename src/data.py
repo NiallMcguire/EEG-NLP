@@ -163,3 +163,7 @@ class Data:
 
         # Get the EEG embeddings for the named entities
         NE_EEG_segment, NE_EEG_Class, NE = self.NER_get_EEG_Class_NE(list_of_words, EEG_sentence_embeddings, List_of_NE, List_of_NE_Labels)
+
+        # Test set
+        Test_NE_EEG_segment, Test_NE_EEG_Class, Test_NE = self.NER_get_EEG_Class_NE(Test_list_of_words, Test_EEG_sentence_embeddings, List_of_NE, List_of_NE_Labels)
+
