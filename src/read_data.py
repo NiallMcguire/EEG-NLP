@@ -22,17 +22,23 @@ class ReadData:
         return data
 
     def get_task_data(self):
+        task_data_list = []
+
         if self.task1:
             self.task1_data = self.read_file()
+            task_data_list.append(self.task1_data)
 
         elif self.task2:
             self.task2_data = self.read_file()
+            task_data_list.append(self.task2_data)
 
         elif self.task3:
             self.task3_data = self.read_file()
+            task_data_list.append(self.task3_data)
 
         elif self.task2_NRv2:
             self.task2_NRv2_data = self.read_file()
+            task_data_list.append(self.task2_NRv2_data)
 
 
 
