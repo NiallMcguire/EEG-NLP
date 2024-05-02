@@ -1,11 +1,16 @@
 from src import data
 from src import utils
+from src import Networks
 import numpy as np
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
 
 if __name__ == "__main__":
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+
+
     train_path = r"C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\train_NER.pkl"
 
     test_path = r"C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\test_NER.pkl"
@@ -14,6 +19,8 @@ if __name__ == "__main__":
 
     d = data.Data()
     util = utils.Utils()
+
+
 
     train_NE, train_EEG_segments, train_Classes = d.NER_save_lists_to_file(train_path)
     test_NE, test_EEG_segments, test_Classes = d.NER_save_lists_to_file(test_path)
@@ -40,8 +47,21 @@ if __name__ == "__main__":
 
     # Define batch size
     batch_size = 32  # Adjust according to your preference
+    # Define model parameters
+    input_size = 840
+    hidden_size = 64
+    num_layers = 2
+    num_classes = 3
 
     # Create the train loader
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
+
+    # Instantiate the model
+    model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes)
+    model.to(device)
+    # Define loss function and optimizer
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+
 
 
