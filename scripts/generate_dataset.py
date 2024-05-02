@@ -11,8 +11,11 @@ if __name__ == "__main__":
     train_split = 0.8
     val_split = 0.1
 
-    EEG_word_tokens, word_labels, EEG_Sentences = data_reader.create_train_test_datasets("train", train_split, val_split)
+    train_EEG_word_tokens, train_word_labels, train_EEG_Sentences = data_reader.create_train_test_datasets("train", train_split, val_split)
 
+    val_EEG_word_tokens, val_word_labels, val_EEG_Sentences = data_reader.create_train_test_datasets("val", train_split, val_split)
+
+    test_EEG_word_tokens, test_word_labels, test_EEG_Sentences = data_reader.create_train_test_datasets("test", train_split, val_split)
 
 
 
