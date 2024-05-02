@@ -35,6 +35,31 @@ class Data:
                     Temp_Sentence_Classes = []
         return Sentences, Sentence_Classes
 
+    def NER_get_sentences_EEG(self, labels, EEG_embeddings):
+        Sentences = []
+        current_sentence = []
+
+        EEG_Sentencs = []
+        EEG_index = 0
+        for i in range(len(labels)):
+            # Check if the word marks the start of a new sentence
+            word = labels[i]
+            if word == "SOS":
+                # If it does, append the current sentence to the list of sentences
+                if len(current_sentence) > 0:
+                    Sentences.append(current_sentence)
+                    sentence_length = len(current_sentence)
+                    EEG_segment = EEG_embeddings[EEG_index:EEG_index + sentence_length]
+                    EEG_index += sentence_length
+                    EEG_Sentencs.append(EEG_segment)
+
+                    # Start a new sentence
+                    current_sentence = []
+            else:
+                # Add the word to the current sentence
+                current_sentence.append(word)
+
+        return Sentences, EEG_Sentencs
 
     def NER_align_sentences(self, path_normal_reading, path_task_reading, path_sentiment):
         normal_reading_sentences, normal_reading_classes = self.NER_read_sentences(path_normal_reading)
@@ -49,10 +74,10 @@ class Data:
         train_path = r"C:\Users\gxb18167\PycharmProjects\EEG-To-Text\SIGIR_Development\EEG-GAN\EEG_Text_Pairs_Sentence.pkl"
         test_path = r"C:\Users\gxb18167\PycharmProjects\EEG-To-Text\SIGIR_Development\EEG-GAN\Test_EEG_Text_Pairs_Sentence.pkl"
 
-        EEG_word_level_embeddings, EEG_word_level_labels = self.read_EEG_embeddings_labels(train_path)
-        Test_EEG_word_level_embeddings, Test_EEG_word_level_labels = self.read_EEG_embeddings_labels(test_path)
+        EEG_word_tokens, EEG_word_labels = self.read_EEG_embeddings_labels(train_path)
+        Test_EEG_word_tokens, Test_EEG_word_labels = self.read_EEG_embeddings_labels(test_path)
 
-        EEG_word_level_sentences, EEG_sentence_embeddings = self.get_sentences_EEG(EEG_word_level_labels,
-                                                                              EEG_word_level_embeddings)
-        Test_EEG_word_level_sentences, Test_EEG_sentence_embeddings = self.get_sentences_EEG(Test_EEG_word_level_labels,
-                                                                                        Test_EEG_word_level_embeddings)
+        EEG_word_level_sentences, EEG_sentence_embeddings = self.NER_get_sentences_EEG(EEG_word_tokens,
+                                                                              EEG_word_labels)
+        Test_EEG_word_level_sentences, Test_EEG_sentence_embeddings = self.NER_get_sentences_EEG(Test_EEG_word_tokens,
+                                                                                        Test_EEG_word_labels)
