@@ -109,6 +109,10 @@ class ReadData:
                 EEG_word_tokens, word_labels, EEG_Sentences = self.read_sentence(subjects, Task_Dataset, train_divider)
 
 
+            if train_dev_test_status == 'dev':
+                print('[INFO]initializing a dev set...')
+                EEG_word_tokens, word_labels, EEG_Sentences = self.read_sentence(subjects, Task_Dataset, dev_divider)
+
             if train_dev_test_status == 'test':
                 print('[INFO]initializing a test set...')
                 for key in subjects:
