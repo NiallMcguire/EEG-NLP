@@ -105,12 +105,9 @@ class ReadData:
             print(f'train size = {train_divider}')
             print(f'dev size = {dev_divider}')
 
-
             if train_dev_test_status == 'train':
                 print('[INFO]initializing a train set...')
                 EEG_word_tokens, word_labels, EEG_Sentences = self.read_sentence(subjects, Task_Dataset, train_divider)
-
-
 
             if train_dev_test_status == 'dev':
                 print('[INFO]initializing a dev set...')
@@ -121,6 +118,7 @@ class ReadData:
                 EEG_word_tokens, word_labels, EEG_Sentences = self.read_sentence(subjects, Task_Dataset, total_num_sentence)
 
 
+        return EEG_word_tokens, word_labels, EEG_Sentences
 
 
 
