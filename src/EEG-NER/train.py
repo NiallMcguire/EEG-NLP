@@ -38,4 +38,10 @@ if __name__ == "__main__":
     # Create a custom dataset
     train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
 
+    # Define batch size
+    batch_size = 32  # Adjust according to your preference
+
+    # Create the train loader
+    train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
+
 
