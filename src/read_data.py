@@ -91,7 +91,6 @@ class ReadData:
     def create_train_test_datasets(self, train_dev_test_status, train_test_split = 0.8, dev_split = 0.1):
         EEG_word_tokens, word_labels, EEG_Sentences = [], [], []
 
-
         Task_Dataset_List = self.get_task_data()
         for Task_Dataset in Task_Dataset_List:
             subjects = list(Task_Dataset.keys())
@@ -101,7 +100,6 @@ class ReadData:
 
             train_divider = int(train_test_split * total_num_sentence)
             dev_divider = train_divider + int(dev_split * total_num_sentence)
-
 
             print(f'train size = {train_divider}')
             print(f'dev size = {dev_divider}')
