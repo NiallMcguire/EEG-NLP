@@ -42,3 +42,14 @@ class Utils:
                 X[i].append(np.zeros((105,8)))
 
         return X, y, NE
+
+    def NER_reshape_data(self, X):
+        # reshape the data to 840
+        new_list = []
+        for i in range(len(X)):
+            array_list = X[i]
+            arrays_list_reshaped = [arr.reshape(-1) for arr in array_list]
+            new_list.append(arrays_list_reshaped)
+
+        new_list = np.array(new_list)
+        return new_list
