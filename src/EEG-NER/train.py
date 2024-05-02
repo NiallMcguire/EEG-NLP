@@ -15,7 +15,6 @@ if __name__ == "__main__":
     else:
         device = torch.device("cpu")
 
-
     train_path = r"C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\train_NER.pkl"
 
     test_path = r"C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\test_NER.pkl"
@@ -24,8 +23,6 @@ if __name__ == "__main__":
 
     d = data.Data()
     util = utils.Utils()
-
-
 
     train_NE, train_EEG_segments, train_Classes = d.NER_save_lists_to_file(train_path)
     test_NE, test_EEG_segments, test_Classes = d.NER_save_lists_to_file(test_path)
@@ -62,13 +59,14 @@ if __name__ == "__main__":
     num_layers = 2
     num_classes = 3
     num_epochs = 10
+    LSTM_layers = 2
 
     # Create the train loader
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
 
     # Instantiate the model
-    model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes)
+    model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, LSTM_layers)
     model.to(device)
     # Define loss function and optimizer
     criterion = nn.CrossEntropyLoss()
@@ -101,7 +99,7 @@ if __name__ == "__main__":
     torch.save(model.state_dict(), 'blstm_model.pth')
 
     # Load the saved model
-    loaded_model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes)
+    loaded_model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, LSTM_layers)
     loaded_model.load_state_dict(torch.load('blstm_model.pth'))
     loaded_model.eval()  # Switch to evaluation mode
 
