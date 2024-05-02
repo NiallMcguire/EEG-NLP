@@ -51,3 +51,8 @@ class Data:
 
         EEG_word_level_embeddings, EEG_word_level_labels = self.read_EEG_embeddings_labels(train_path)
         Test_EEG_word_level_embeddings, Test_EEG_word_level_labels = self.read_EEG_embeddings_labels(test_path)
+
+        EEG_word_level_sentences, EEG_sentence_embeddings = self.get_sentences_EEG(EEG_word_level_labels,
+                                                                              EEG_word_level_embeddings)
+        Test_EEG_word_level_sentences, Test_EEG_sentence_embeddings = self.get_sentences_EEG(Test_EEG_word_level_labels,
+                                                                                        Test_EEG_word_level_embeddings)
