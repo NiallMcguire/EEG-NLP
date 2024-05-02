@@ -2,7 +2,7 @@ import pickle
 import re
 
 class Data:
-    def __init__(self, data):
+    def __init__(self):
         pass
 
     def read_EEG_embeddings_labels(self, path):
@@ -148,6 +148,16 @@ class Data:
                 unique_Classes.append(Classes[i])
 
         return unique_entities, unique_EEG_segments, unique_Classes
+
+    def NER_save_lists_to_file(self, path):
+        # Open the pickle file in binary write mode
+        with open(path, 'rb') as f:
+            # Load each list from the file
+            NE = pickle.load(f)
+            EEG_segments = pickle.load(f)
+            Classes = pickle.load(f)
+
+        return NE, EEG_segments, Classes
 
     def NER_align_sentences(self, path_normal_reading, path_task_reading, path_sentiment, train_path, test_path):
         path_normal_reading = r'C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\zuco1_normalreading_ner.txt'
