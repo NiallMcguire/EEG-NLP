@@ -3,7 +3,8 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
-from
+from src.EEG_NER_Pre_Training.Pre_Training import CustomDataset, ContrastiveLoss, MLP
+
 
 
 
@@ -30,3 +31,10 @@ if __name__ == "__main__":
     # Create custom datasets and data loaders for contrastive learning
     custom_dataset = CustomDataset(bi, vQ)
     data_loader = DataLoader(custom_dataset, batch_size=batch_size, shuffle=True)
+
+    # Initialize the MLP network
+    model = MLP()
+
+    # Define the optimizer and contrastive loss function
+    optimizer = optim.SGD([bi], lr=learning_rate)  # Only optimize brain embeddings (bi)
+    criterion = ContrastiveLoss()
