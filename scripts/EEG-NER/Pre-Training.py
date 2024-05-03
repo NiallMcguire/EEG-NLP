@@ -11,7 +11,6 @@ from src.EEG_NER_Pre_Training.Pre_Training import CustomDataset, ContrastiveLoss
 
 if __name__ == "__main__":
 
-
     # Define the pre-training parameters
     num_brain_embeddings = 1000  # Number of brain embeddings
     num_query_embeddings = 500  # Number of query embeddings
