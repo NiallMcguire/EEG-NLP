@@ -46,3 +46,8 @@ class ContrastiveLossCosine(nn.Module):
                                       (label) * torch.pow(torch.clamp(self.margin - cosine_similarity, min=0.0), 2))
         return loss_contrastive
 
+
+
+
+
+
