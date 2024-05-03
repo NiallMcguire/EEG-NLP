@@ -38,3 +38,21 @@ if __name__ == "__main__":
     # Define the optimizer and contrastive loss function
     optimizer = optim.SGD([bi], lr=learning_rate)  # Only optimize brain embeddings (bi)
     criterion = ContrastiveLoss()
+
+    # Contrastive Learning (Optimization) using PyTorch
+    for i in range(num_iterations):
+        for brain_batch, query_batch in data_loader:
+            # Forward pass
+            embeddings = model(brain_batch)
+
+            # Compute contrastive loss
+            loss = criterion(embeddings, query_batch)
+
+            # Backward pass and optimization
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+        print(f"Iteration {i + 1}, Loss: {loss.item()}")
+
+    print("Optimization complete.")
