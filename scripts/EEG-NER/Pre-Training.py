@@ -33,7 +33,7 @@ if __name__ == "__main__":
     data_loader = DataLoader(custom_dataset, batch_size=batch_size, shuffle=True)
 
     # Initialize the MLP network
-    model = MLP()
+    model = MLP(embedding_dim, position_embedding_dim, hidden_layer_dim)
 
     # Define the optimizer and contrastive loss function
     optimizer = optim.SGD([bi], lr=learning_rate)  # Only optimize brain embeddings (bi)
