@@ -45,7 +45,7 @@ class ContrastiveLoss(nn.Module):
 
 # Define the MLP network for brain decoding using PyTorch
 class MLP(nn.Module):
-    def __init__(self):
+    def __init__(self, embedding_dim, position_embedding_dim, hidden_layer_dim):
         super(MLP, self).__init__()
         self.fc1 = nn.Linear(embedding_dim + position_embedding_dim, hidden_layer_dim)
         self.fc2 = nn.Linear(hidden_layer_dim, embedding_dim)
