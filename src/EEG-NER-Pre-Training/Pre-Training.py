@@ -29,9 +29,7 @@ class CustomDataset(Dataset):
     def __getitem__(self, idx):
         return self.brain_embeddings[idx], self.query_embeddings
 
-# Initialize brain embeddings (bi) and query embeddings (vQ) using PyTorch tensors
-bi = torch.rand(num_time_frames, embedding_dim, requires_grad=True)
-vQ = torch.rand(num_query_embeddings, num_tokens, embedding_dim)
+
 
 
 # Define a custom contrastive loss function
@@ -57,9 +55,6 @@ class ContrastiveLoss(nn.Module):
         return loss
 
 
-# Create custom datasets and data loaders for contrastive learning
-custom_dataset = CustomDataset(bi, vQ)
-data_loader = DataLoader(custom_dataset, batch_size=batch_size, shuffle=True)
 
 # Define the MLP network for brain decoding using PyTorch
 class MLP(nn.Module):

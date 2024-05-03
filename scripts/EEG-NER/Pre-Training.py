@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
+from
 
 
 
@@ -21,3 +22,11 @@ if __name__ == "__main__":
     learning_rate = 0.01  # Learning rate for optimization
     num_iterations = 1000  # Number of optimization iterations
     batch_size = 32  # Batch size for contrastive learning
+
+    # Initialize brain embeddings (bi) and query embeddings (vQ) using PyTorch tensors
+    bi = torch.rand(num_time_frames, embedding_dim, requires_grad=True)
+    vQ = torch.rand(num_query_embeddings, num_tokens, embedding_dim)
+
+    # Create custom datasets and data loaders for contrastive learning
+    custom_dataset = CustomDataset(bi, vQ)
+    data_loader = DataLoader(custom_dataset, batch_size=batch_size, shuffle=True)
