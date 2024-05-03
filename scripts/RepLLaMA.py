@@ -13,7 +13,7 @@ def get_model(peft_model_name):
 
 if __name__ == '__main__':
     # Load the tokenizer and model
-    tokenizer = AutoTokenizer.from_pretrained('meta-llama/Llama-2-7b-hf')
+    tokenizer = AutoTokenizer.from_pretrained('meta-llama/Llama-2-7b-hf', use_auth_token=True)
     model = get_model('castorini/repllama-v1-7b-lora-doc')
 
     # Define query and document inputs
