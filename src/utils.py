@@ -25,7 +25,7 @@ class Utils:
         return y_onehot
 
 
-    def NER_padding_x_y(self, segments, Classes):
+    def NER_padding_x_y(self, segments, Classes, padding_shape=(105,8)):
         X = []
         y = []
         for i in range(len(segments)):
@@ -42,7 +42,7 @@ class Utils:
             padding_count = max_seq_length - len(X[i])
             #print(padding_count)
             for j in range(padding_count):
-                X[i].append(np.zeros((105,8)))
+                X[i].append(np.zeros(padding_shape))
 
         return X, y
 
