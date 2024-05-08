@@ -32,8 +32,8 @@ if __name__ == "__main__":
     d = data.Data()
     util = utils.Utils()
 
-    train_NE, train_EEG_segments, train_Classes = d.NER_save_lists_to_file(train_path)
-    test_NE, test_EEG_segments, test_Classes = d.NER_save_lists_to_file(test_path)
+    train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
+    test_NE, test_EEG_segments, test_Classes = d.NER_read_custom_files(test_path)
 
     EEG_word_tokens, EEG_word_labels = d.read_EEG_embeddings_labels(EEG_path)
 

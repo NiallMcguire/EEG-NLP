@@ -149,7 +149,7 @@ class Data:
 
         return unique_entities, unique_EEG_segments, unique_Classes
 
-    def NER_save_lists_to_file(self, path):
+    def NER_read_custom_files(self, path):
         # Open the pickle file in binary write mode
         with open(path, 'rb') as f:
             # Load each list from the file
@@ -219,6 +219,5 @@ class Data:
         #    pickle.dump(unique_EEG_segments, f)
         #    pickle.dump(unique_Classes, f)
 
-        
-            
+
         return unique_entities, unique_EEG_segments, unique_Classes, Test_unique_entities, Test_unique_EEG_segments, Test_unique_Classes
