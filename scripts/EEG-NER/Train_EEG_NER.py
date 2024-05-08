@@ -64,7 +64,11 @@ if __name__ == "__main__":
 
 
     #create word embeddings
-    NE_List_Flat = [word for sublist in NE_list for word in sublist]
+    train_NE_flat = [word for sublist in train_NE for word in sublist]
+    test_NE_flat = [word for sublist in test_NE for word in sublist]
+
+    train_word_embeddings = util.NER_Word2Vec(train_NE_flat)
+    test_word_embeddings = util.NER_Word2Vec(test_NE_flat)
 
     # padding
     X_train, y_train = util.NER_padding_x_y(train_EEG_segments, train_Classes)
