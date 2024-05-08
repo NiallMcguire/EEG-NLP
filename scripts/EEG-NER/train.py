@@ -15,7 +15,7 @@ if __name__ == "__main__":
     else:
         device = torch.device("cpu")
 
-    train_path = r"C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\train_NER.pkl"
+    train_path = r"/users/gxb18167/Datasets/ZuCo/train_NER.pkl"
 
     test_path = r"C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\test_NER.pkl"
 
