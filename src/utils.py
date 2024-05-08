@@ -63,8 +63,6 @@ class Utils:
             words.append([Word_Labels_List[i]])
         model = Word2Vec(sentences=words, vector_size=vector_size, window=window, min_count=min_count, workers=workers)
         word_embeddings = {word: model.wv[word] for word in model.wv.index_to_key}
-        print("Number of word embeddings:", len(word_embeddings))
-        # word, embedding = list(word_embeddings.items())[10]
-        # print(f"Word: {word}, Embedding: {embedding}")
+
 
         return word_embeddings
