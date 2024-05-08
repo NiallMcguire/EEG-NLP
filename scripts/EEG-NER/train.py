@@ -72,6 +72,10 @@ if __name__ == "__main__":
     parameters['num_epochs'] = num_epochs
     LSTM_layers = 2
     parameters['LSTM_layers'] = LSTM_layers
+    learning_rate = 0.001
+    parameters['learning_rate'] = learning_rate
+    optimizer = 'Adam'
+    parameters['optimizer'] = optimizer
 
     # Create the train loader
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
@@ -82,7 +86,9 @@ if __name__ == "__main__":
     model.to(device)
     # Define loss function and optimizer
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+    if optimizer == 'Adam':
+        optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     for epoch in range(num_epochs):
         model.train()
