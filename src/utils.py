@@ -57,11 +57,11 @@ class Utils:
         new_list = np.array(new_list)
         return new_list
 
-    def create_word_label_embeddings(self, Word_Labels_List):
+    def NER_Word2Vec(self, Word_Labels_List, vector_size=50, window=5, min_count=1, workers=4):
         tokenized_words = []
         for i in range(len(Word_Labels_List)):
             tokenized_words.append([Word_Labels_List[i]])
-        model = Word2Vec(sentences=tokenized_words, vector_size=50, window=5, min_count=1, workers=4)
+        model = Word2Vec(sentences=tokenized_words, vector_size=vector_size, window=window, min_count=min_count, workers=workers)
         word_embeddings = {word: model.wv[word] for word in model.wv.index_to_key}
         print("Number of word embeddings:", len(word_embeddings))
         # word, embedding = list(word_embeddings.items())[10]
