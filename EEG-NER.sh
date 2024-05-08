@@ -30,6 +30,7 @@
 module purge
 module load nvidia/sdk/22.3
 module load anaconda/python-3.9.7/2021.11
+model load src
 
 #Uncomment the following if you are running multi-threaded
 #export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
