@@ -64,5 +64,9 @@ class Utils:
         model = Word2Vec(sentences=words, vector_size=vector_size, window=window, min_count=min_count, workers=workers)
         word_embeddings = {word: model.wv[word] for word in model.wv.index_to_key}
 
+        embedded_input = []
+        for word in Word_Labels_List:
+            embedded_input.append(word_embeddings[word])
+
 
         return word_embeddings

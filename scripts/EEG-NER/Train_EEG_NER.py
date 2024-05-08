@@ -70,6 +70,8 @@ if __name__ == "__main__":
     train_word_embeddings = util.NER_Word2Vec(train_NE_flat)
     test_word_embeddings = util.NER_Word2Vec(test_NE_flat)
 
+
+
     # padding
     X_train, y_train = util.NER_padding_x_y(train_EEG_segments, train_Classes)
     X_train_numpy = np.array(X_train)
