@@ -12,9 +12,7 @@ from torch.utils.data import DataLoader, TensorDataset
 import torch.nn as nn
 import torch.optim as optim
 
-import nltk
-nltk.download('punkt')
-from gensim.models import Word2Vec
+
 
 
 
@@ -66,7 +64,7 @@ if __name__ == "__main__":
 
 
     #create word embeddings
-
+    NE_List_Flat = [word for sublist in NE_list for word in sublist]
 
     # padding
     X_train, y_train = util.NER_padding_x_y(train_EEG_segments, train_Classes)
