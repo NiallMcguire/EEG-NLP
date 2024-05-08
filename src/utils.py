@@ -25,13 +25,13 @@ class Utils:
         return y_onehot
 
 
-    def NER_padding_x_y(self, EEG_segments, Classes):
+    def NER_padding_x_y(self, segments, Classes):
         X = []
         y = []
-        for i in range(len(EEG_segments)):
+        for i in range(len(segments)):
             label = Classes[i][0]
             #print(label)
-            EEG_list = EEG_segments[i]
+            EEG_list = segments[i]
             for EEG in EEG_list:
                 if EEG != []:
                     X.append(EEG)
