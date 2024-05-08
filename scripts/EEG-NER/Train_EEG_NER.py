@@ -23,10 +23,9 @@ if __name__ == "__main__":
 
     evaluation = True
     parameters['evaluation'] = evaluation
-    # Define batch size
-    batch_size = 32  # Adjust according to your preference
+
+    batch_size = 32
     parameters['batch_size'] = batch_size
-    # Define model parameters
     input_size = 840
     parameters['input_size'] = input_size
     hidden_size = 64
@@ -40,6 +39,7 @@ if __name__ == "__main__":
     LSTM_layers = 2
     parameters['LSTM_layers'] = LSTM_layers
     learning_rate = 0.001
+
     parameters['learning_rate'] = learning_rate
     optimizer = 'Adam'
     parameters['optimizer'] = optimizer
@@ -67,8 +67,8 @@ if __name__ == "__main__":
     train_NE_flat = [word for sublist in train_NE for word in sublist]
     test_NE_flat = [word for sublist in test_NE for word in sublist]
 
-    train_word_embeddings = util.NER_Word2Vec(train_NE_flat)
-    test_word_embeddings = util.NER_Word2Vec(test_NE_flat)
+    train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE_flat)
+    test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE_flat)
 
 
 
