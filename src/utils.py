@@ -25,7 +25,6 @@ class Utils:
     def NER_padding_x_y(self, EEG_segments, Classes, named_entity_list):
         X = []
         y = []
-        NE = []
         for i in range(len(EEG_segments)):
             named_entity = named_entity_list[i]
             label = Classes[i][0]
@@ -35,7 +34,6 @@ class Utils:
                 if EEG != []:
                     X.append(EEG)
                     y.append(label)
-                    NE.append(named_entity)
         max_seq_length = max([len(x) for x in X])
         #paddding
         for i in range(len(X)):
@@ -44,7 +42,7 @@ class Utils:
             for j in range(padding_count):
                 X[i].append(np.zeros((105,8)))
 
-        return X, y, NE
+        return X, y
 
     def NER_reshape_data(self, X):
         # reshape the data to 840
