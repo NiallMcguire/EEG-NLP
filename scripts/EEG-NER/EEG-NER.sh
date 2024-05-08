@@ -42,7 +42,7 @@ module load anaconda/python-3.9.7/2021.11
 
 #Modify the line below to run your program. This is an example
 #=========================================================
-python /users/gxb18167/EEG-NLP/scripts/Train_EEG_NER.py
+python /users/gxb18167/EEG-NLP/scripts/EEG-NER/Train_EEG_NER.py
 
 # Do not change the line below
 #=========================================================

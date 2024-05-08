@@ -3,14 +3,13 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
-from src.EEG_NER_Pre_Training.Pre_Training import CustomDataset, ContrastiveLoss, MLP
+from src.EEG_NER.Pre_Training import CustomDataset, ContrastiveLoss, MLP
 
 
 
 
 
 if __name__ == "__main__":
-
     # Define the pre-training parameters
     num_brain_embeddings = 1000  # Number of brain embeddings
     num_query_embeddings = 500  # Number of query embeddings
