@@ -99,10 +99,10 @@ if __name__ == "__main__":
     if optimizer == 'Adam':
         optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
+    loss_over_batches = []
     for epoch in range(num_epochs):
         model.train()
         total_loss = 0
-        loss_over_batches = []
         for batch_x, batch_y in train_loader:
             batch_x, batch_y = batch_x.to(device), batch_y.to(device)
 
@@ -124,6 +124,8 @@ if __name__ == "__main__":
         avg_loss = total_loss / len(train_loader)
         print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_loss:.4f}')
 
+    log['Loss'] = loss_over_batches
+    '''
     # Save the trained model
     torch.save(model.state_dict(), 'blstm_model.pth')
 
@@ -131,6 +133,7 @@ if __name__ == "__main__":
     loaded_model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, LSTM_layers)
     loaded_model.load_state_dict(torch.load('blstm_model.pth'))
     loaded_model.eval()  # Switch to evaluation mode
+    '''
 
     # Evaluate the model
     with torch.no_grad():
