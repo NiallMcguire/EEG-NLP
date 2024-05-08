@@ -1,4 +1,7 @@
 
+import sys
+sys.path.append('/users/gxb18167/EEG-NLP')
+
 from src import data
 from src import utils
 from src import Networks
