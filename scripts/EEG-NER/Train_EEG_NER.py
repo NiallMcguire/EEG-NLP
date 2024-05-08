@@ -72,6 +72,15 @@ if __name__ == "__main__":
         test_NE_flat = [word for sublist in test_NE for word in sublist]
 
         if Embedding_model == 'Word2Vec':
+            vector_size = 50
+            parameters['vector_size'] = vector_size
+            window = 5
+            parameters['window'] = window
+            min_count = 1
+            parameters['min_count'] = min_count
+            workers = 4
+
+
             train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE_flat)
             test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE_flat)
 
