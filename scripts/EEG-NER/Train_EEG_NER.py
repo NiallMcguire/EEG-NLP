@@ -61,6 +61,8 @@ if __name__ == "__main__":
 
     parameters = {}
 
+    evaluation = True
+    parameters['evaluation'] = evaluation
     # Define batch size
     batch_size = 32  # Adjust according to your preference
     parameters['batch_size'] = batch_size
@@ -135,20 +137,21 @@ if __name__ == "__main__":
     loaded_model.eval()  # Switch to evaluation mode
     '''
 
-    # Evaluate the model
-    with torch.no_grad():
-        correct = 0
-        total = 0
-        for batch_x, batch_y in test_loader:  # Assuming you have a test DataLoader
-            batch_x, batch_y = batch_x.to(device), batch_y.to(device)
-            batch_x = batch_x.squeeze(3)
-            outputs = model(batch_x)
-            _, predicted = torch.max(outputs.data, 1)
-            total += batch_y.size(0)
-            correct += (predicted == batch_y).sum().item()
+    if evaluation == True:
+        # Evaluate the model
+        with torch.no_grad():
+            correct = 0
+            total = 0
+            for batch_x, batch_y in test_loader:  # Assuming you have a test DataLoader
+                batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+                batch_x = batch_x.squeeze(3)
+                outputs = model(batch_x)
+                _, predicted = torch.max(outputs.data, 1)
+                total += batch_y.size(0)
+                correct += (predicted == batch_y).sum().item()
 
-        print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
-        log['Accuracy'] = 100 * correct / total
+            print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
+            log['Accuracy'] = 100 * correct / total
 
 
 
