@@ -76,6 +76,8 @@ if __name__ == "__main__":
     parameters['learning_rate'] = learning_rate
     optimizer = 'Adam'
     parameters['optimizer'] = optimizer
+    criterion = 'CrossEntropyLoss'
+    parameters['criterion'] = criterion
 
     # Create the train loader
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
@@ -84,8 +86,10 @@ if __name__ == "__main__":
     # Instantiate the model
     model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, LSTM_layers)
     model.to(device)
+
     # Define loss function and optimizer
-    criterion = nn.CrossEntropyLoss()
+    if criterion == 'CrossEntropyLoss':
+        criterion = nn.CrossEntropyLoss()
 
     if optimizer == 'Adam':
         optimizer = optim.Adam(model.parameters(), lr=learning_rate)
