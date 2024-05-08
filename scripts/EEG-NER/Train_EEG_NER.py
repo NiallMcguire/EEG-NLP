@@ -23,6 +23,10 @@ if __name__ == "__main__":
 
     evaluation = True
     parameters['evaluation'] = evaluation
+    EEG_with_Text = True
+    parameters['EEG_with_Text'] = EEG_with_Text
+    Embedding_model = 'Word2Vec'
+    parameters['Embedding_model'] = Embedding_model
 
     batch_size = 32
     parameters['batch_size'] = batch_size
@@ -62,13 +66,14 @@ if __name__ == "__main__":
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
     test_NE, test_EEG_segments, test_Classes = d.NER_read_custom_files(test_path)
 
+    if EEG_with_Text == True:
+        #create word embeddings
+        train_NE_flat = [word for sublist in train_NE for word in sublist]
+        test_NE_flat = [word for sublist in test_NE for word in sublist]
 
-    #create word embeddings
-    train_NE_flat = [word for sublist in train_NE for word in sublist]
-    test_NE_flat = [word for sublist in test_NE for word in sublist]
-
-    train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE_flat)
-    test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE_flat)
+        if Embedding_model == 'Word2Vec':
+            train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE_flat)
+            test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE_flat)
 
 
 
