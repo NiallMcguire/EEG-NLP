@@ -22,11 +22,10 @@ class Utils:
         return y_onehot
 
 
-    def NER_padding_x_y(self, EEG_segments, Classes, named_entity_list):
+    def NER_padding_x_y(self, EEG_segments, Classes):
         X = []
         y = []
         for i in range(len(EEG_segments)):
-            named_entity = named_entity_list[i]
             label = Classes[i][0]
             #print(label)
             EEG_list = EEG_segments[i]
