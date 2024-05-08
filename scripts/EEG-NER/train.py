@@ -140,6 +140,7 @@ if __name__ == "__main__":
             correct += (predicted == batch_y).sum().item()
 
         print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
+        log['Accuracy'] = 100 * correct / total
 
 
 
