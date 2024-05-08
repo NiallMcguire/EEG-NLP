@@ -84,6 +84,10 @@ if __name__ == "__main__":
             train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE_flat, vector_size, window, min_count, workers)
             test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE_flat, vector_size, window, min_count, workers)
 
+            #paddding
+            train_NE_padded = util.NER_padding_x_y(train_NE_embedded, train_Classes)
+            test_NE_padded = util.NER_padding_x_y(test_NE_embedded, test_Classes)
+
 
 
 
