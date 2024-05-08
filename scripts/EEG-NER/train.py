@@ -10,6 +10,9 @@ import torch.optim as optim
 
 
 if __name__ == "__main__":
+    log = {}
+
+
     if torch.cuda.is_available():
         device = torch.device("cuda")
     else:
@@ -51,15 +54,24 @@ if __name__ == "__main__":
     train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
     test_dataset = TensorDataset(x_test_tensor, y_test_tensor)
 
+    parameters = {}
+
     # Define batch size
     batch_size = 32  # Adjust according to your preference
+    parameters['batch_size'] = batch_size
     # Define model parameters
     input_size = 840
+    parameters['input_size'] = input_size
     hidden_size = 64
+    parameters['hidden_size'] = hidden_size
     num_layers = 2
+    parameters['num_layers'] = num_layers
     num_classes = 3
+    parameters['num_classes'] = num_classes
     num_epochs = 10
+    parameters['num_epochs'] = num_epochs
     LSTM_layers = 2
+    parameters['LSTM_layers'] = LSTM_layers
 
     # Create the train loader
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
