@@ -142,7 +142,7 @@ if __name__ == "__main__":
         for batch_x, batch_y in test_loader:  # Assuming you have a test DataLoader
             batch_x, batch_y = batch_x.to(device), batch_y.to(device)
             batch_x = batch_x.squeeze(3)
-            outputs = loaded_model(batch_x)
+            outputs = model(batch_x)
             _, predicted = torch.max(outputs.data, 1)
             total += batch_y.size(0)
             correct += (predicted == batch_y).sum().item()
