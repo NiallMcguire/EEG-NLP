@@ -87,7 +87,7 @@ if __name__ == "__main__":
     for epoch in range(num_epochs):
         model.train()
         total_loss = 0
-
+        loss_over_steps = []
         for batch_x, batch_y in train_loader:
             batch_x, batch_y = batch_x.to(device), batch_y.to(device)
 
@@ -99,6 +99,8 @@ if __name__ == "__main__":
             _, predicted = torch.max(outputs, 1)
 
             loss = criterion(outputs, batch_y.squeeze())  # Ensure target tensor is Long type
+            loss_over_steps.append(loss.item())
+
             loss.backward()
             optimizer.step()
 
