@@ -12,6 +12,10 @@ from torch.utils.data import DataLoader, TensorDataset
 import torch.nn as nn
 import torch.optim as optim
 
+import nltk
+nltk.download('punkt')
+from gensim.models import Word2Vec
+
 
 
 if __name__ == "__main__":
@@ -36,6 +40,8 @@ if __name__ == "__main__":
     test_NE, test_EEG_segments, test_Classes = d.NER_read_custom_files(test_path)
 
     EEG_word_tokens, EEG_word_labels = d.read_EEG_embeddings_labels(EEG_path)
+
+
 
     # padding
     X_train, y_train, NE_list = util.NER_padding_x_y(train_EEG_segments, train_Classes, train_NE)
