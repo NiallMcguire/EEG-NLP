@@ -40,7 +40,6 @@ class Utils:
         #paddding
         for i in range(len(X)):
             padding_count = max_seq_length - len(X[i])
-            #print(padding_count)
             for j in range(padding_count):
                 X[i].append(np.zeros(padding_shape))
 
