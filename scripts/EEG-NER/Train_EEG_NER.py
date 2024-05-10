@@ -1,5 +1,8 @@
 
 import sys
+
+from sklearn.model_selection import train_test_split
+
 sys.path.append('/users/gxb18167/EEG-NLP')
 
 from src import data
@@ -88,6 +91,7 @@ if __name__ == "__main__":
             train_NE_expanded = np.array(train_NE_expanded)
             test_NE_expanded = np.array(test_NE_expanded)
 
+
             train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
             test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
 
@@ -96,6 +100,11 @@ if __name__ == "__main__":
     X_train_numpy = np.array(X_train)
     X_train_numpy = util.NER_reshape_data(X_train_numpy)
     y_train_categorical = util.encode_labels(y_train)
+
+    #validation random from train
+    X_train_numpy, X_val_numpy, y_train_categorical, y_val_categorical = train_test_split(X_train_numpy, y_train_categorical, test_size=0.2, random_state=42)
+
+
 
     X_test, y_test = util.NER_padding_x_y(test_EEG_segments, test_Classes)
     X_test_numpy = np.array(X_test)
@@ -183,8 +192,6 @@ if __name__ == "__main__":
         with torch.no_grad():
             correct = 0
             total = 0
-
-
             for batch in test_loader:
                 if EEG_with_Text == True:
                     batch_x, batch_NE, batch_y = batch
