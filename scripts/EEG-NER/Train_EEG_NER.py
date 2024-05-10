@@ -87,6 +87,10 @@ if __name__ == "__main__":
             test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, padding_shape=vector_size)
 
 
+            print("length of train_NE_expanded: ", len(train_NE_expanded))
+            train_NE_expanded = np.array(train_NE_expanded)
+            print("length of train_NE_expanded: ", train_NE_expanded.shape)
+
             '''
             #paddding
             train_NE_padded, y = util.NER_padding_x_y(train_NE_embedded, train_Classes, vector_size)
