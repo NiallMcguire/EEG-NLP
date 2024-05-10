@@ -139,12 +139,17 @@ if __name__ == "__main__":
     for epoch in range(num_epochs):
         model.train()
         total_loss = 0
-        for batch_x, batch_y in train_loader:
-            batch_x, batch_y = batch_x.to(device), batch_y.to(device)
-
-            optimizer.zero_grad()
-
-            outputs = model(batch_x)
+        for batch in train_loader:
+            if EEG_with_Text == True:
+                batch_x, batch_NE, batch_y = batch
+                batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
+                optimizer.zero_grad()
+                outputs = model(batch_x, batch_NE)
+            else:
+                batch_x, batch_y = batch
+                batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+                optimizer.zero_grad()
+                outputs = model(batch_x)
 
             # Convert class probabilities to class indices
             _, predicted = torch.max(outputs, 1)
