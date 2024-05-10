@@ -64,7 +64,7 @@ if __name__ == "__main__":
     util = utils.Utils()
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
-    print(len(train_NE))
+    print(len(train_EEG_segments))
     test_NE, test_EEG_segments, test_Classes = d.NER_read_custom_files(test_path)
 
     if EEG_with_Text == True:
