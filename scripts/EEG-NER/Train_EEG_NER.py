@@ -87,7 +87,7 @@ if __name__ == "__main__":
             print("Length of Train NE Embeddings", len(train_NE_embedded))
             print("Length of train classes", len(train_Classes))
 
-            print("Length of train_NE", len(train_NE))
+            print("Length of train_NE", len(train_EEG_segments))
 
             #paddding
             train_NE_padded = util.NER_padding_x_y(train_NE_embedded, train_Classes)
