@@ -82,7 +82,11 @@ class Utils:
         for i in range(len(expanded_named_entity_list)):
             padding_count = max_seq_len - len(expanded_named_entity_list[i])
             for j in range(padding_count):
-                 expanded_named_entity_list[i].append(np.zeros(padding_shape))
+                named_entities = expanded_named_entity_list[i]
+                named_entities = named_entities.append(np.zeros(padding_shape))
+                named_entities = np.array(named_entities)
+
+                expanded_named_entity_list[i].append(named_entities)
 
         return expanded_named_entity_list
 
