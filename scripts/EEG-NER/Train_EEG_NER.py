@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     evaluation = True
     parameters['evaluation'] = evaluation
-    EEG_with_Text = False
+    EEG_with_Text = True
     parameters['EEG_with_Text'] = EEG_with_Text
     Embedding_model = 'BERT'
     parameters['Embedding_model'] = Embedding_model
