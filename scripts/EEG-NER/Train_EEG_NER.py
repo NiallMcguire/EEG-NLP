@@ -93,9 +93,15 @@ if __name__ == "__main__":
         train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, padding_shape=vector_size)
         test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, padding_shape=vector_size)
 
+        print(type(train_NE_expanded))
+        print(type(train_NE_expanded[0]))
+
         if type(train_NE_expanded) == list:
             train_NE_expanded = np.array(train_NE_expanded)
             test_NE_expanded = np.array(test_NE_expanded)
+
+        print(type(train_NE_expanded))
+        print(type(train_NE_expanded[0]))
 
         train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
         test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
