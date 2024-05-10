@@ -81,15 +81,24 @@ if __name__ == "__main__":
             train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count, workers)
             test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE, vector_size, window, min_count, workers)
 
-            train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, padding_shape=vector_size)
-            test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, padding_shape=vector_size)
+        elif Embedding_model == 'BERT':
+            vector_size = 768
+            parameters['vector_size'] = vector_size
 
+            ner_bert = utils.NER_BERT()
+
+            train_NE_embedded = ner_bert.get_embeddings(train_NE)
+            test_NE_embedded = ner_bert.get_embeddings(test_NE)
+
+        train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, padding_shape=vector_size)
+        test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, padding_shape=vector_size)
+
+        if type(train_NE_expanded) == list:
             train_NE_expanded = np.array(train_NE_expanded)
             test_NE_expanded = np.array(test_NE_expanded)
 
-
-            train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
-            test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
+        train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
+        test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
 
 
     X_train, y_train = util.NER_padding_x_y(train_EEG_segments, train_Classes)
@@ -134,7 +143,7 @@ if __name__ == "__main__":
 
     # Instantiate the model
     if EEG_with_Text == True:
-        model = Networks.BLSTM_Text(input_size, hidden_size, num_layers, num_classes, LSTM_layers)
+        model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_layers, num_classes, LSTM_layers)
     else:
         model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, LSTM_layers)
     model.to(device)

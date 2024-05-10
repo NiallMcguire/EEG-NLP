@@ -93,7 +93,7 @@ class NER_BERT:
         self.tokenizer = BertTokenizer.from_pretrained(model_name)
         self.model = BertModel.from_pretrained(model_name)
 
-    def NER_BERT(self, Word_Labels_List):
+    def get_embeddings(self, Word_Labels_List):
         embedded_input = []
         for named_entity in Word_Labels_List:
             inputs = self.tokenizer(named_entity, return_tensors="pt", padding=True, truncation=True)

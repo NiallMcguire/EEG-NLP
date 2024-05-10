@@ -24,11 +24,11 @@ class BLSTM(nn.Module):
 
 
 class BLSTM_Text(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, num_classes, num_lstm_layers, dropout=0.2):
+    def __init__(self, input_size, vector_size, hidden_size, num_layers, num_classes, num_lstm_layers, dropout=0.2):
         super(BLSTM_Text, self).__init__()
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-        self.lstm = nn.LSTM(input_size + 50, hidden_size, num_layers, batch_first=True, bidirectional=True)
+        self.lstm = nn.LSTM(input_size + vector_size, hidden_size, num_layers, batch_first=True, bidirectional=True)
         self.fc = nn.Linear(hidden_size * 2, num_classes)  # *2 for bidirectional
         self.dropout = nn.Dropout(dropout)
 
