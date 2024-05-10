@@ -86,8 +86,8 @@ if __name__ == "__main__":
 
 
             #paddding
-            train_NE_padded = util.NER_padding_x_y(train_NE_embedded, train_Classes, vector_size)
-            test_NE_padded = util.NER_padding_x_y(test_NE_embedded, test_Classes, vector_size)
+            train_NE_padded, _ = util.NER_padding_x_y(train_NE_embedded, train_Classes, vector_size)
+            test_NE_padded, _ = util.NER_padding_x_y(test_NE_embedded, test_Classes, vector_size)
 
             print("type of train_NE_padded", type(train_NE_padded))
             print("Length of train_NE_padded", len(train_NE_padded))
