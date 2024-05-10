@@ -86,12 +86,12 @@ if __name__ == "__main__":
 
 
             #paddding
-            train_NE_padded = util.NER_padding_x_y(train_NE_embedded, train_Classes, train_NE_embedded[0][0].shape)
-            train_NE_padded = np.array(train_NE_padded)
-            test_NE_padded = util.NER_padding_x_y(test_NE_embedded, test_Classes, test_NE_embedded[0][0].shape)
-            test_NE_padded = np.array(test_NE_padded)
+            train_NE_padded = util.NER_padding_x_y(train_NE_embedded, train_Classes, vector_size)
+            test_NE_padded = util.NER_padding_x_y(test_NE_embedded, test_Classes, vector_size)
 
-            print(train_NE_padded[0][0].shape)
+            print("type of train_NE_padded", type(train_NE_padded))
+
+            print(train_NE_padded.shape)
 
             print(train_NE_padded.shape)
             train_NE_padded_tensor = torch.tensor(train_NE_padded, dtype=torch.float32)
