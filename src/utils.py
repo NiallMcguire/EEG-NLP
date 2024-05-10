@@ -70,6 +70,12 @@ class Utils:
 
         return word_embeddings, embedded_input
 
+    def max_dimension_size(self, arr):
+        if arr.ndim == 1:
+            return 1
+        else:
+            return arr.shape[0]
+
     def NER_expanded_NER_list(self, EEG_segments, NE, padding_shape=(50,)):
         expanded_named_entity_list = []
         for i in range(len(EEG_segments)):
@@ -77,12 +83,25 @@ class Utils:
             for j in range(len(EEG_segments[i])):
                 expanded_named_entity_list.append(named_entities)
 
-        max_seq_len = max([len(i) for i in expanded_named_entity_list])
-        # padding function
-        for i in range(len(expanded_named_entity_list)):
-            padding_count = max_seq_len - len(expanded_named_entity_list[i])
-            for j in range(padding_count):
-                expanded_named_entity_list[i].append(np.zeros(padding_shape))
+        if type(NE) == list:
+            max_seq_len = max([len(i) for i in expanded_named_entity_list])
+            # padding function
+            for i in range(len(expanded_named_entity_list)):
+                padding_count = max_seq_len - len(expanded_named_entity_list[i])
+                for j in range(padding_count):
+                    expanded_named_entity_list[i].append(np.zeros(padding_shape))
+        else:
+            max_seq_len = 0
+            for i in range(len(expanded_named_entity_list)):
+                max_seq_len = max(max_seq_len, self.max_dimension_size(expanded_named_entity_list[i]))
+
+            # padding function
+            desired_shape = (max_seq_len, padding_shape)
+            for i in range(len(expanded_named_entity_list)):
+                current_shape = expanded_named_entity_list[i].shape
+                pad_width = [(0, max(0, desired_shape[i] - current_shape[i])) for i in range(len(desired_shape))]
+                padded_arr = np.pad(expanded_named_entity_list[0], pad_width, mode='constant')
+                expanded_named_entity_list[i] = padded_arr
 
         return expanded_named_entity_list
 
@@ -98,6 +117,6 @@ class NER_BERT:
             inputs = self.tokenizer(named_entity, return_tensors="pt", padding=True, truncation=True)
             outputs = self.model(**inputs)
             last_hidden_states = outputs.last_hidden_state
-            embedded_input.append(last_hidden_states.mean(dim=1).squeeze().detach().numpy().tolist())
+            embedded_input.append(last_hidden_states.mean(dim=1).squeeze().detach().tolist())
 
         return embedded_input
