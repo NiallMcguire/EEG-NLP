@@ -70,3 +70,11 @@ class Utils:
             embedded_input.append(sequence)
 
         return word_embeddings, embedded_input
+
+    def NER_expanded_NER_list(self, EEG_segments, NE):
+        expanded_named_entity_list = []
+        for i in range(len(EEG_segments)):
+            named_entities = NE[i]
+            for j in range(len(EEG_segments[i])):
+                expanded_named_entity_list.append(named_entities)
+        return expanded_named_entity_list
