@@ -69,10 +69,17 @@ class Utils:
 
         return word_embeddings, embedded_input
 
-    def NER_expanded_NER_list(self, EEG_segments, NE):
+    def NER_expanded_NER_list(self, EEG_segments, NE, padding_shape=(50,)):
         expanded_named_entity_list = []
         for i in range(len(EEG_segments)):
             named_entities = NE[i]
             for j in range(len(EEG_segments[i])):
                 expanded_named_entity_list.append(named_entities)
+
+        max_seq_len = max([len(i) for i in expanded_named_entity_list])
+        # padding function
+        for i in range(len(expanded_named_entity_list)):
+            padding_count = max_seq_len - len(expanded_named_entity_list[i])
+            for j in range(padding_count):
+                expanded_named_entity_list[i].append(np.zeros(padding_shape))
         return expanded_named_entity_list
