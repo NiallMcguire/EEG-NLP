@@ -95,6 +95,7 @@ if __name__ == "__main__":
 
         print(type(train_NE_expanded))
         print(type(train_NE_expanded[0][0]))
+        print(train_NE_expanded[0][0])
 
         if type(train_NE_expanded) == list:
             train_NE_expanded = np.array(train_NE_expanded)
