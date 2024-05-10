@@ -67,9 +67,8 @@ class Utils:
             sequence = []
             for word in named_entity:
                 sequence.append(word_embeddings[word])
+            sequence = np.array(sequence)
             embedded_input.append(sequence)
 
         embedded_input = np.array(embedded_input)
-
-
         return word_embeddings, embedded_input
