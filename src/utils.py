@@ -30,18 +30,19 @@ class Utils:
         y = []
         for i in range(len(segments)):
             label = Classes[i][0]
-            #print(label)
             EEG_list = segments[i]
             for EEG in EEG_list:
                 if EEG != []:
                     X.append(EEG)
                     y.append(label)
         max_seq_length = max([len(x) for x in X])
+
         #paddding
         for i in range(len(X)):
             padding_count = max_seq_length - len(X[i])
             for j in range(padding_count):
                 X[i].append(np.zeros(padding_shape))
+
 
         return X, y
 
