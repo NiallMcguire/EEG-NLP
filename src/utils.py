@@ -76,14 +76,14 @@ class Utils:
         else:
             return arr.shape[0]
 
-    def NER_expanded_NER_list(self, EEG_segments, NE, padding_shape=(50,)):
+    def NER_expanded_NER_list(self, EEG_segments, NE, padding_shape=50):
         expanded_named_entity_list = []
         for i in range(len(EEG_segments)):
             named_entities = NE[i]
             for j in range(len(EEG_segments[i])):
                 expanded_named_entity_list.append(named_entities)
 
-        if type(NE) == list:
+        if type(NE[0]) == list:
             max_seq_len = max([len(i) for i in expanded_named_entity_list])
             # padding function
             for i in range(len(expanded_named_entity_list)):
@@ -99,7 +99,7 @@ class Utils:
             desired_shape = (max_seq_len, padding_shape)
             for i in range(len(expanded_named_entity_list)):
                 current_shape = expanded_named_entity_list[i].shape
-                pad_width = [(0, max(0, desired_shape[i] - current_shape[i])) for i in range(len(desired_shape))]
+                pad_width = [(0, max(0, desired_shape[z] - current_shape[z])) for z in range(len(desired_shape))]
                 padded_arr = np.pad(expanded_named_entity_list[0], pad_width, mode='constant')
                 expanded_named_entity_list[i] = padded_arr
 
