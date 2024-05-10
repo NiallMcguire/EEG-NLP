@@ -101,6 +101,6 @@ class NER_BERT:
             inputs = self.tokenizer(named_entity, return_tensors="pt", padding=True, truncation=True)
             outputs = self.model(**inputs)
             last_hidden_states = outputs.last_hidden_state
-            embedded_input.append(last_hidden_states.mean(dim=1).squeeze().detach().numpy())
+            embedded_input.append(last_hidden_states.mean(dim=1).squeeze().detach().numpy().tolist())
 
         return embedded_input
