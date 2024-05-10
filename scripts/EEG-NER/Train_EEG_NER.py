@@ -24,7 +24,7 @@ if __name__ == "__main__":
     parameters['evaluation'] = evaluation
     EEG_with_Text = False
     parameters['EEG_with_Text'] = EEG_with_Text
-    Embedding_model = 'Word2Vec'
+    Embedding_model = 'BERT'
     parameters['Embedding_model'] = Embedding_model
 
     batch_size = 32
