@@ -68,8 +68,8 @@ if __name__ == "__main__":
 
     if EEG_with_Text == True:
         #create word embeddings
-        train_NE_flat = [word for sublist in train_NE for word in sublist]
-        test_NE_flat = [word for sublist in test_NE for word in sublist]
+        #train_NE_flat = [word for sublist in train_NE for word in sublist]
+        #test_NE_flat = [word for sublist in test_NE for word in sublist]
 
         if Embedding_model == 'Word2Vec':
             vector_size = 50
