@@ -86,40 +86,17 @@ if __name__ == "__main__":
             train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, padding_shape=vector_size)
             test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, padding_shape=vector_size)
 
-
-            print("length of train_NE_expanded: ", len(train_NE_expanded))
             train_NE_expanded = np.array(train_NE_expanded)
-            print("length of train_NE_expanded: ", train_NE_expanded.shape)
-
-            '''
-            #paddding
-            train_NE_padded, y = util.NER_padding_x_y(train_NE_embedded, train_Classes, vector_size)
-            test_NE_padded, _ = util.NER_padding_x_y(test_NE_embedded, test_Classes, vector_size)
-
-            train_NE_padded = np.array(train_NE_padded)
-            test_NE_padded = np.array(test_NE_padded)
-
-            train_NE_padded_tensor = torch.tensor(train_NE_padded, dtype=torch.float32)
-            test_NE_padded_tensor = torch.tensor(test_NE_padded, dtype=torch.float32)
-            '''
+            test_NE_expanded = np.array(test_NE_expanded)
 
 
+            train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
+            test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
 
 
-
-
-
-    # padding
-    print("length of train_EEG_segments: ", len(train_EEG_segments))
-    print("length of train_Classes: ", len(train_Classes))
     X_train, y_train = util.NER_padding_x_y(train_EEG_segments, train_Classes)
-    print("length of y_train: ", len(y_train))
     X_train_numpy = np.array(X_train)
-
-
     X_train_numpy = util.NER_reshape_data(X_train_numpy)
-
-
     y_train_categorical = util.encode_labels(y_train)
 
     X_test, y_test = util.NER_padding_x_y(test_EEG_segments, test_Classes)
