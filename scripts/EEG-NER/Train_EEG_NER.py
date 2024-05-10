@@ -107,6 +107,7 @@ if __name__ == "__main__":
 
 
 
+
     # padding
     print("length of train_EEG_segments: ", len(train_EEG_segments))
     print("length of train_Classes: ", len(train_Classes))
