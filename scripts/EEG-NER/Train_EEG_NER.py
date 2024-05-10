@@ -90,10 +90,10 @@ if __name__ == "__main__":
             test_NE_padded = util.NER_padding_x_y(test_NE_embedded, test_Classes, vector_size)
 
             print("type of train_NE_padded", type(train_NE_padded))
+            print("Length of train_NE_padded", len(train_NE_padded))
 
             print(train_NE_padded.shape)
 
-            print(train_NE_padded.shape)
             train_NE_padded_tensor = torch.tensor(train_NE_padded, dtype=torch.float32)
             test_NE_padded_tensor = torch.tensor(test_NE_padded, dtype=torch.float32)
 
