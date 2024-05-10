@@ -89,9 +89,12 @@ if __name__ == "__main__":
             train_NE_padded = util.NER_padding_x_y(train_NE_embedded, train_Classes, train_NE_embedded[0][0].shape)
             test_NE_padded = util.NER_padding_x_y(test_NE_embedded, test_Classes, test_NE_embedded[0][0].shape)
 
+            train_NE_padded_tensor = torch.tensor(train_NE_padded, dtype=torch.float32)
+            test_NE_padded_tensor = torch.tensor(test_NE_padded, dtype=torch.float32)
 
 
-    breakpoint(print('done'))
+
+
 
 
     # padding
@@ -112,9 +115,13 @@ if __name__ == "__main__":
     x_test_tensor = torch.tensor(X_test_numpy, dtype=torch.float32)
     y_test_tensor = torch.tensor(y_test_categorical, dtype=torch.float32)  # Assuming your labels are integers
 
-    # Create a custom dataset
-    train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
-    test_dataset = TensorDataset(x_test_tensor, y_test_tensor)
+
+    if EEG_with_Text == True:
+        train_dataset = TensorDataset(x_train_tensor, train_NE_padded_tensor, y_train_tensor)
+        test_dataset = TensorDataset(x_test_tensor, test_NE_padded_tensor, y_test_tensor)
+    else:
+        train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
+        test_dataset = TensorDataset(x_test_tensor, y_test_tensor)
 
     # Create the train loader
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
