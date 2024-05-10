@@ -87,7 +87,8 @@ if __name__ == "__main__":
 
             #assert len(train_NE_embedded) == len(train_Classes)
 
-
+            print("length of train_NE_embedded: ", len(train_NE_embedded))
+            print("length of train_Classes: ", len(train_Classes))
 
             #paddding
             train_NE_padded, y = util.NER_padding_x_y(train_NE_embedded, train_Classes, vector_size)
@@ -105,12 +106,15 @@ if __name__ == "__main__":
 
 
     # padding
+    print("length of train_EEG_segments: ", len(train_EEG_segments))
+    print("length of train_Classes: ", len(train_Classes))
     X_train, y_train = util.NER_padding_x_y(train_EEG_segments, train_Classes)
+    print("length of y_train: ", len(y_train))
     X_train_numpy = np.array(X_train)
-    print("X_train_numpy shape: ", X_train_numpy.shape)
+
 
     X_train_numpy = util.NER_reshape_data(X_train_numpy)
-    print("X_train_numpy shape: ", X_train_numpy.shape)
+
 
     y_train_categorical = util.encode_labels(y_train)
 
