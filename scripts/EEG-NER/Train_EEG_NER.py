@@ -147,7 +147,7 @@ if __name__ == "__main__":
         optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     #early stopping
-    patience = 5
+    patience = 10
     counter = 0
     best_val_loss = None
     best_model = None
