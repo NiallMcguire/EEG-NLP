@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     evaluation = True
     parameters['evaluation'] = evaluation
-    EEG_with_Text = False
+    EEG_with_Text = True
     parameters['EEG_with_Text'] = EEG_with_Text
     Embedding_model = 'Word2Vec'
     parameters['Embedding_model'] = Embedding_model
@@ -122,7 +122,10 @@ if __name__ == "__main__":
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
 
     # Instantiate the model
-    model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, LSTM_layers)
+    if EEG_with_Text == True:
+        model = Networks.BLSTM_Text(input_size, hidden_size, num_layers, num_classes, LSTM_layers)
+    else:
+        model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, LSTM_layers)
     model.to(device)
 
     # Define loss function and optimizer
