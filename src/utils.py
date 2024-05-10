@@ -64,8 +64,10 @@ class Utils:
 
         embedded_input = []
         for named_entity in Word_Labels_List:
+            sequence = []
             for word in named_entity:
-                embedded_input.append(word_embeddings[word])
+                sequence.append(word_embeddings[word])
+            embedded_input.append(sequence)
 
 
         return word_embeddings, embedded_input
