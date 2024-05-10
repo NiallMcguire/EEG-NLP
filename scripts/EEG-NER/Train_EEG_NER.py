@@ -134,6 +134,7 @@ if __name__ == "__main__":
     if optimizer == 'Adam':
         optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
+
     loss_over_batches = []
     for epoch in range(num_epochs):
         model.train()
