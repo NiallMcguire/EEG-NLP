@@ -64,17 +64,9 @@ class Utils:
             sequence = []
             for word in named_entity:
                 sequence.append(word_embeddings[word])
-            sequence = np.array(sequence)
+
             embedded_input.append(sequence)
 
-        #padding
-        max_seq_length = max([len(x) for x in embedded_input])
-        for i in range(len(embedded_input)):
-            padding_count = max_seq_length - len(embedded_input[i])
-            for j in range(padding_count):
-                embedded_input[i] = np.append(embedded_input[i], np.zeros((vector_size,)), axis=0)
-
-        embedded_input = np.array(embedded_input)
         return word_embeddings, embedded_input
 
     def NER_expanded_NER_list(self, EEG_segments, NE):
