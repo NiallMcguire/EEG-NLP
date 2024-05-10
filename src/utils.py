@@ -83,21 +83,19 @@ class Utils:
             for j in range(len(EEG_segments[i])):
                 expanded_named_entity_list.append(named_entities)
 
-        if type(NE[0]) == list:
-            max_seq_len = max([len(i) for i in expanded_named_entity_list])
-            # padding function
+        if type(NE[0]) != list:
             for i in range(len(expanded_named_entity_list)):
-                padding_count = max_seq_len - len(expanded_named_entity_list[i])
-                for j in range(padding_count):
-                    expanded_named_entity_list[i].append(np.zeros(padding_shape))
-        else:
-            max_seq_len = 0
-            for i in range(len(expanded_named_entity_list)):
-                max_seq_len = max(max_seq_len, self.max_dimension_size(expanded_named_entity_list[i]))
+                if expanded_named_entity_list[i].shape == (padding_shape,):
+                    expanded_named_entity_list[i] = expanded_named_entity_list[i].reshape(1, -1).tolist()
+                else:
+                    expanded_named_entity_list[i] = expanded_named_entity_list[i].tolist()
 
-            # padding function
-            desired_shape = (max_seq_len, padding_shape)
-
+        max_seq_len = max([len(i) for i in expanded_named_entity_list])
+        # padding function
+        for i in range(len(expanded_named_entity_list)):
+            padding_count = max_seq_len - len(expanded_named_entity_list[i])
+            for j in range(padding_count):
+                expanded_named_entity_list[i].append(np.zeros(padding_shape))
 
         return expanded_named_entity_list
 
