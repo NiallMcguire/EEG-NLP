@@ -79,7 +79,6 @@ if __name__ == "__main__":
             parameters['min_count'] = min_count
             workers = 4
 
-
             train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count, workers)
             test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE, vector_size, window, min_count, workers)
 
@@ -88,7 +87,6 @@ if __name__ == "__main__":
 
             train_NE_expanded = np.array(train_NE_expanded)
             test_NE_expanded = np.array(test_NE_expanded)
-
 
             train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
             test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
