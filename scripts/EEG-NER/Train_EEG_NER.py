@@ -89,6 +89,8 @@ if __name__ == "__main__":
             train_NE_padded = util.NER_padding_x_y(train_NE_embedded, train_Classes, train_NE_embedded[0][0].shape)
             test_NE_padded = util.NER_padding_x_y(test_NE_embedded, test_Classes, test_NE_embedded[0][0].shape)
 
+            print(train_NE_padded[0][0].shape)
+
             print(train_NE_padded.shape)
             train_NE_padded_tensor = torch.tensor(train_NE_padded, dtype=torch.float32)
             test_NE_padded_tensor = torch.tensor(test_NE_padded, dtype=torch.float32)
