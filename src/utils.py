@@ -4,6 +4,7 @@ import numpy as np
 import nltk
 nltk.download('punkt')
 from gensim.models import Word2Vec
+from transformers import BertTokenizer, BertModel
 
 
 class Utils:
@@ -85,3 +86,19 @@ class Utils:
 
 
         return expanded_named_entity_list
+
+
+class NER_BERT:
+    def __init__(self, model_name='bert-base-uncased'):
+        self.tokenizer = BertTokenizer.from_pretrained(model_name)
+        self.model = BertModel.from_pretrained(model_name)
+
+    def NER_BERT(self, Word_Labels_List):
+        embedded_input = []
+        for named_entity in Word_Labels_List:
+            inputs = self.tokenizer(named_entity, return_tensors="pt", padding=True, truncation=True)
+            outputs = self.model(**inputs)
+            last_hidden_states = outputs.last_hidden_state
+            embedded_input.append(last_hidden_states.mean(dim=1).squeeze().detach().numpy())
+
+        return embedded_input
