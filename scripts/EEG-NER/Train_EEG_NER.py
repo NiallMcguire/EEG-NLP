@@ -89,6 +89,7 @@ if __name__ == "__main__":
             train_NE_padded = util.NER_padding_x_y(train_NE_embedded, train_Classes, train_NE_embedded[0][0].shape)
             test_NE_padded = util.NER_padding_x_y(test_NE_embedded, test_Classes, test_NE_embedded[0][0].shape)
 
+            print(train_NE_padded.shape)
             train_NE_padded_tensor = torch.tensor(train_NE_padded, dtype=torch.float32)
             test_NE_padded_tensor = torch.tensor(test_NE_padded, dtype=torch.float32)
 
@@ -109,6 +110,7 @@ if __name__ == "__main__":
     y_test_categorical = util.encode_labels(y_test)
 
     # Convert numpy arrays to PyTorch tensors
+    print(X_train_numpy.shape)
     x_train_tensor = torch.tensor(X_train_numpy, dtype=torch.float32)
     y_train_tensor = torch.tensor(y_train_categorical, dtype=torch.float32)  # Assuming your labels are integers
 
