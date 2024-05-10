@@ -198,7 +198,7 @@ if __name__ == "__main__":
                     outputs = model(batch_x)
                 loss = criterion(outputs, batch_y.squeeze())
                 val_loss += loss.item()
-                print(f'Validation Loss: {val_loss:.4f}')
+            print(f'Validation loss: {val_loss:.4f}')
             if best_val_loss is None:
                 best_val_loss = val_loss
                 best_model = model.state_dict()
