@@ -83,8 +83,8 @@ if __name__ == "__main__":
             train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count, workers)
             test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE, vector_size, window, min_count, workers)
 
-            train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded)
-            test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded)
+            train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, padding_shape=vector_size)
+            test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, padding_shape=vector_size)
 
 
             '''
