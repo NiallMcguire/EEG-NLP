@@ -97,11 +97,7 @@ class Utils:
 
             # padding function
             desired_shape = (max_seq_len, padding_shape)
-            for i in range(len(expanded_named_entity_list)):
-                current_shape = expanded_named_entity_list[i].shape
-                pad_width = [(0, max(0, desired_shape[z] - current_shape[z])) for z in range(len(desired_shape))]
-                padded_arr = np.pad(expanded_named_entity_list[0], pad_width, mode='constant')
-                expanded_named_entity_list[i] = padded_arr
+
 
         return expanded_named_entity_list
 
