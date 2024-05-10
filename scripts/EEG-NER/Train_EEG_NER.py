@@ -91,6 +91,8 @@ if __name__ == "__main__":
             print("len(train_NE_embedded)", len(train_NE_embedded))
             print("len(train_NE_embedded)", len(train_NE_embedded[0]))
 
+            breakpoint(print("done"))
+
             test_NE_embedded = ner_bert.get_embeddings(test_NE)
 
         train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, padding_shape=vector_size)
