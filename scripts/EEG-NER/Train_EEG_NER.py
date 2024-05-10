@@ -93,7 +93,6 @@ if __name__ == "__main__":
             print("Length of train_NE_padded", len(train_NE_padded))
             print("lenght of y ", len(y))
 
-            print(train_NE_padded.shape)
 
             train_NE_padded = np.array(train_NE_padded)
             test_NE_padded = np.array(test_NE_padded)
