@@ -64,6 +64,7 @@ if __name__ == "__main__":
     util = utils.Utils()
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
+    print(len(train_NE))
     test_NE, test_EEG_segments, test_Classes = d.NER_read_custom_files(test_path)
 
     if EEG_with_Text == True:
@@ -103,7 +104,11 @@ if __name__ == "__main__":
     # padding
     X_train, y_train = util.NER_padding_x_y(train_EEG_segments, train_Classes)
     X_train_numpy = np.array(X_train)
+    print("X_train_numpy shape: ", X_train_numpy.shape)
+
     X_train_numpy = util.NER_reshape_data(X_train_numpy)
+    print("X_train_numpy shape: ", X_train_numpy.shape)
+
     y_train_categorical = util.encode_labels(y_train)
 
     X_test, y_test = util.NER_padding_x_y(test_EEG_segments, test_Classes)
@@ -112,7 +117,7 @@ if __name__ == "__main__":
     y_test_categorical = util.encode_labels(y_test)
 
     # Convert numpy arrays to PyTorch tensors
-    print(X_train_numpy.shape)
+    print(train_NE_padded.shape)
     x_train_tensor = torch.tensor(X_train_numpy, dtype=torch.float32)
     y_train_tensor = torch.tensor(y_train_categorical, dtype=torch.float32)  # Assuming your labels are integers
 
