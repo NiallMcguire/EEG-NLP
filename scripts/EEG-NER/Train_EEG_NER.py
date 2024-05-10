@@ -183,9 +183,16 @@ if __name__ == "__main__":
         with torch.no_grad():
             correct = 0
             total = 0
-            for batch_x, batch_y in test_loader:
-                batch_x, batch_y = batch_x.to(device), batch_y.to(device)
-                outputs = model(batch_x)
+
+
+            for batch in test_loader:
+                if EEG_with_Text == True:
+                    batch_x, batch_NE, batch_y = batch
+                    batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
+                    outputs = model(batch_x, batch_NE)
+                else:
+                    batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+                    outputs = model(batch_x)
                 _, predicted = torch.max(outputs, 1)
                 total += batch_y.size(0)
                 correct += (predicted == torch.argmax(batch_y, 1)).sum().item()
