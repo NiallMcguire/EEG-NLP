@@ -81,8 +81,8 @@ if __name__ == "__main__":
             workers = 4
 
 
-            train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE_flat, vector_size, window, min_count, workers)
-            test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE_flat, vector_size, window, min_count, workers)
+            train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count, workers)
+            test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE, vector_size, window, min_count, workers)
 
             print("Length of Train NE Embeddings", len(train_NE_embedded))
             print("Length of train classes", len(train_Classes))
