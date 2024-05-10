@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
             assert len(train_NE_embedded) == len(train_Classes)
 
-            print("Embedded shape: ", train_NE_embedded[0].shape)
+            print("Embedded shape: ", train_NE_embedded[0][0].shape)
 
             breakpoint(print("Breakpoint"))
 
