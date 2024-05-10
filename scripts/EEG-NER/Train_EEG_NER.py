@@ -15,10 +15,6 @@ from torch.utils.data import DataLoader, TensorDataset
 import torch.nn as nn
 import torch.optim as optim
 
-
-
-
-
 if __name__ == "__main__":
     log = {}
 
@@ -151,7 +147,7 @@ if __name__ == "__main__":
         optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     #early stopping
-    patience = 20
+    patience = 5
     counter = 0
     best_val_loss = None
     best_model = None
