@@ -69,5 +69,7 @@ class Utils:
                 sequence.append(word_embeddings[word])
             embedded_input.append(sequence)
 
+        embedded_input = np.array(embedded_input)
+
 
         return word_embeddings, embedded_input
