@@ -85,7 +85,7 @@ if __name__ == "__main__":
             test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE_flat, vector_size, window, min_count, workers)
 
             print("Length of Train NE Embeddings", len(train_NE_embedded))
-            print("Lenght of train classes", len(train_Classes))
+            print("Length of train classes", len(train_Classes))
 
             #paddding
             train_NE_padded = util.NER_padding_x_y(train_NE_embedded, train_Classes)
