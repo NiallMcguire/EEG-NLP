@@ -84,6 +84,8 @@ if __name__ == "__main__":
 
             assert len(train_NE_embedded) == len(train_Classes)
 
+            print("Embedded shape: ", train_NE_embedded[0].shape)
+
             #paddding
             train_NE_padded = util.NER_padding_x_y(train_NE_embedded, train_Classes)
             test_NE_padded = util.NER_padding_x_y(test_NE_embedded, test_Classes)
