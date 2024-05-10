@@ -116,8 +116,8 @@ if __name__ == "__main__":
         train_dataset = TensorDataset(x_train_tensor, train_NE_padded_tensor, y_train_tensor)
         test_dataset = TensorDataset(x_test_tensor, test_NE_padded_tensor, y_test_tensor)
     else:
-        train_dataset = TensorDataset(x_train_tensor, x_train_tensor,  y_train_tensor)
-        test_dataset = TensorDataset(x_test_tensor, x_test_tensor, y_test_tensor)
+        train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
+        test_dataset = TensorDataset(x_test_tensor, y_test_tensor)
 
     # Create the train loader
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
