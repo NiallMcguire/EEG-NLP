@@ -94,6 +94,8 @@ if __name__ == "__main__":
 
             print(train_NE_padded.shape)
 
+            breakpoint()
+
             train_NE_padded_tensor = torch.tensor(train_NE_padded, dtype=torch.float32)
             test_NE_padded_tensor = torch.tensor(test_NE_padded, dtype=torch.float32)
 
