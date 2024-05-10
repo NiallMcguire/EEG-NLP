@@ -41,7 +41,7 @@ if __name__ == "__main__":
     parameters['num_layers'] = num_layers
     num_classes = 3
     parameters['num_classes'] = num_classes
-    num_epochs = 10
+    num_epochs = 100
     parameters['num_epochs'] = num_epochs
     LSTM_layers = 2
     parameters['LSTM_layers'] = LSTM_layers
@@ -101,9 +101,6 @@ if __name__ == "__main__":
     X_train_numpy = util.NER_reshape_data(X_train_numpy)
     y_train_categorical = util.encode_labels(y_train)
 
-    #validation random from train
-    X_train_numpy, X_val_numpy, y_train_categorical, y_val_categorical = train_test_split(X_train_numpy, y_train_categorical, test_size=0.2, random_state=42)
-
 
 
     X_test, y_test = util.NER_padding_x_y(test_EEG_segments, test_Classes)
@@ -122,13 +119,22 @@ if __name__ == "__main__":
     if EEG_with_Text == True:
         train_dataset = TensorDataset(x_train_tensor, train_NE_padded_tensor, y_train_tensor)
         test_dataset = TensorDataset(x_test_tensor, test_NE_padded_tensor, y_test_tensor)
+
+        val_size = 0.2
+        train_size = len(train_dataset) - int(len(train_dataset) * val_size)
+        train_dataset, val_dataset = torch.utils.data.random_split(train_dataset, [train_size, int(len(train_dataset) * val_size)])
     else:
         train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
         test_dataset = TensorDataset(x_test_tensor, y_test_tensor)
 
+        val_size = 0.2
+        train_size = len(train_dataset) - int(len(train_dataset) * val_size)
+        train_dataset, val_dataset = torch.utils.data.random_split(train_dataset, [train_size, int(len(train_dataset) * val_size)])
+
     # Create the train loader
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
+    val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=False)
 
     # Instantiate the model
     if EEG_with_Text == True:
@@ -144,6 +150,11 @@ if __name__ == "__main__":
     if optimizer == 'Adam':
         optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
+    #early stopping
+    patience = 20
+    counter = 0
+    best_val_loss = None
+    best_model = None
 
     loss_over_batches = []
     for epoch in range(num_epochs):
@@ -174,6 +185,36 @@ if __name__ == "__main__":
 
         avg_loss = total_loss / len(train_loader)
         print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_loss:.4f}')
+
+        #early stopping
+        model.eval()
+        with torch.no_grad():
+
+            val_loss = 0
+            for batch in val_loader:
+                if EEG_with_Text == True:
+                    batch_x, batch_NE, batch_y = batch
+                    batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
+                    outputs = model(batch_x, batch_NE)
+                else:
+                    batch_x, batch_y = batch
+                    batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+                    outputs = model(batch_x)
+                loss = criterion(outputs, batch_y.squeeze())
+                val_loss += loss.item()
+
+            if best_val_loss is None:
+                best_val_loss = val_loss
+                best_model = model.state_dict()
+            elif val_loss < best_val_loss:
+                best_val_loss = val_loss
+                best_model = model.state_dict()
+                counter = 0
+            else:
+                counter += 1
+                if counter > patience:
+                    print("Early stopping")
+                    break
 
     log['Loss'] = loss_over_batches
 
