@@ -94,9 +94,6 @@ if __name__ == "__main__":
         test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, padding_shape=vector_size)
 
 
-        if type(train_NE_expanded) == list:
-            train_NE_expanded = np.array(train_NE_expanded)
-            test_NE_expanded = np.array(test_NE_expanded)
 
         print("Type of train_NE_expanded: ", type(train_NE_expanded))
         print("Type of train_NE_expanded[0]: ", type(train_NE_expanded[0]))

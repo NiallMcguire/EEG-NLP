@@ -93,10 +93,13 @@ class Utils:
         max_seq_len = max([len(i) for i in expanded_named_entity_list])
         # padding function
         for i in range(len(expanded_named_entity_list)):
+            list_element = expanded_named_entity_list[i]
             padding_count = max_seq_len - len(expanded_named_entity_list[i])
             for j in range(padding_count):
-                expanded_named_entity_list[i].append(np.zeros(padding_shape))
-            expanded_named_entity_list[i] = np.array(expanded_named_entity_list[i])
+                list_element.append(np.zeros(padding_shape))
+            expanded_named_entity_list[i] = np.array(list_element)
+
+        expanded_named_entity_list = np.array(expanded_named_entity_list)
 
         return expanded_named_entity_list
 
