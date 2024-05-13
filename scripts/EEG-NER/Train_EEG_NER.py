@@ -90,14 +90,16 @@ if __name__ == "__main__":
             train_NE_embedded = ner_bert.get_embeddings(train_NE)
             test_NE_embedded = ner_bert.get_embeddings(test_NE)
 
-        train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, padding_shape=vector_size)
-        test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, padding_shape=vector_size)
+            train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, padding_shape=vector_size)
+            test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, padding_shape=vector_size)
+
+            print("Type of train_NE_expanded: ", type(train_NE_expanded))
+            print("Type of train_NE_expanded[0]: ", type(train_NE_expanded[0]))
+            print("Type of train_NE_expanded[0][0]: ", type(train_NE_expanded[0][0]))
 
 
 
-        print("Type of train_NE_expanded: ", type(train_NE_expanded))
-        print("Type of train_NE_expanded[0]: ", type(train_NE_expanded[0]))
-        print("Type of train_NE_expanded[0][0]: ", type(train_NE_expanded[0][0]))
+
 
         train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
         test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
