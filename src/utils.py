@@ -96,6 +96,7 @@ class Utils:
             padding_count = max_seq_len - len(expanded_named_entity_list[i])
             for j in range(padding_count):
                 expanded_named_entity_list[i].append(np.zeros(padding_shape))
+                expanded_named_entity_list[i] = np.array(expanded_named_entity_list[i])
 
         return expanded_named_entity_list
 
