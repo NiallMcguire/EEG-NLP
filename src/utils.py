@@ -91,6 +91,7 @@ class Utils:
                     expanded_named_entity_list[i] = expanded_named_entity_list[i].tolist()
 
         max_seq_len = max([len(i) for i in expanded_named_entity_list])
+
         # padding function
         for i in range(len(expanded_named_entity_list)):
             list_element = expanded_named_entity_list[i]
@@ -106,12 +107,12 @@ class NER_BERT:
         self.tokenizer = BertTokenizer.from_pretrained(model_name)
         self.model = BertModel.from_pretrained(model_name)
 
-    def get_embeddings(self, Word_Labels_List):
+    def NER_BERT(self, Word_Labels_List):
         embedded_input = []
         for named_entity in Word_Labels_List:
             inputs = self.tokenizer(named_entity, return_tensors="pt", padding=True, truncation=True)
             outputs = self.model(**inputs)
             last_hidden_states = outputs.last_hidden_state
-            embedded_input.append(last_hidden_states.mean(dim=1).squeeze().detach().tolist())
+            embedded_input.append(last_hidden_states.mean(dim=1).squeeze().detach().numpy())
 
         return embedded_input

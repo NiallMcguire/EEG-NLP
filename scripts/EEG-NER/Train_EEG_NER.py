@@ -97,10 +97,7 @@ if __name__ == "__main__":
             print("Type of train_NE_expanded[0][0]: ", type(train_NE_expanded[0][0]))
 
             train_NE_expanded = np.array(train_NE_expanded)
-
-            print("Shape of train_NE_expanded: ", train_NE_expanded.shape)
-
-
+            test_NE_expanded = np.array(test_NE_expanded)
 
 
 
