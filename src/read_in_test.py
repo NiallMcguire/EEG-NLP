@@ -1,5 +1,5 @@
 import data
-
+import pickle
 
 
 if __name__ == "__main__":
@@ -39,3 +39,9 @@ if __name__ == "__main__":
                                                                                         NE_EEG_Class)
 
     print("Data created successfully!")
+
+    with open('NER.pkl', 'wb') as f:
+
+        pickle.dump(unique_entities, f)
+        pickle.dump(unique_EEG_segments, f)
+        pickle.dump(unique_Classes, f)
