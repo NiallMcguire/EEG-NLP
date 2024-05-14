@@ -145,9 +145,9 @@ if __name__ == "__main__":
 
     # Instantiate the model
     if EEG_with_Text == True:
-        model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_layers, num_classes)
+        model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_layers, num_classes, dropout)
     else:
-        model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes)
+        model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, dropout)
     model.to(device)
 
     # Define loss function and optimizer
