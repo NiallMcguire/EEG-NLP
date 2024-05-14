@@ -1,6 +1,7 @@
 import pickle
 import re
 import numpy as np
+import torch
 
 class Data:
     def __init__(self):
@@ -266,9 +267,58 @@ class Data:
 
         print("Loaded in", len(whole_dataset_dicts), "task datasets")
 
-        Task_Dataset_List = whole_dataset_dicts
-        if not isinstance(whole_dataset_dicts, list):
-            Task_Dataset_List = [whole_dataset_dicts]
+
+        EEG_word_level_embeddings = []
+        EEG_word_level_labels = []
+        # Main loop, looping through each task
+        for Task_Dataset in Task_Dataset_List:
+            subjects = list(Task_Dataset.keys())
+            print('[INFO]using subjects: ', subjects)
+
+            total_num_sentence = len(Task_Dataset[subjects[0]])
+
+            train_divider = int(0.8 * total_num_sentence)
+            dev_divider = train_divider + int(0.1 * total_num_sentence)
+
+            print(f'train size = {train_divider}')
+            print(f'dev size = {dev_divider}')
+
+            print('[INFO]initializing a train set...')
+
+            for key in subjects:
+                print(f'key = {key}')
+                # creating test set
+                for i in range(dev_divider, total_num_sentence):
+                    if Task_Dataset[key][i] is not None:
+                        sentence_object = Task_Dataset[key][i]
+
+                        Sentence_EEG_word_level_embeddings = []
+                        Sentence_word_level_labels = []
+
+                        Sentence_word_level_labels.append("SOS")
+                        for word in sentence_object['word']:
+
+                            word_eeg_embedding, EEG_word_level_label = get_eeg_word_embedding(word)
+
+                            if word_eeg_embedding is not None and torch.isnan(
+                                    torch.from_numpy(word_eeg_embedding)).any() == False:
+                                Sentence_EEG_word_level_embeddings.append(word_eeg_embedding)
+                                Sentence_word_level_labels.append(EEG_word_level_label)
+                            else:
+                                Sentence_EEG_word_level_embeddings = []
+                                Sentence_word_level_labels = []
+                                break
+
+                        for word_label in Sentence_word_level_labels:
+                            EEG_word_level_labels.append(word_label)
+                        for word_embedding in Sentence_EEG_word_level_embeddings:
+                            EEG_word_level_embeddings.append(word_embedding)
+
+
+
+
+
+
 
 
 
