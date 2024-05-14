@@ -95,7 +95,6 @@ if __name__ == "__main__":
             test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, vector_size)
 
 
-
         train_NE_expanded = np.array(train_NE_expanded)
         test_NE_expanded = np.array(test_NE_expanded)
 
@@ -107,8 +106,6 @@ if __name__ == "__main__":
     X_train_numpy = np.array(X_train)
     X_train_numpy = util.NER_reshape_data(X_train_numpy)
     y_train_categorical = util.encode_labels(y_train)
-
-
 
     X_test, y_test = util.NER_padding_x_y(test_EEG_segments, test_Classes)
     X_test_numpy = np.array(X_test)
@@ -158,7 +155,7 @@ if __name__ == "__main__":
         optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     #early stopping
-    patience = 10
+    patience = 4
     counter = 0
     best_val_loss = None
     best_model = None
