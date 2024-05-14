@@ -63,7 +63,6 @@ if __name__ == "__main__":
     util = utils.Utils()
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
-    print(len(train_EEG_segments))
     test_NE, test_EEG_segments, test_Classes = d.NER_read_custom_files(test_path)
 
     if EEG_with_Text == True:
@@ -90,8 +89,8 @@ if __name__ == "__main__":
             train_NE_embedded = ner_bert.get_embeddings(train_NE)
             test_NE_embedded = ner_bert.get_embeddings(test_NE)
 
-            train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, padding_shape=vector_size)
-            test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, padding_shape=vector_size)
+            train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, 768)
+            test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, 768)
 
             print("Type of train_NE_expanded: ", type(train_NE_expanded))
             print("Type of train_NE_expanded[0]: ", type(train_NE_expanded[0]))
