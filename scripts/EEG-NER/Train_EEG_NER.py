@@ -22,8 +22,8 @@ if __name__ == "__main__":
 
     evaluation = True
     parameters['evaluation'] = evaluation
-    EEG_with_Text = True
-    parameters['EEG_with_Text'] = EEG_with_Text
+    inputs = "EEG+Text"
+    parameters['inputs'] = inputs
     Embedding_model = 'BERT'
     parameters['Embedding_model'] = Embedding_model
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
     test_NE, test_EEG_segments, test_Classes = d.NER_read_custom_files(test_path)
 
-    if EEG_with_Text == True:
+    if inputs == "EEE+Text":
         #create word embeddings
 
         if Embedding_model == 'Word2Vec':
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     y_test_tensor = torch.tensor(y_test_categorical, dtype=torch.float32)  # Assuming your labels are integers
 
 
-    if EEG_with_Text == True:
+    if inputs == "EEE+Text":
         train_dataset = TensorDataset(x_train_tensor, train_NE_padded_tensor, y_train_tensor)
         test_dataset = TensorDataset(x_test_tensor, test_NE_padded_tensor, y_test_tensor)
 
@@ -166,7 +166,7 @@ if __name__ == "__main__":
         model.train()
         total_loss = 0
         for batch in train_loader:
-            if EEG_with_Text == True:
+            if inputs == "EEE+Text":
                 batch_x, batch_NE, batch_y = batch
                 batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
                 optimizer.zero_grad()
@@ -197,7 +197,7 @@ if __name__ == "__main__":
 
             val_loss = 0
             for batch in val_loader:
-                if EEG_with_Text == True:
+                if inputs == "EEE+Text":
                     batch_x, batch_NE, batch_y = batch
                     batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
                     outputs = model(batch_x, batch_NE)
@@ -239,7 +239,7 @@ if __name__ == "__main__":
             correct = 0
             total = 0
             for batch in test_loader:
-                if EEG_with_Text == True:
+                if inputs == "EEE+Text":
                     batch_x, batch_NE, batch_y = batch
                     batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
                     outputs = model(batch_x, batch_NE)
