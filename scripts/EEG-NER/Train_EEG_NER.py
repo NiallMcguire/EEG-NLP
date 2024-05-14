@@ -59,7 +59,7 @@ if __name__ == "__main__":
     else:
         device = torch.device("cpu")
 
-    train_path = r"/users/gxb18167/Datasets/ZuCo/train_NER.pkl"
+    train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
 
     #test_path = r"/users/gxb18167/Datasets/ZuCo/test_NER.pkl"
 
