@@ -280,11 +280,8 @@ class Data:
 
             total_num_sentence = len(Task_Dataset[subjects[0]])
 
-            print('[INFO]initializing a train set...')
-
             for key in subjects:
                 print(f'key = {key}')
-                # creating test set
                 for i in range(total_num_sentence):
                     if Task_Dataset[key][i] is not None:
                         sentence_object = Task_Dataset[key][i]
