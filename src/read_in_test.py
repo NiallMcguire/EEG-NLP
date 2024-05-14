@@ -35,4 +35,10 @@ if __name__ == "__main__":
     # Get the named entities
     List_of_NE, List_of_NE_Labels = data.NER_get_named_entities(Sentences_labels, Sentence_Classes)
 
+    # Get the EEG embeddings for the named entities
+    NE_EEG_segment, NE_EEG_Class, NE = data.NER_get_EEG_Class_NE(list_of_words, EEG_sentence_embeddings, List_of_NE, List_of_NE_Labels)
+
+    unique_entities, unique_EEG_segments, unique_Classes = data.NER_get_unique_entities(NE, NE_EEG_segment,
+                                                                                        NE_EEG_Class)
+
     print("Data created successfully!")
