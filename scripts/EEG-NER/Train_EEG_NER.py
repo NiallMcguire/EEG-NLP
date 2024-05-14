@@ -53,6 +53,8 @@ if __name__ == "__main__":
     parameters['criterion'] = criterion
     val_size = 0.4
     parameters['val_size'] = val_size
+    test_size = 0.2
+    parameters['test_size'] = test_size
 
     if torch.cuda.is_available():
         device = torch.device("cuda")
@@ -103,12 +105,7 @@ if __name__ == "__main__":
         train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
 
         #test split
-        train_NE_padded_tensor, test_NE_padded_tensor, train_Classes, test_Classes = train_test_split(train_NE_padded_tensor, train_Classes, test_size=0.2, random_state=42)
-
-
-
-
-
+        train_NE_padded_tensor, test_NE_padded_tensor, train_Classes, test_Classes = train_test_split(train_NE_padded_tensor, train_Classes, test_size=test_size, random_state=42)
         #test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
 
 
@@ -118,7 +115,7 @@ if __name__ == "__main__":
     y_categorical = util.encode_labels(y)
 
     #train test split
-    X_train, X_test, y_train, y_test = train_test_split(X, y_categorical, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y_categorical, test_size=test_size, random_state=42)
 
     # Convert numpy arrays to PyTorch tensors
     x_train_tensor = torch.tensor(X_train, dtype=torch.float32)
