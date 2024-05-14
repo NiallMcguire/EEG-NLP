@@ -7,3 +7,5 @@ if __name__ == "__main__":
 
     data = data.Data()
     data.create_custom_dataset(task_name)
+
+    print("Data created successfully!")
