@@ -61,14 +61,14 @@ if __name__ == "__main__":
 
     train_path = r"/users/gxb18167/Datasets/ZuCo/train_NER.pkl"
 
-    test_path = r"/users/gxb18167/Datasets/ZuCo/test_NER.pkl"
+    #test_path = r"/users/gxb18167/Datasets/ZuCo/test_NER.pkl"
 
 
     d = data.Data()
     util = utils.Utils()
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
-    test_NE, test_EEG_segments, test_Classes = d.NER_read_custom_files(test_path)
+    #test_NE, test_EEG_segments, test_Classes = d.NER_read_custom_files(test_path)
 
     if inputs == "EEE+Text" or "Text":
         #create word embeddings
@@ -83,7 +83,7 @@ if __name__ == "__main__":
             workers = 4
 
             train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count, workers)
-            test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE, vector_size, window, min_count, workers)
+            #test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE, vector_size, window, min_count, workers)
 
         elif Embedding_model == 'BERT':
             vector_size = 768
@@ -92,34 +92,40 @@ if __name__ == "__main__":
             ner_bert = utils.NER_BERT()
 
             train_NE_embedded = ner_bert.get_embeddings(train_NE)
-            test_NE_embedded = ner_bert.get_embeddings(test_NE)
+            #test_NE_embedded = ner_bert.get_embeddings(test_NE)
 
         train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
-        test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, vector_size)
+        #test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, vector_size)
 
         train_NE_expanded = np.array(train_NE_expanded)
-        test_NE_expanded = np.array(test_NE_expanded)
+        #test_NE_expanded = np.array(test_NE_expanded)
 
         train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
-        test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
+
+        #test split
+        train_NE_padded_tensor, test_NE_padded_tensor, train_Classes, test_Classes = train_test_split(train_NE_padded_tensor, train_Classes, test_size=0.2, random_state=42)
 
 
-    X_train, y_train = util.NER_padding_x_y(train_EEG_segments, train_Classes)
-    X_train_numpy = np.array(X_train)
-    X_train_numpy = util.NER_reshape_data(X_train_numpy)
-    y_train_categorical = util.encode_labels(y_train)
 
-    X_test, y_test = util.NER_padding_x_y(test_EEG_segments, test_Classes)
-    X_test_numpy = np.array(X_test)
-    X_test_numpy = util.NER_reshape_data(X_test_numpy)
-    y_test_categorical = util.encode_labels(y_test)
+
+
+        #test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
+
+
+    X, y = util.NER_padding_x_y(train_EEG_segments, train_Classes)
+    X = np.array(X)
+    X = util.NER_reshape_data(X)
+    y_categorical = util.encode_labels(y)
+
+    #train test split
+    X_train, X_test, y_train, y_test = train_test_split(X, y_categorical, test_size=0.2, random_state=42)
 
     # Convert numpy arrays to PyTorch tensors
-    x_train_tensor = torch.tensor(X_train_numpy, dtype=torch.float32)
-    y_train_tensor = torch.tensor(y_train_categorical, dtype=torch.float32)  # Assuming your labels are integers
+    x_train_tensor = torch.tensor(X_train, dtype=torch.float32)
+    y_train_tensor = torch.tensor(y_train, dtype=torch.float32)  # Assuming your labels are integers
 
-    x_test_tensor = torch.tensor(X_test_numpy, dtype=torch.float32)
-    y_test_tensor = torch.tensor(y_test_categorical, dtype=torch.float32)  # Assuming your labels are integers
+    x_test_tensor = torch.tensor(X_test, dtype=torch.float32)
+    y_test_tensor = torch.tensor(y_test, dtype=torch.float32)  # Assuming your labels are integers
 
 
     if inputs == "EEE+Text":
