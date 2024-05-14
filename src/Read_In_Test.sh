@@ -11,7 +11,7 @@
 #SBATCH --export=ALL
 #
 # Run in the gpu partition (queue) with any GPU
-#SBATCH --partition=cpu
+#SBATCH --partition=standard --mem-per-cpu=9600
 #
 # Specify project account (replace as required)
 #SBATCH --account=moshfeghi-pmwc
