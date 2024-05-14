@@ -33,9 +33,9 @@ if __name__ == "__main__":
     input_size = 840
     parameters['input_size'] = input_size
     hidden_size = 64
+    parameters['hidden_size'] = hidden_size
     dropout = 0.2
     parameters['dropout'] = dropout
-    parameters['hidden_size'] = hidden_size
     num_layers = 2
     parameters['num_layers'] = num_layers
     num_classes = 3
@@ -51,6 +51,8 @@ if __name__ == "__main__":
     parameters['optimizer'] = optimizer
     criterion = 'CrossEntropyLoss'
     parameters['criterion'] = criterion
+    val_size = 0.4
+    parameters['val_size'] = val_size
 
     if torch.cuda.is_available():
         device = torch.device("cuda")
@@ -95,7 +97,6 @@ if __name__ == "__main__":
         train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
         test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, vector_size)
 
-
         train_NE_expanded = np.array(train_NE_expanded)
         test_NE_expanded = np.array(test_NE_expanded)
 
@@ -125,21 +126,18 @@ if __name__ == "__main__":
         train_dataset = TensorDataset(x_train_tensor, train_NE_padded_tensor, y_train_tensor)
         test_dataset = TensorDataset(x_test_tensor, test_NE_padded_tensor, y_test_tensor)
 
-        val_size = 0.2
         train_size = len(train_dataset) - int(len(train_dataset) * val_size)
         train_dataset, val_dataset = torch.utils.data.random_split(train_dataset, [train_size, int(len(train_dataset) * val_size)])
     elif inputs == "Text":
         train_dataset = TensorDataset(train_NE_padded_tensor, y_train_tensor)
         test_dataset = TensorDataset(test_NE_padded_tensor, y_test_tensor)
 
-        val_size = 0.2
         train_size = len(train_dataset) - int(len(train_dataset) * val_size)
         train_dataset, val_dataset = torch.utils.data.random_split(train_dataset, [train_size, int(len(train_dataset) * val_size)])
     else:
         train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
         test_dataset = TensorDataset(x_test_tensor, y_test_tensor)
 
-        val_size = 0.2
         train_size = len(train_dataset) - int(len(train_dataset) * val_size)
         train_dataset, val_dataset = torch.utils.data.random_split(train_dataset, [train_size, int(len(train_dataset) * val_size)])
 
