@@ -32,6 +32,8 @@ if __name__ == "__main__":
     input_size = 840
     parameters['input_size'] = input_size
     hidden_size = 64
+    dropout = 0.2
+    parameters['dropout'] = dropout
     parameters['hidden_size'] = hidden_size
     num_layers = 2
     parameters['num_layers'] = num_layers
@@ -89,8 +91,8 @@ if __name__ == "__main__":
             train_NE_embedded = ner_bert.get_embeddings(train_NE)
             test_NE_embedded = ner_bert.get_embeddings(test_NE)
 
-            train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, 768)
-            test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, 768)
+            train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
+            test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, vector_size)
 
 
 
@@ -143,9 +145,9 @@ if __name__ == "__main__":
 
     # Instantiate the model
     if EEG_with_Text == True:
-        model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_layers, num_classes, LSTM_layers)
+        model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_layers, num_classes)
     else:
-        model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, LSTM_layers)
+        model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes)
     model.to(device)
 
     # Define loss function and optimizer
