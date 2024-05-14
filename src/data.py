@@ -242,7 +242,6 @@ class Data:
         return EEG_word_token, word_label
 
     def create_custom_dataset(self, task_name):
-
         whole_dataset_dicts = []
 
         if 'task1' in task_name:
@@ -267,6 +266,9 @@ class Data:
 
         print("Loaded in", len(whole_dataset_dicts), "task datasets")
 
+        Task_Dataset_List = whole_dataset_dicts
+        if not isinstance(whole_dataset_dicts, list):
+            Task_Dataset_List = [whole_dataset_dicts]
 
         EEG_word_level_embeddings = []
         EEG_word_level_labels = []
@@ -277,18 +279,12 @@ class Data:
 
             total_num_sentence = len(Task_Dataset[subjects[0]])
 
-            train_divider = int(0.8 * total_num_sentence)
-            dev_divider = train_divider + int(0.1 * total_num_sentence)
-
-            print(f'train size = {train_divider}')
-            print(f'dev size = {dev_divider}')
-
             print('[INFO]initializing a train set...')
 
             for key in subjects:
                 print(f'key = {key}')
                 # creating test set
-                for i in range(dev_divider, total_num_sentence):
+                for i in range(total_num_sentence):
                     if Task_Dataset[key][i] is not None:
                         sentence_object = Task_Dataset[key][i]
 
@@ -298,7 +294,7 @@ class Data:
                         Sentence_word_level_labels.append("SOS")
                         for word in sentence_object['word']:
 
-                            word_eeg_embedding, EEG_word_level_label = get_eeg_word_embedding(word)
+                            word_eeg_embedding, EEG_word_level_label = self.get_eeg_word_embedding(word)
 
                             if word_eeg_embedding is not None and torch.isnan(
                                     torch.from_numpy(word_eeg_embedding)).any() == False:
