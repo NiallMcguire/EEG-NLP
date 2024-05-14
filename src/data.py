@@ -311,6 +311,7 @@ class Data:
                         for word_embedding in Sentence_EEG_word_level_embeddings:
                             EEG_word_level_embeddings.append(word_embedding)
 
+        return EEG_word_level_embeddings, EEG_word_level_labels
 
 
 
