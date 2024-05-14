@@ -6,11 +6,8 @@ if __name__ == "__main__":
     data = data.Data()
 
     task_name = "task1, task2, taskNRv2"
-
     path_normal_reading = r'/users/gxb18167/Datasets/ZuCo/ZuCo_NER_Labels/zuco1_normalreading_ner.txt'
-
     path_task_reading = r"/users/gxb18167/Datasets/ZuCo/ZuCo_NER_Labels/zuco1_taskreading_ner.txt"
-
     path_sentiment = r"/users/gxb18167/Datasets/ZuCo/ZuCo_NER_Labels/zuco1_sentiment_ner.txt"
 
     normal_reading_sentences, normal_reading_classes = data.NER_read_sentences(path_normal_reading)
