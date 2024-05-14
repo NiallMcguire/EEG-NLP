@@ -67,7 +67,7 @@ if __name__ == "__main__":
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
     test_NE, test_EEG_segments, test_Classes = d.NER_read_custom_files(test_path)
 
-    if inputs == "EEE+Text":
+    if inputs == "EEE+Text" or "Text":
         #create word embeddings
 
         if Embedding_model == 'Word2Vec':
@@ -127,6 +127,13 @@ if __name__ == "__main__":
         val_size = 0.2
         train_size = len(train_dataset) - int(len(train_dataset) * val_size)
         train_dataset, val_dataset = torch.utils.data.random_split(train_dataset, [train_size, int(len(train_dataset) * val_size)])
+    elif inputs == "Text":
+        train_dataset = TensorDataset(train_NE_padded_tensor, y_train_tensor)
+        test_dataset = TensorDataset(test_NE_padded_tensor, y_test_tensor)
+
+        val_size = 0.2
+        train_size = len(train_dataset) - int(len(train_dataset) * val_size)
+        train_dataset, val_dataset = torch.utils.data.random_split(train_dataset, [train_size, int(len(train_dataset) * val_size)])
     else:
         train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
         test_dataset = TensorDataset(x_test_tensor, y_test_tensor)
@@ -141,8 +148,12 @@ if __name__ == "__main__":
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=False)
 
     # Instantiate the model
-    if EEG_with_Text == True:
+    if inputs == "EEE+Text":
         model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_layers, num_classes, dropout)
+    elif inputs == "Text":
+        input_size = vector_size
+        parameters['input_size'] = input_size
+        model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, dropout)
     else:
         model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, dropout)
     model.to(device)
