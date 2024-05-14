@@ -156,6 +156,7 @@ if __name__ == "__main__":
 
     #early stopping
     patience = 4
+    parameters['patience'] = patience
     counter = 0
     best_val_loss = None
     best_model = None
