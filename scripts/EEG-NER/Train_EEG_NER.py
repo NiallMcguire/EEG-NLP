@@ -92,8 +92,8 @@ if __name__ == "__main__":
             train_NE_embedded = ner_bert.get_embeddings(train_NE)
             test_NE_embedded = ner_bert.get_embeddings(test_NE)
 
-            train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
-            test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, vector_size)
+        train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
+        test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, vector_size)
 
 
         train_NE_expanded = np.array(train_NE_expanded)
