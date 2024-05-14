@@ -161,7 +161,6 @@ class Data:
 
         return NE, EEG_segments, Classes
 
-    '''
     def NER_align_sentences(self, path_normal_reading, path_task_reading, path_sentiment, train_path, test_path):
         path_normal_reading = r'C:\Users\gxb18167\PycharmProjects\SIGIR_EEG_GAN\Development\Named-Entity-Classification\Data-Management\zuco1_normalreading_ner.txt'
 
@@ -224,7 +223,6 @@ class Data:
 
 
         return unique_entities, unique_EEG_segments, unique_Classes, Test_unique_entities, Test_unique_EEG_segments, Test_unique_Classes
-    '''
 
 
     def get_eeg_word_embedding(self, word, eeg_type='GD', bands=['_t1', '_t2', '_a1', '_a2', '_b1', '_b2', '_g1', '_g2']):
