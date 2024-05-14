@@ -24,7 +24,7 @@ if __name__ == "__main__":
     parameters['evaluation'] = evaluation
     inputs = "Text"
     parameters['inputs'] = inputs
-    Embedding_model = 'BERT'
+    Embedding_model = 'Word2Vec' # 'Word2Vec' or 'BERT'
 
     parameters['Embedding_model'] = Embedding_model
 
