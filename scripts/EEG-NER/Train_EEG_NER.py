@@ -25,6 +25,7 @@ if __name__ == "__main__":
     inputs = "Text"
     parameters['inputs'] = inputs
     Embedding_model = 'BERT'
+
     parameters['Embedding_model'] = Embedding_model
 
     batch_size = 32
