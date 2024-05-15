@@ -105,7 +105,7 @@ if __name__ == "__main__":
         train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
 
         #test split
-        train_NE_padded_tensor, test_NE_padded_tensor, train_Classes, test_Classes = train_test_split(train_NE_padded_tensor, train_Classes, test_size=test_size, random_state=42)
+
         #test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
 
 
@@ -113,6 +113,9 @@ if __name__ == "__main__":
     X = np.array(X)
     X = util.NER_reshape_data(X)
     y_categorical = util.encode_labels(y)
+
+    train_NE_padded_tensor, test_NE_padded_tensor, _, _ = train_test_split(
+        train_NE_padded_tensor, y_categorical, test_size=test_size, random_state=42)
 
     #train test split
     X_train, X_test, y_train, y_test = train_test_split(X, y_categorical, test_size=test_size, random_state=42)
