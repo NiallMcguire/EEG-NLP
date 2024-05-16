@@ -50,7 +50,7 @@ if __name__ == "__main__":
     parameters['criterion'] = criterion
     val_size = 0.4
     parameters['val_size'] = val_size
-    test_size = 0.7
+    test_size = 0.9
     parameters['test_size'] = test_size
 
     if torch.cuda.is_available():
