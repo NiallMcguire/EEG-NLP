@@ -34,7 +34,7 @@ if __name__ == "__main__":
     parameters['hidden_size'] = hidden_size
     dropout = 0.2
     parameters['dropout'] = dropout
-    num_layers = 2
+    num_layers = 4
     parameters['num_layers'] = num_layers
     num_classes = 3
     parameters['num_classes'] = num_classes
