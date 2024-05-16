@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     evaluation = True
     parameters['evaluation'] = evaluation
-    inputs = "EEG"
+    inputs = "EEE+Text" # "EEG", "Text", "EEE+Text"
     parameters['inputs'] = inputs
     Embedding_model = 'Word2Vec' # 'Word2Vec' or 'BERT'
 
