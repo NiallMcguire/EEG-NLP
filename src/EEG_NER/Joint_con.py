@@ -21,7 +21,6 @@ class JointEmbedding(nn.Module):
 
         # Combine representations
         combined = eeg_out[:, -1, :] + bert_out  # Summing up the last BLSTM output and BERT output
-
         # Final classification layer
         out = self.fc(combined)
         return out
