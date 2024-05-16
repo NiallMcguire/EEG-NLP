@@ -140,13 +140,13 @@ if __name__ == "__main__":
 
     # Instantiate the model
     if inputs == "EEE+Text":
-        model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_layers, num_classes, dropout)
+        model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_classes, num_layers, dropout)
     elif inputs == "Text":
         input_size = vector_size
         parameters['input_size'] = input_size
-        model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, dropout)
+        model = Networks.BLSTM(input_size, hidden_size, num_classes, num_layers, dropout)
     else:
-        model = Networks.BLSTM(input_size, hidden_size, num_layers, num_classes, dropout)
+        model = Networks.BLSTM(input_size, hidden_size, num_classes,num_layers, dropout)
     model.to(device)
 
     # Define loss function and optimizer
