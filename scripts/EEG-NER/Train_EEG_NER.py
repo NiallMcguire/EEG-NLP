@@ -25,9 +25,7 @@ if __name__ == "__main__":
     inputs = "EEE+Text" # "EEG", "Text", "EEE+Text"
     parameters['inputs'] = inputs
     Embedding_model = 'Word2Vec' # 'Word2Vec' or 'BERT'
-
     parameters['Embedding_model'] = Embedding_model
-
     batch_size = 32
     parameters['batch_size'] = batch_size
     input_size = 840
@@ -45,7 +43,6 @@ if __name__ == "__main__":
     LSTM_layers = 2
     parameters['LSTM_layers'] = LSTM_layers
     learning_rate = 0.001
-
     parameters['learning_rate'] = learning_rate
     optimizer = 'Adam'
     parameters['optimizer'] = optimizer
@@ -63,14 +60,11 @@ if __name__ == "__main__":
 
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
 
-    #test_path = r"/users/gxb18167/Datasets/ZuCo/test_NER.pkl"
-
 
     d = data.Data()
     util = utils.Utils()
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
-    #test_NE, test_EEG_segments, test_Classes = d.NER_read_custom_files(test_path)
 
     if inputs == "EEE+Text" or "Text":
         #create word embeddings
@@ -85,7 +79,6 @@ if __name__ == "__main__":
             workers = 4
 
             train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count, workers)
-            #test_word_embeddings, test_NE_embedded = util.NER_Word2Vec(test_NE, vector_size, window, min_count, workers)
 
         elif Embedding_model == 'BERT':
             vector_size = 768
@@ -94,19 +87,12 @@ if __name__ == "__main__":
             ner_bert = utils.NER_BERT()
 
             train_NE_embedded = ner_bert.get_embeddings(train_NE)
-            #test_NE_embedded = ner_bert.get_embeddings(test_NE)
 
         train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
-        #test_NE_expanded = util.NER_expanded_NER_list(test_EEG_segments, test_NE_embedded, vector_size)
 
         train_NE_expanded = np.array(train_NE_expanded)
-        #test_NE_expanded = np.array(test_NE_expanded)
 
         train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
-
-        #test split
-
-        #test_NE_padded_tensor = torch.tensor(test_NE_expanded, dtype=torch.float32)
 
 
     X, y = util.NER_padding_x_y(train_EEG_segments, train_Classes)
