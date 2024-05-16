@@ -24,7 +24,7 @@ if __name__ == "__main__":
     parameters['evaluation'] = evaluation
     inputs = "EEE+Text" # "EEG", "Text", "EEE+Text"
     parameters['inputs'] = inputs
-    Embedding_model = 'Word2Vec' # 'Word2Vec' or 'BERT'
+    Embedding_model = 'BERT' # 'Word2Vec' or 'BERT'
     parameters['Embedding_model'] = Embedding_model
     batch_size = 32
     parameters['batch_size'] = batch_size
