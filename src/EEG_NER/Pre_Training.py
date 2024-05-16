@@ -20,25 +20,34 @@ class CustomDataset(Dataset):
 
 
 # Define a custom contrastive loss function
+import torch.nn.functional as F
+import torch.nn as nn
+
 class ContrastiveLoss(nn.Module):
     def __init__(self, margin=1.0):
         super(ContrastiveLoss, self).__init__()
         self.margin = margin
 
     def forward(self, embeddings, query_embeddings):
-        # Compute pairwise cosine similarity matrix
-        sim_matrix = F.cosine_similarity(embeddings.unsqueeze(1), query_embeddings.unsqueeze(0), dim=-1)
+        # Ensure that embeddings and query_embeddings have compatible dimensions
+        # embeddings: (batch_size, embedding_dim)
+        # query_embeddings: (batch_size, num_tokens, embedding_dim)
 
-        # Construct positive and negative pairs
-        mask = torch.eye(embeddings.size(0), dtype=torch.bool).to(embeddings.device)
-        positives = sim_matrix.masked_select(mask).view(embeddings.size(0), -1)
-        negatives = sim_matrix.masked_select(~mask).view(embeddings.size(0), -1)
+        # Compute the cosine similarity
+        sim_matrix = F.cosine_similarity(embeddings.unsqueeze(1), query_embeddings, dim=-1)
 
-        # Compute contrastive loss
-        targets = torch.arange(embeddings.size(0)).to(embeddings.device)
-        loss_pos = F.cross_entropy(positives, targets)
-        loss_neg = F.cross_entropy(-negatives, targets)
-        loss = loss_pos + loss_neg
+        # Compute the contrastive loss
+        # Assume we have binary labels indicating whether pairs are positive or negative samples
+        # For simplicity, we use a dummy label tensor (adjust according to your dataset)
+        labels = torch.ones(embeddings.size(0)).to(embeddings.device)  # Example: all positive pairs
+
+        # Positive pairs: loss = 1 - cos_sim
+        pos_loss = (1 - sim_matrix[labels == 1]).pow(2).sum()
+
+        # Negative pairs: loss = max(0, cos_sim - margin)
+        neg_loss = (sim_matrix[labels == 0] - self.margin).clamp(min=0).pow(2).sum()
+
+        loss = pos_loss + neg_loss
         return loss
 
 
