@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     train_NE_expanded = np.array(train_NE_expanded)
 
-    train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
+    #train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
 
     X, y = util.NER_padding_x_y(train_EEG_segments, train_Classes)
     X = np.array(X)
