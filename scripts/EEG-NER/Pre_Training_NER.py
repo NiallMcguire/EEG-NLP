@@ -46,6 +46,7 @@ if __name__ == "__main__":
     #create pairs
     # Move tensors to GPU if available
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    X = torch.tensor(X, dtype=torch.float32)
     X = X.to(device)
     train_NE_padded_tensor = train_NE_padded_tensor.to(device)
 
