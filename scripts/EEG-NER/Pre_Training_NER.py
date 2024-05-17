@@ -27,8 +27,6 @@ if __name__ == "__main__":
 
     train_NE_embedded = ner_bert.get_embeddings(train_NE)
 
-
-
     train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
 
     train_NE_expanded = np.array(train_NE_expanded)
@@ -40,8 +38,24 @@ if __name__ == "__main__":
     X = util.NER_reshape_data(X)
     y_categorical = util.encode_labels(y)
 
+
+    # Create pairs and labels
+    positive_pairs = [(X[i], train_NE_padded_tensor[i], 1) for i in range(len(X))]
+    negative_pairs = []
+
+    # Generate negative pairs
+    for i in range(len(X)):
+        for j in range(len(train_NE_padded_tensor)):
+            if i != j:
+                negative_pairs.append((X[i], train_NE_padded_tensor[j], 0))
+
+
+
     train_NE_padded_tensor, test_NE_padded_tensor, _, _ = train_test_split(
         train_NE_padded_tensor, y_categorical, test_size=test_size, random_state=42)
 
+
+
     X_train, X_test, y_train, y_test = train_test_split(X, y_categorical, test_size=test_size, random_state=42)
 
+    X_val, X_test, y_val, y_test = train_test_split(X_test, y_test, test_size=test_size, random_state=42)
