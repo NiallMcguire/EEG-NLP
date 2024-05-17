@@ -15,3 +15,8 @@ if __name__ == "main":
     hidden_size = 50
     learning_rate = 0.001
     num_epochs = 20
+
+    # Initialize the MLP model, loss function, and optimizer
+    model = MLP(input_size, hidden_size, output_size)
+    criterion = nn.CrossEntropyLoss()  # Since it's a classification task, use CrossEntropyLoss
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
