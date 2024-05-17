@@ -1,7 +1,12 @@
+import sys
+
+sys.path.append('/users/gxb18167/EEG-NLP')
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from sklearn.model_selection import train_test_split
+
 
 from src import Networks
 from src import data
