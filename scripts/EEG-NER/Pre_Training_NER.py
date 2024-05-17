@@ -2,21 +2,16 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from src import Networks
+from src import data
 
 
 
 
 if __name__ == "main":
-    # Adjusted input and output sizes
-    input_size = 840 + 768  # EEG data vector size + BERT embedding size
-    output_size = 3  # Number of classes for named entity recognition
+    train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
 
-    # Hyperparameters
-    hidden_size = 50
-    learning_rate = 0.001
-    num_epochs = 20
+    d = data.Data()
+    util = utils.Utils()
 
-    # Initialize the MLP model, loss function, and optimizer
-    model = MLP(input_size, hidden_size, output_size)
-    criterion = nn.CrossEntropyLoss()  # Since it's a classification task, use CrossEntropyLoss
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
+
