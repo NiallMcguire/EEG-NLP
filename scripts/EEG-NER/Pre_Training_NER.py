@@ -43,6 +43,16 @@ if __name__ == "__main__":
     X = util.NER_reshape_data(X)
     y_categorical = util.encode_labels(y)
 
+    #create pairs
+    # Move tensors to GPU if available
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    X = X.to(device)
+    train_NE_padded_tensor = train_NE_padded_tensor.to(device)
+
+    # Create positive pairs
+    positive_pairs = torch.stack([X, train_NE_padded_tensor], dim=1)
+    positive_labels = torch.ones(len(X), device=device)
+
     '''
     # Create pairs and labels
     positive_pairs = [(X[i], train_NE_padded_tensor[i], 1) for i in range(len(X))]
