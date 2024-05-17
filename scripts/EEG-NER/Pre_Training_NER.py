@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
 
     #train_NE_padded_tensor, test_NE_padded_tensor, _, _ = train_test_split(
-        train_NE_padded_tensor, y_categorical, test_size=test_size, random_state=42)
+        #train_NE_padded_tensor, y_categorical, test_size=test_size, random_state=42)
 
 
 
