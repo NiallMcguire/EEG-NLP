@@ -49,6 +49,8 @@ if __name__ == "__main__":
             if i != j:
                 negative_pairs.append((X[i], train_NE_padded_tensor[j], 0))
 
+    breakpoint(print("Done"))
+
 
 
     train_NE_padded_tensor, test_NE_padded_tensor, _, _ = train_test_split(
