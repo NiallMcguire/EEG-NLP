@@ -9,7 +9,8 @@ import numpy as np
 
 
 if __name__ == "main":
-    train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
+    #train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
+    train_path = r"C:\Users\gxb18167\PycharmProjects\EEG-NLP\NER.pkl" #@TODO path change to above
 
     d = data.Data()
     util = utils.Utils()
