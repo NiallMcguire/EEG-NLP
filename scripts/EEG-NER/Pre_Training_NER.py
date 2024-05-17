@@ -44,15 +44,16 @@ if __name__ == "__main__":
     y_categorical = util.encode_labels(y)
 
 
+
     # Create pairs and labels
-    positive_pairs = [(X[i], train_NE_padded_tensor[i], 1) for i in range(len(X))]
+    positive_pairs = [(X[i], train_NE_expanded[i], 1) for i in range(len(X))]
     negative_pairs = []
 
     # Generate negative pairs
     for i in range(len(X)):
-        for j in range(len(train_NE_padded_tensor)):
+        for j in range(len(train_NE_expanded)):
             if i != j:
-                negative_pairs.append((X[i], train_NE_padded_tensor[j], 0))
+                negative_pairs.append((X[i], train_NE_expanded[j], 0))
 
     breakpoint(print("Done"))
 
