@@ -43,18 +43,7 @@ if __name__ == "__main__":
     X = util.NER_reshape_data(X)
     y_categorical = util.encode_labels(y)
 
-    #create pairs
-    # Move tensors to GPU if available
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    X = torch.tensor(X, dtype=torch.float32)
-    X = X.to(device)
-    train_NE_padded_tensor = train_NE_padded_tensor.to(device)
 
-    # Create positive pairs
-    positive_pairs = torch.stack([X, train_NE_padded_tensor], dim=1)
-    positive_labels = torch.ones(len(X), device=device)
-
-    '''
     # Create pairs and labels
     positive_pairs = [(X[i], train_NE_padded_tensor[i], 1) for i in range(len(X))]
     negative_pairs = []
@@ -77,4 +66,3 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_split(X, y_categorical, test_size=test_size, random_state=42)
 
     X_val, X_test, y_val, y_test = train_test_split(X_test, y_test, test_size=test_size, random_state=42)
-    '''
