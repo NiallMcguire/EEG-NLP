@@ -41,8 +41,6 @@ if __name__ == "__main__":
 
     train_NE_expanded = np.array(train_NE_expanded)
 
-    # train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
-
     X, y = util.NER_padding_x_y(train_EEG_segments, train_Classes)
     X = np.array(X)
     X = util.NER_reshape_data(X)
@@ -57,9 +55,6 @@ if __name__ == "__main__":
         for j in range(len(train_NE_expanded)):
             if i != j:
                 negative_pairs.append((X[i], train_NE_expanded[j], 0))
-
-
-
     all_pairs = positive_pairs + negative_pairs
 
     del positive_pairs
