@@ -117,12 +117,17 @@ if __name__ == "__main__":
     print("EEG input shape: ", eeg_train.shape)
     print("BERT input shape: ", bert_train.shape)
 
+    print("EEG input shape 1", eeg_train.shape[1])
+    print("BERT input shape 1", bert_train.shape[1])
 
-    breakpoint()
+
+
+
+    eeg_input_dim = eeg_train.shape[1]
+    bert_output_dim = bert_train.shape[1]
+
     # Assuming the model is already defined as EEGToBERTModel
 
-    eeg_input_dim = 128
-    bert_output_dim = 768
 
     model = EEGToBERTModel(eeg_input_dim, bert_output_dim)
     criterion = ContrastiveLoss(margin=1.0)
