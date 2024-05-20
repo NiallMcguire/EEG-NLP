@@ -44,7 +44,6 @@ if __name__ == "__main__":
     y_categorical = util.encode_labels(y)
 
 
-
     # Create pairs and labels
     positive_pairs = [(X[i], train_NE_expanded[i], 1) for i in range(len(X))]
     negative_pairs = []
@@ -56,8 +55,6 @@ if __name__ == "__main__":
                 negative_pairs.append((X[i], train_NE_expanded[j], 0))
 
     all_pairs = positive_pairs + negative_pairs
-
-
 
     #train_NE_padded_tensor, test_NE_padded_tensor, _, _ = train_test_split(
         #train_NE_padded_tensor, y_categorical, test_size=test_size, random_state=42)
