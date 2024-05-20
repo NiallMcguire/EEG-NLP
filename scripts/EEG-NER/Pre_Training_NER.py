@@ -114,7 +114,15 @@ if __name__ == "__main__":
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=True)
 
+    print("EEG input shape: ", eeg_train.shape)
+    print("BERT input shape: ", bert_train.shape)
+
+
+    breakpoint()
     # Assuming the model is already defined as EEGToBERTModel
+
+    eeg_input_dim = 128
+    bert_output_dim = 768
 
     model = EEGToBERTModel(eeg_input_dim, bert_output_dim)
     criterion = ContrastiveLoss(margin=1.0)
