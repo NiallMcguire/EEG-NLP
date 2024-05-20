@@ -45,6 +45,19 @@ class ContrastiveLoss(nn.Module):
                                       label * torch.pow(torch.clamp(self.margin - euclidean_distance, min=0.0), 2))
         return loss_contrastive
 
+class EEGToBERTModel(nn.Module):
+    def __init__(self, eeg_input_dim, bert_output_dim):
+        super(EEGToBERTModel, self).__init__()
+        self.fc1 = nn.Linear(eeg_input_dim, 512)
+        self.fc2 = nn.Linear(512, 256)
+        self.fc3 = nn.Linear(256, bert_output_dim)
+
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = torch.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+
 
 if __name__ == "__main__":
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
@@ -100,3 +113,29 @@ if __name__ == "__main__":
 
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=True)
+
+    # Assuming the model is already defined as EEGToBERTModel
+
+    model = EEGToBERTModel(eeg_input_dim, bert_output_dim)
+    criterion = ContrastiveLoss(margin=1.0)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+
+    def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=20):
+        model.train()
+        for epoch in range(num_epochs):
+            running_loss = 0.0
+            for eeg_vectors, bert_vectors, labels in train_loader:
+                optimizer.zero_grad()
+                output1 = model(eeg_vectors)
+                output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
+                loss = criterion(output1, output2, labels)
+                loss.backward()
+                optimizer.step()
+                running_loss += loss.item() * eeg_vectors.size(0)
+
+            epoch_loss = running_loss / len(train_loader.dataset)
+            print(f'Epoch {epoch + 1}/{num_epochs}, Loss: {epoch_loss:.4f}')
+
+
+    train_contrastive(model, train_loader, criterion, optimizer)
