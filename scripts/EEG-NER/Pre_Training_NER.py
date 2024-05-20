@@ -87,7 +87,7 @@ if __name__ == "__main__":
     X = util.NER_reshape_data(X)
     y_categorical = util.encode_labels(y)
 
-
+    '''
     # Create pairs and labels
     positive_pairs = [(X[i], train_NE_expanded[i], 1) for i in range(len(X))]
     negative_pairs = []
@@ -104,6 +104,41 @@ if __name__ == "__main__":
     eeg_pairs = torch.tensor([pair[0] for pair in all_pairs], dtype=torch.float32)
     bert_pairs = torch.tensor([pair[1] for pair in all_pairs], dtype=torch.float32)
     labels = torch.tensor([pair[2] for pair in all_pairs], dtype=torch.float32)
+    '''
+
+    # Batch size for generating pairs
+    batch_size = 32
+
+    # Initialize lists to store pairs and labels
+    all_pairs = []
+    all_labels = []
+
+    # Create positive pairs
+    for i in range(0, len(X), batch_size):
+        eeg_batch = X[i:i + batch_size]
+        bert_batch = train_NE_expanded[i:i + batch_size]
+        positive_pairs = [(eeg_batch[j], bert_batch[j], 1) for j in range(len(eeg_batch))]
+        all_pairs.extend(positive_pairs)
+        all_labels.extend([1] * len(eeg_batch))
+
+    # Generate negative pairs
+    for i in range(0, len(X), batch_size):
+        eeg_batch = X[i:i + batch_size]
+        for j in range(0, len(train_NE_expanded), batch_size):
+            bert_batch = train_NE_expanded[j:j + batch_size]
+            for k in range(len(eeg_batch)):
+                negative_pairs = [(eeg_batch[k], bert_batch[l], 0) for l in range(len(bert_batch)) if i != j]
+                all_pairs.extend(negative_pairs)
+                all_labels.extend([0] * len(bert_batch))
+
+    # Convert to tensors
+    eeg_pairs = torch.stack([pair[0] for pair in all_pairs], dim=0)
+    bert_pairs = torch.stack([pair[1] for pair in all_pairs], dim=0)
+    labels = torch.tensor(all_labels, dtype=torch.float32)
+
+
+    #kill running processes
+    exit(0)
 
     eeg_train, eeg_test, bert_train, bert_test, labels_train, labels_test = train_test_split(eeg_pairs, bert_pairs, labels, test_size=test_size, random_state=42)
 
