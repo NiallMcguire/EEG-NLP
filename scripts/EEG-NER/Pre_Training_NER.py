@@ -61,12 +61,6 @@ if __name__ == "__main__":
     bert_pairs = torch.tensor([pair[1] for pair in all_pairs], dtype=torch.float32)
     labels = torch.tensor([pair[2] for pair in all_pairs], dtype=torch.float32)
 
-
-    #train_NE_padded_tensor, test_NE_padded_tensor, _, _ = train_test_split(
-        #train_NE_padded_tensor, y_categorical, test_size=test_size, random_state=42)
+    eeg_train, eeg_test, bert_train, bert_test, labels_train, labels_test = train_test_split(eeg_pairs, bert_pairs, labels, test_size=test_size, random_state=42)
 
 
-
-    #X_train, X_test, y_train, y_test = train_test_split(X, y_categorical, test_size=test_size, random_state=42)
-
-    #X_val, X_test, y_val, y_test = train_test_split(X_test, y_test, test_size=test_size, random_state=42)
