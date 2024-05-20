@@ -52,8 +52,8 @@ def save_pairs_in_batches(X, train_NE_expanded, save_path, batch_size=100):
 if __name__ == "__main__":
     import sys
     sys.path.append('/users/gxb18167/EEG-NLP/')
-    import data
-    import utils
+    from src import data
+    from src import utils
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
     save_path = r"/users/gxb18167/EEG-NLP/"
     vector_size = 768
