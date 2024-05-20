@@ -55,7 +55,7 @@ if __name__ == "__main__":
             if i != j:
                 negative_pairs.append((X[i], train_NE_expanded[j], 0))
 
-    breakpoint(print("Done"))
+    all_pairs = positive_pairs + negative_pairs
 
 
 
