@@ -48,16 +48,17 @@ class EEGToBERTModel(nn.Module):
         super(EEGToBERTModel, self).__init__()
         self.lstm = nn.LSTM(eeg_input_dim, 512, batch_first=True)
         self.fc1 = nn.Linear(512, 256)
-        self.fc2 = nn.Linear(256, bert_output_dim)
+        self.fc2 = nn.Linear(256, bert_output_dim * 7)  # Adjusted output dimension
 
     def forward(self, x):
         # LSTM expects input of shape (batch_size, sequence_length, input_dim)
         x, _ = self.lstm(x)  # LSTM output and (hidden_state, cell_state)
-        x = x[:, -1, :]  # Take the output of the last time step
-        x = torch.relu(self.fc1(x))
+        x = torch.relu(self.fc1(
+            x[:, -1, :]))  # Take the output of the last time step and pass it through the fully connected layer
         x = self.fc2(x)
+        # Reshape x to match the shape of output2
+        x = x.view(x.size(0), 7, -1)
         return x
-
 
 if __name__ == "__main__":
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
@@ -127,7 +128,7 @@ if __name__ == "__main__":
 
 
     # Assuming the model is already defined as EEGToBERTModel
-    model = EEGToBERTModel(eeg_input_dim, bert_output_dim*7)
+    model = EEGToBERTModel(eeg_input_dim, bert_output_dim)
     criterion = ContrastiveLoss(margin=1.0)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
