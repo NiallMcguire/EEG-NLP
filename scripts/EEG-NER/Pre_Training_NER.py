@@ -142,6 +142,7 @@ if __name__ == "__main__":
                 output1 = model(eeg_vectors)
                 output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
 
+                print("labels shape", labels.shape)
                 # Reshape labels to match the shape of output1 and output2
                 labels = labels.view(-1)  # Reshape to [batch_size * sequence_length]
 
