@@ -13,6 +13,7 @@ from src import Networks
 from src import data
 from src import utils
 import numpy as np
+from random import sample
 
 
 from torch.utils.data import Dataset, DataLoader
@@ -61,7 +62,7 @@ class EEGToBERTModel(nn.Module):
 
 if __name__ == "__main__":
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
-    #train_path = r"C:\Users\gxb18167\PycharmProjects\EEG-NLP\NER.pkl" #@TODO path change to above
+    #save_path = r"/users/gxb18167/EEG-NLP/"
 
     d = data.Data()
     util = utils.Utils()
@@ -69,7 +70,6 @@ if __name__ == "__main__":
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
     vector_size = 768
-
     test_size = 0.2
 
     ner_bert = utils.NER_BERT()
@@ -77,33 +77,34 @@ if __name__ == "__main__":
     train_NE_embedded = ner_bert.get_embeddings(train_NE)
 
     train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
-
     train_NE_expanded = np.array(train_NE_expanded)
-
-    #train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
 
     X, y = util.NER_padding_x_y(train_EEG_segments, train_Classes)
     X = np.array(X)
     X = util.NER_reshape_data(X)
     y_categorical = util.encode_labels(y)
 
-
-    # Create pairs and labels
     positive_pairs = [(X[i], train_NE_expanded[i], 1) for i in range(len(X))]
+
+    num_negative_pairs_per_positive = 1
     negative_pairs = []
 
-    # Generate negative pairs
     for i in range(len(X)):
-        for j in range(len(train_NE_expanded)):
-            if i != j:
-                negative_pairs.append((X[i], train_NE_expanded[j], 0))
+        negative_indices = sample([j for j in range(len(train_NE_expanded)) if j != i], num_negative_pairs_per_positive)
+        for neg_index in negative_indices:
+            negative_pairs.append((X[i], train_NE_expanded[neg_index], 0))
 
     all_pairs = positive_pairs + negative_pairs
 
-    #convert to tensors
-    eeg_pairs = torch.tensor([pair[0] for pair in all_pairs], dtype=torch.float32)
-    bert_pairs = torch.tensor([pair[1] for pair in all_pairs], dtype=torch.float32)
-    labels = torch.tensor([pair[2] for pair in all_pairs], dtype=torch.float32)
+    # Convert lists of numpy.ndarrays to single numpy.ndarrays
+    eeg_array = np.array([pair[0] for pair in all_pairs])
+    bert_array = np.array([pair[1] for pair in all_pairs])
+    labels_array = np.array([pair[2] for pair in all_pairs])
+
+    # Convert numpy.ndarrays to tensors
+    eeg_pairs = torch.tensor(eeg_array, dtype=torch.float32)
+    bert_pairs = torch.tensor(bert_array, dtype=torch.float32)
+    labels = torch.tensor(labels_array, dtype=torch.float32)
 
 
 
