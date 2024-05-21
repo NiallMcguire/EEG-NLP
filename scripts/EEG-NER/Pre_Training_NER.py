@@ -165,6 +165,7 @@ if __name__ == "__main__":
             print(f'Epoch {epoch + 1}/{num_epochs}, Loss: {epoch_loss:.4f}')
             # Evaluate validation loss if validation loader is provided
 
+            # Evaluate validation loss if validation loader is provided
             if validation_loader is not None:
                 validation_loss = evaluate(model, validation_loader, criterion)
                 print(f'Epoch {epoch + 1}/{num_epochs}, Validation Loss: {validation_loss:.4f}')
