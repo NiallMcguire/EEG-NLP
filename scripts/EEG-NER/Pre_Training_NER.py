@@ -143,7 +143,7 @@ if __name__ == "__main__":
                 output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
 
                 # Reshape labels to match the shape of output1 and output2
-                labels = labels.unsqueeze(1).expand(-1, output1.size(1)).contiguous().view(-1)
+                labels = labels.view(-1)  # Reshape to [batch_size * sequence_length]
 
                 loss = criterion(output1, output2, labels)
                 loss.backward()
