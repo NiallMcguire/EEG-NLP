@@ -38,6 +38,8 @@ class ContrastiveLoss(nn.Module):
 
     def forward(self, output1, output2, label):
         euclidean_distance = F.pairwise_distance(output1, output2)
+        # Reshape label tensor to match the shape of euclidean_distance tensor
+        label = label.unsqueeze(1).expand_as(euclidean_distance)
         loss_contrastive = torch.mean((1 - label) * torch.pow(euclidean_distance, 2) +
                                       label * torch.pow(torch.clamp(self.margin - euclidean_distance, min=0.0), 2))
         return loss_contrastive
@@ -143,8 +145,6 @@ if __name__ == "__main__":
                 output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
 
                 print("labels shape", labels.shape)
-                # Reshape labels to match the shape of output1 and output2
-                labels = labels.view(-1)  # Reshape to [batch_size * sequence_length]
 
                 loss = criterion(output1, output2, labels)
                 loss.backward()
