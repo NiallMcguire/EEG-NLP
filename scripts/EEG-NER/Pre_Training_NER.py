@@ -111,11 +111,17 @@ if __name__ == "__main__":
 
     eeg_train, eeg_test, bert_train, bert_test, labels_train, labels_test = train_test_split(eeg_pairs, bert_pairs, labels, test_size=test_size, random_state=42)
 
+    #validation
+    eeg_train, eeg_val, bert_train, bert_val, labels_train, labels_val = train_test_split(eeg_train, bert_train, labels_train, test_size=0.2, random_state=42)
+
 
     train_dataset = EEGToBERTContrastiveDataset(eeg_train, bert_train, labels_train)
+    validation_dataset = EEGToBERTContrastiveDataset(eeg_val, bert_val, labels_val)
+
     test_dataset = EEGToBERTContrastiveDataset(eeg_test, bert_test, labels_test)
 
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+    validation_loader = DataLoader(validation_dataset, batch_size=32, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=True)
 
     print("EEG input shape: ", eeg_train.shape)
@@ -134,9 +140,13 @@ if __name__ == "__main__":
     criterion = ContrastiveLoss(margin=1.0)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
+    patience = 5
+
 
     def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=20):
         model.train()
+        best_validation_loss = float('inf')
+        no_improvement_count = 0
         for epoch in range(num_epochs):
             running_loss = 0.0
             for eeg_vectors, bert_vectors, labels in train_loader:
@@ -153,6 +163,37 @@ if __name__ == "__main__":
 
             epoch_loss = running_loss / len(train_loader.dataset)
             print(f'Epoch {epoch + 1}/{num_epochs}, Loss: {epoch_loss:.4f}')
+            # Evaluate validation loss if validation loader is provided
+
+            if validation_loader is not None:
+                validation_loss = evaluate(model, validation_loader, criterion)
+                print(f'Epoch {epoch + 1}/{num_epochs}, Validation Loss: {validation_loss:.4f}')
+
+                # Check for early stopping criteria
+                if validation_loss < best_validation_loss:
+                    best_validation_loss = validation_loss
+                    no_improvement_count = 0
+                else:
+                    no_improvement_count += 1
+
+                if no_improvement_count >= patience:
+                    print(f'No improvement for {patience} epochs. Stopping training.')
+                    break
+
+    def evaluate(model, data_loader, criterion):
+        model.eval()
+        total_loss = 0.0
+        total_samples = 0
+
+        with torch.no_grad():
+            for eeg_vectors, bert_vectors, labels in data_loader:
+                output1 = model(eeg_vectors)
+                output2 = bert_vectors
+                loss = criterion(output1, output2, labels)
+                total_loss += loss.item() * eeg_vectors.size(0)
+                total_samples += eeg_vectors.size(0)
+
+        return total_loss / total_samples
 
 
     train_contrastive(model, train_loader, criterion, optimizer)
