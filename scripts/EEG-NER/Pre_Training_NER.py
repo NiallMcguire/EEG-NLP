@@ -107,10 +107,6 @@ if __name__ == "__main__":
     labels = torch.tensor(labels_array, dtype=torch.float32)
 
 
-
-    #kill running processes
-    exit(0)
-
     eeg_train, eeg_test, bert_train, bert_test, labels_train, labels_test = train_test_split(eeg_pairs, bert_pairs, labels, test_size=test_size, random_state=42)
 
 
