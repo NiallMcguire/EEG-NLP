@@ -142,10 +142,8 @@ if __name__ == "__main__":
                 output1 = model(eeg_vectors)
                 output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
 
-
-                # Debugging: Print shapes
-                print("Output1 shape:", output1.shape)
-                print("Output2 shape:", output2.shape)
+                # Reshape labels to match the shape of output1 and output2
+                labels = labels.unsqueeze(1).expand(-1, output1.size(1)).contiguous().view(-1)
 
                 loss = criterion(output1, output2, labels)
                 loss.backward()
