@@ -42,17 +42,20 @@ class ContrastiveLoss(nn.Module):
                                       label * torch.pow(torch.clamp(self.margin - euclidean_distance, min=0.0), 2))
         return loss_contrastive
 
+
 class EEGToBERTModel(nn.Module):
     def __init__(self, eeg_input_dim, bert_output_dim):
         super(EEGToBERTModel, self).__init__()
-        self.fc1 = nn.Linear(eeg_input_dim, 512)
-        self.fc2 = nn.Linear(512, 256)
-        self.fc3 = nn.Linear(256, bert_output_dim)
+        self.lstm = nn.LSTM(eeg_input_dim, 512, batch_first=True)
+        self.fc1 = nn.Linear(512, 256)
+        self.fc2 = nn.Linear(256, bert_output_dim)
 
     def forward(self, x):
+        # LSTM expects input of shape (batch_size, sequence_length, input_dim)
+        x, _ = self.lstm(x)  # LSTM output and (hidden_state, cell_state)
+        x = x[:, -1, :]  # Take the output of the last time step
         x = torch.relu(self.fc1(x))
-        x = torch.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = self.fc2(x)
         return x
 
 
