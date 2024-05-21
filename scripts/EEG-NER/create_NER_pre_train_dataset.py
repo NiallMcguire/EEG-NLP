@@ -60,4 +60,6 @@ if __name__ == "__main__":
     torch.save(bert_pairs, save_path + "Pre_NER_bert_pairs.pt")
     torch.save(labels, save_path + "Pre_NER_labels.pt")
 
+    print("Pre-training dataset created successfully")
+
 
