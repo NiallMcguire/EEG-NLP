@@ -41,7 +41,6 @@ if __name__ == "__main__":
 
     positive_pairs = [(X[i], train_NE_expanded[i], 1) for i in range(len(X))]
 
-    # Limit the number of negative pairs to a fixed number per positive pair
     num_negative_pairs_per_positive = 1
     negative_pairs = []
 
@@ -52,9 +51,15 @@ if __name__ == "__main__":
 
     all_pairs = positive_pairs + negative_pairs
 
-    eeg_pairs = torch.tensor([pair[0] for pair in all_pairs], dtype=torch.float32)
-    bert_pairs = torch.tensor([pair[1] for pair in all_pairs], dtype=torch.float32)
-    labels = torch.tensor([pair[2] for pair in all_pairs], dtype=torch.float32)
+    # Convert lists of numpy.ndarrays to single numpy.ndarrays
+    eeg_array = np.array([pair[0] for pair in all_pairs])
+    bert_array = np.array([pair[1] for pair in all_pairs])
+    labels_array = np.array([pair[2] for pair in all_pairs])
+
+    # Convert numpy.ndarrays to tensors
+    eeg_pairs = torch.tensor(eeg_array, dtype=torch.float32)
+    bert_pairs = torch.tensor(bert_array, dtype=torch.float32)
+    labels = torch.tensor(labels_array, dtype=torch.float32)
 
     torch.save(eeg_pairs, save_path + "Pre_NER_eeg_pairs.pt")
     torch.save(bert_pairs, save_path + "Pre_NER_bert_pairs.pt")
