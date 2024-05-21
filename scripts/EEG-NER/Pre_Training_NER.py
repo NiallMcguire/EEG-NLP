@@ -123,14 +123,10 @@ if __name__ == "__main__":
     print("BERT input shape 1", bert_train.shape[1])
 
 
-
-
     eeg_input_dim = eeg_train.shape[1]
     bert_output_dim = bert_train.shape[1]
 
     # Assuming the model is already defined as EEGToBERTModel
-
-
     model = EEGToBERTModel(eeg_input_dim, bert_output_dim)
     criterion = ContrastiveLoss(margin=1.0)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
