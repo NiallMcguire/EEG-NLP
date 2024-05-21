@@ -127,7 +127,7 @@ if __name__ == "__main__":
 
 
     # Assuming the model is already defined as EEGToBERTModel
-    model = EEGToBERTModel(eeg_input_dim, bert_output_dim)
+    model = EEGToBERTModel(eeg_input_dim, bert_output_dim*7)
     criterion = ContrastiveLoss(margin=1.0)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
