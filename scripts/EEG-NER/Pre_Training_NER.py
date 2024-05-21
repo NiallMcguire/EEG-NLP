@@ -140,6 +140,12 @@ if __name__ == "__main__":
                 optimizer.zero_grad()
                 output1 = model(eeg_vectors)
                 output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
+
+
+                # Debugging: Print shapes
+                print("Output1 shape:", output1.shape)
+                print("Output2 shape:", output2.shape)
+
                 loss = criterion(output1, output2, labels)
                 loss.backward()
                 optimizer.step()
