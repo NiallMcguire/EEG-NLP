@@ -132,7 +132,7 @@ if __name__ == "__main__":
 
 
     eeg_input_dim = eeg_train.shape[2]  # Adjusted input dimension
-    bert_output_dim = bert_train.shape[2]  # Keep as is since we wll reshape the outpus
+    bert_output_dim = bert_train.shape[2]  # Keep as is since we have reshape the outpus
 
 
     # Assuming the model is already defined as EEGToBERTModel
