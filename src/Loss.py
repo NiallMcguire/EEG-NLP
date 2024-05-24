@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 
-class ContrastiveLossEuclid(nn.Module):
+class ContrastiveLossEuclidNER(nn.Module):
     """
     Contrastive loss class using euclidean distance between embeddings
 
@@ -16,7 +16,7 @@ class ContrastiveLossEuclid(nn.Module):
 
     """
     def __init__(self, margin=1.0):
-        super(ContrastiveLossEuclid, self).__init__()
+        super(ContrastiveLossEuclidNER, self).__init__()
         self.margin = margin
 
     def forward(self, output1, output2, label):

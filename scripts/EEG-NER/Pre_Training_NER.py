@@ -31,19 +31,6 @@ class EEGToBERTContrastiveDataset(Dataset):
 
 
 
-class ContrastiveLoss(nn.Module):
-    def __init__(self, margin=1.0):
-        super(ContrastiveLoss, self).__init__()
-        self.margin = margin
-
-    def forward(self, output1, output2, label):
-        euclidean_distance = F.pairwise_distance(output1, output2)
-        # Reshape label tensor to match the shape of euclidean_distance tensor
-        label = label.unsqueeze(1).expand_as(euclidean_distance)
-        loss_contrastive = torch.mean((1 - label) * torch.pow(euclidean_distance, 2) +
-                                      label * torch.pow(torch.clamp(self.margin - euclidean_distance, min=0.0), 2))
-        return loss_contrastive
-
 
 class EEGToBERTModel(nn.Module):
     def __init__(self, eeg_input_dim, bert_output_dim):
