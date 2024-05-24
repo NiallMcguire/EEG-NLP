@@ -16,26 +16,6 @@ from random import sample
 
 from torch.utils.data import Dataset, DataLoader
 
-class EEGToBERTContrastiveDataset(Dataset):
-    def __init__(self, eeg_data, bert_data, labels):
-        self.eeg_data = eeg_data
-        self.bert_data = bert_data
-        self.labels = labels
-
-    def __len__(self):
-        return len(self.labels)
-
-    def __getitem__(self, idx):
-        eeg_vector = self.eeg_data[idx]
-        bert_vector = self.bert_data[idx]
-        label = self.labels[idx]
-        return eeg_vector, bert_vector, label
-
-
-
-
-
-
 if __name__ == "__main__":
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
     #save_path = r"/users/gxb18167/EEG-NLP/"
@@ -91,10 +71,10 @@ if __name__ == "__main__":
     eeg_train, eeg_val, bert_train, bert_val, labels_train, labels_val = train_test_split(eeg_train, bert_train, labels_train, test_size=0.2, random_state=42)
 
 
-    train_dataset = EEGToBERTContrastiveDataset(eeg_train, bert_train, labels_train)
-    validation_dataset = EEGToBERTContrastiveDataset(eeg_val, bert_val, labels_val)
+    train_dataset = utils.EEGToBERTContrastiveDataset(eeg_train, bert_train, labels_train)
+    validation_dataset = utils.EEGToBERTContrastiveDataset(eeg_val, bert_val, labels_val)
 
-    test_dataset = EEGToBERTContrastiveDataset(eeg_test, bert_test, labels_test)
+    test_dataset = utils.EEGToBERTContrastiveDataset(eeg_test, bert_test, labels_test)
 
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
     validation_loader = DataLoader(validation_dataset, batch_size=32, shuffle=False)

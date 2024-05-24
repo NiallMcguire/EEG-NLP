@@ -116,3 +116,18 @@ class NER_BERT:
             embedded_input.append(last_hidden_states.mean(dim=1).squeeze().detach().numpy())
 
         return embedded_input
+
+class EEGToBERTContrastiveDataset(Dataset):
+    def __init__(self, eeg_data, bert_data, labels):
+        self.eeg_data = eeg_data
+        self.bert_data = bert_data
+        self.labels = labels
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        eeg_vector = self.eeg_data[idx]
+        bert_vector = self.bert_data[idx]
+        label = self.labels[idx]
+        return eeg_vector, bert_vector, label
