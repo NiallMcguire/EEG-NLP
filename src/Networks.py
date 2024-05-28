@@ -119,7 +119,7 @@ class EEGToBERTModel_v4(nn.Module):
         super(EEGToBERTModel_v4, self).__init__()
         self.lstm = nn.LSTM(eeg_input_dim, hidden_dim, batch_first=True, bidirectional=True)
         self.attention = Attention(hidden_dim)
-        self.fc1 = nn.Linear(hidden_dim * 2, 256)  # Since LSTM is bidirectional, the output size is doubled
+        self.fc1 = nn.Linear(hidden_dim * 2 + hidden_dim, 256)  # Adjusted input dimension
         self.fc2 = nn.Linear(256, bert_output_dim)
 
     def forward(self, x):
