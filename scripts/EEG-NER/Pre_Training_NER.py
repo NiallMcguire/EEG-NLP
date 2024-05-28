@@ -192,3 +192,9 @@ if __name__ == "__main__":
 
     model_save_path = model_save_path + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.pt"
 
+    torch.save(model.state_dict(), model_save_path)
+
+    parameters['model_save_path'] = model_save_path
+
+    config_save_path = config_save_path + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.json"
+
