@@ -28,7 +28,9 @@ if __name__ == "__main__":
 
     parameters = {}
     vector_size = 768
+    parameters['vector_size'] = vector_size
     test_size = 0.2
+    parameters['test_size'] = test_size
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
