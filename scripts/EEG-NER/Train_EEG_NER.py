@@ -202,7 +202,8 @@ if __name__ == "__main__":
         validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
         test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
-    print("Pre-training complete")
+        print("Pre-training complete")
+        print("train aligned shape: ", train_aligned_EEG.shape)
 
     '''
     # Instantiate the model
