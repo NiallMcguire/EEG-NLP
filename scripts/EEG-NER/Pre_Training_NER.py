@@ -99,16 +99,9 @@ if __name__ == "__main__":
 
     test_dataset = utils.EEGToBERTContrastiveDataset(eeg_test, bert_test, labels_test)
 
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-    validation_loader = DataLoader(validation_dataset, batch_size=32, shuffle=False)
-    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=True)
-
-    print("EEG input shape: ", eeg_train.shape)
-    print("BERT input shape: ", bert_train.shape)
-
-    print("EEG input shape 1", eeg_train.shape[1])
-    print("BERT input shape 1", bert_train.shape[1])
-
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
     eeg_input_dim = eeg_train.shape[2]  # Adjusted input dimension
     bert_output_dim = bert_train.shape[2]  # Keep as is since we have reshape the outpus
