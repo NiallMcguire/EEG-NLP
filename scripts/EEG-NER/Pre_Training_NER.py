@@ -28,6 +28,8 @@ if __name__ == "__main__":
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
     parameters = {}
+    epochs = 20
+    parameters['epochs'] = epochs
     test_size = 0.2
     parameters['test_size'] = test_size
     validation_size = 0.2
@@ -40,6 +42,8 @@ if __name__ == "__main__":
     parameters['loss_function'] = loss_function
     optimizer = "Adam"
     parameters['optimizer'] = optimizer
+    learning_rate = 0.001
+    parameters['learning_rate'] = learning_rate
 
     Embedding_model = 'BERT'  # 'Word2Vec' or 'BERT'
     parameters['Embedding_model'] = Embedding_model
@@ -122,11 +126,11 @@ if __name__ == "__main__":
         criterion = Loss.ContrastiveLossEuclidNER(margin=margin)
 
     if optimizer == "Adam":
-        optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+        optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     patience = 5
 
-    def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=20):
+    def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=epochs):
         model.train()
         best_validation_loss = float('inf')
         no_improvement_count = 0
