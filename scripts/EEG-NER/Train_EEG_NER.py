@@ -16,7 +16,6 @@ import torch.nn as nn
 import torch.optim as optim
 
 if __name__ == "__main__":
-    log = {}
 
     parameters = {}
 
@@ -223,7 +222,7 @@ if __name__ == "__main__":
                     print("Early stopping")
                     break
 
-    log['Loss'] = loss_over_batches
+    parameters['Loss'] = loss_over_batches
 
     '''
     # Save the trained model
@@ -252,7 +251,7 @@ if __name__ == "__main__":
                 total += batch_y.size(0)
                 correct += (predicted == torch.argmax(batch_y, 1)).sum().item()
             print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
-            log['Accuracy'] = 100 * correct / total
+            parameters['Accuracy'] = 100 * correct / total
 
 
 
