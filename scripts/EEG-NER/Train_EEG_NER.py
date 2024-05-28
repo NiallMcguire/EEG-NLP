@@ -157,36 +157,45 @@ if __name__ == "__main__":
         pre_train_model.to(device)
         pre_train_model.eval()
         #replace train_loader with new encoded data
-        train_aligned_EEG = []
-        train_aligned_y = []
+        # Initialize empty tensors
+        train_aligned_EEG = torch.empty((0, vector_size)).to(device)
+        train_aligned_y = torch.empty((0,)).to(device)
 
-        validation_aligned_EEG = []
-        validation_aligned_y = []
+        validation_aligned_EEG = torch.empty((0, vector_size)).to(device)
+        validation_aligned_y = torch.empty((0,)).to(device)
 
-        test_aligned_EEG = []
-        test_aligned_y = []
+        test_aligned_EEG = torch.empty((0, vector_size)).to(device)
+        test_aligned_y = torch.empty((0,)).to(device)
 
         with torch.no_grad():
             for batch in train_loader:
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG)
-                #train_aligned_EEG.append(aligned_EEG_outputs)
-                #train_aligned_y.append(batch_y)
+                train_aligned_EEG = torch.cat((train_aligned_EEG, aligned_EEG_outputs), dim=0)
+                train_aligned_y = torch.cat((train_aligned_y, batch_y), dim=0)
+
 
             for batch in val_loader:
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG)
-                #validation_aligned_EEG.append(aligned_EEG_outputs)
-                #validation_aligned_y.append(batch_y)
+                validation_aligned_EEG = torch.cat((validation_aligned_EEG, aligned_EEG_outputs), dim=0)
+                validation_aligned_y = torch.cat((validation_aligned_y, batch_y), dim=0)
+
 
             for batch in test_loader:
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG)
-                #test_aligned_EEG.append(aligned_EEG_outputs)
-                #test_aligned_y.append(batch_y)
+                test_aligned_EEG = torch.cat((test_aligned_EEG, aligned_EEG_outputs), dim=0)
+                test_aligned_y = torch.cat((test_aligned_y, batch_y), dim=0)
+
+
+        # Create the train loader
+        train_aligned_loader = DataLoader(dataset=train_aligned_EEG, batch_size=batch_size, shuffle=True)
+        validation_aligned_loader = DataLoader(dataset=validation_aligned_EEG, batch_size=batch_size, shuffle=False)
+        test_aligned_loader = DataLoader(dataset=test_aligned_EEG, batch_size=batch_size, shuffle=False)
 
     print("Pre-training complete")
 
