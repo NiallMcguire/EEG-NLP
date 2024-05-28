@@ -129,6 +129,7 @@ if __name__ == "__main__":
         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     patience = 5
+    parameters['patience'] = patience
 
     def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=epochs):
         model.train()
