@@ -194,3 +194,7 @@ if __name__ == "__main__":
     parameters['model_save_path'] = model_save_path
     config_save_path = config_save_path + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.json"
     util.save_json(parameters, config_save_path)
+
+    print("Model saved at: ", model_save_path)
+    print("Config saved at: ", config_save_path)
+    print("Training completed")
