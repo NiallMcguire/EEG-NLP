@@ -203,6 +203,7 @@ class EEGToBERTModelEstimator(BaseEstimator):
             '''
 
     def score(self, X, y):
+        '''
         train_NE, train_EEG_segments = X
         train_Classes = y
 
@@ -246,6 +247,7 @@ class EEGToBERTModelEstimator(BaseEstimator):
         validation_loss = self.evaluate(self.model, validation_loader,
                                         Loss.ContrastiveLossEuclidNER(margin=self.parameters['margin']))
         return -validation_loss
+        '''
 
 
 
