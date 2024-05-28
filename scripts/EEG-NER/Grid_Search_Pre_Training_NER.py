@@ -13,6 +13,7 @@ import numpy as np
 from random import sample
 import datetime
 from torch.utils.data import Dataset, DataLoader
+import itertools
 
 class EEGToBERTModelEstimator(BaseEstimator):
     def __init__(self, model_save_path, config_save_path, **kwargs):
@@ -232,6 +233,14 @@ if __name__ == "__main__":
     util = utils.Utils()
     Loss = Loss
     Networks = Networks
+
+    # Generate all combinations of parameters
+    keys, values = zip(*param_grid.items())
+    param_combinations = [dict(zip(keys, v)) for v in itertools.product(*values)]
+
+    for params in param_combinations:
+        print("Parameters: ", params)
+
 
     #train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
