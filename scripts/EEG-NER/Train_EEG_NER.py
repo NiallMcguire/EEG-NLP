@@ -20,8 +20,9 @@ if __name__ == "__main__":
     parameters = {}
 
     evaluation = True
+    pre_training = True
     parameters['evaluation'] = evaluation
-    inputs = "Text" # "EEG", "Text", "EEE+Text"
+    inputs = "EEG" # "EEG", "Text", "EEE+Text"
     parameters['inputs'] = inputs
     Embedding_model = 'BERT' # 'Word2Vec' or 'BERT'
     parameters['Embedding_model'] = Embedding_model
@@ -113,7 +114,7 @@ if __name__ == "__main__":
     y_test_tensor = torch.tensor(y_test, dtype=torch.float32)  # Assuming your labels are integers
 
 
-    if inputs == "EEE+Text":
+    if inputs == "EEG+Text":
         train_dataset = TensorDataset(x_train_tensor, train_NE_padded_tensor, y_train_tensor)
         test_dataset = TensorDataset(x_test_tensor, test_NE_padded_tensor, y_test_tensor)
 
@@ -122,7 +123,6 @@ if __name__ == "__main__":
     elif inputs == "Text":
         train_dataset = TensorDataset(train_NE_padded_tensor, y_train_tensor)
         test_dataset = TensorDataset(test_NE_padded_tensor, y_test_tensor)
-
         train_size = len(train_dataset) - int(len(train_dataset) * val_size)
         train_dataset, val_dataset = torch.utils.data.random_split(train_dataset, [train_size, int(len(train_dataset) * val_size)])
     else:
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=False)
 
     # Instantiate the model
-    if inputs == "EEE+Text":
+    if inputs == "EEG+Text":
         model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_classes, num_layers, dropout)
     elif inputs == "Text":
         input_size = vector_size
@@ -167,7 +167,7 @@ if __name__ == "__main__":
         model.train()
         total_loss = 0
         for batch in train_loader:
-            if inputs == "EEE+Text":
+            if inputs == "EEG+Text":
                 batch_x, batch_NE, batch_y = batch
                 batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
                 optimizer.zero_grad()
@@ -198,7 +198,7 @@ if __name__ == "__main__":
 
             val_loss = 0
             for batch in val_loader:
-                if inputs == "EEE+Text":
+                if inputs == "EEG+Text":
                     batch_x, batch_NE, batch_y = batch
                     batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
                     outputs = model(batch_x, batch_NE)
@@ -240,7 +240,7 @@ if __name__ == "__main__":
             correct = 0
             total = 0
             for batch in test_loader:
-                if inputs == "EEE+Text":
+                if inputs == "EEG+Text":
                     batch_x, batch_NE, batch_y = batch
                     batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
                     outputs = model(batch_x, batch_NE)
