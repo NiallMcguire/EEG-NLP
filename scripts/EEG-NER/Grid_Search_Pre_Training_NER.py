@@ -239,10 +239,10 @@ if __name__ == "__main__":
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
 
-    train_model = EEGToBERTModelEstimator(model_save_path, config_save_path)
+
 
     for params in param_combinations:
-        train_model.set_params(**params)
+        train_model = EEGToBERTModelEstimator(model_save_path, config_save_path, params)
         train_model.fit(train_NE, train_EEG_segments, train_Classes)
         print("Model trained with parameters: ", params)
 
