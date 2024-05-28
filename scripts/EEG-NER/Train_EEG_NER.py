@@ -139,6 +139,7 @@ if __name__ == "__main__":
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=False)
 
+    print("Data before pre-training: ", train_loader.dataset.tensors[0].shape)
 
     if pre_training == True:
         parameters['pre_training'] = pre_training
@@ -210,7 +211,6 @@ if __name__ == "__main__":
 
         print("Pre-training complete")
         print("train aligned shape: ", train_aligned_EEG.shape)
-        print("tensor dataset shape: ", train_dataset.tensors[0].shape)
 
     '''
     # Instantiate the model
