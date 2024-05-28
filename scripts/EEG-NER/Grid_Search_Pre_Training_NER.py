@@ -238,8 +238,7 @@ if __name__ == "__main__":
     keys, values = zip(*param_grid.items())
     param_combinations = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
-    for params in param_combinations:
-        print("Parameters: ", params)
+    print(len(param_combinations))
 
 
     #train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
