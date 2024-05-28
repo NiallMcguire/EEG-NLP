@@ -205,8 +205,10 @@ if __name__ == "__main__":
 
         print("Pre-training complete")
         print("train aligned shape: ", train_aligned_EEG.shape)
+        input_size = 768
 
-    '''
+
+
     # Instantiate the model
     if inputs == "EEG+Text":
         model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_classes, num_layers, dropout)
@@ -293,7 +295,7 @@ if __name__ == "__main__":
                     break
 
     parameters['Loss'] = loss_over_batches
-    '''
+
 
     '''
     # Save the trained model
@@ -305,7 +307,7 @@ if __name__ == "__main__":
     loaded_model.eval()  # Switch to evaluation mode
     '''
 
-    '''
+
     if evaluation == True:
         model.eval()
         with torch.no_grad():
@@ -324,7 +326,7 @@ if __name__ == "__main__":
                 correct += (predicted == torch.argmax(batch_y, 1)).sum().item()
             print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
             parameters['Accuracy'] = 100 * correct / total
-    '''
+
 
 
 
