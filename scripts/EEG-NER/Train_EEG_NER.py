@@ -66,7 +66,6 @@ if __name__ == "__main__":
     d = data.Data()
     util = utils.Utils()
 
-
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
     if inputs == "EEE+Text" or "Text":
@@ -188,6 +187,8 @@ if __name__ == "__main__":
                 aligned_EEG_outputs = pre_train_model(batch_EEG)
                 #test_aligned_EEG.append(aligned_EEG_outputs)
                 #test_aligned_y.append(batch_y)
+
+    print("Pre-training complete")
 
     '''
     # Instantiate the model
