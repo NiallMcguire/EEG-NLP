@@ -21,6 +21,8 @@ if __name__ == "__main__":
 
 
     evaluation = True
+    pre_training = True
+
     parameters['evaluation'] = evaluation
     inputs = "EEG" # "EEG", "Text", "EEE+Text"
     parameters['inputs'] = inputs
@@ -138,7 +140,7 @@ if __name__ == "__main__":
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=False)
 
-    pre_training = True
+
     if pre_training == True:
         parameters['pre_training'] = pre_training
         pre_training_config = "/users/gxb18167/configs/20240528-130339EEG_NER_Pre_Training.json"
