@@ -205,16 +205,16 @@ class EEGToBERTModelEstimator(BaseEstimator):
 if __name__ == "__main__":
     # Define parameter grid for grid search
     param_grid = {
-        'epochs': [100, 200],
-        'patience': [5, 10],
-        'test_size': [0.2, 0.3],
+        'epochs': [100],
+        'patience': [5, 10, 20],
+        'test_size': [0.2],
         'validation_size': [0.1, 0.2],
-        'num_negative_pairs_per_positive': [1, 2],
+        'num_negative_pairs_per_positive': [1, 2, 3],
         'batch_size': [32, 64],
         'loss_function': ["ContrastiveLossEuclidNER"],
-        'margin': [1.0, 2.0],
+        'margin': [0.5, 1.0, 2.0],
         'optimizer': ["Adam", "SGD"],
-        'learning_rate': [0.001, 0.01],
+        'learning_rate': [0.0001, 0.001, 0.01],
         'Embedding_model': ['BERT', 'Word2Vec'],
         'model_name': ['EEGToBERTModel_v1', 'EEGToBERTModel_v2', 'EEGToBERTModel_v3']
     }
@@ -236,5 +236,5 @@ if __name__ == "__main__":
     train_model = EEGToBERTModelEstimator(model_save_path, config_save_path)
 
 
-    grid_search = GridSearchCV(estimator=train_model, param_grid=param_grid, cv=3)
+    grid_search = GridSearchCV(estimator=train_model, param_grid=param_grid, cv=0)
     grid_search.fit(X, y)
