@@ -182,6 +182,20 @@ class EEGToBERTModelEstimator(BaseEstimator):
 
             model = train_contrastive(model, train_loader, criterion, optimizer)
 
+            # model save path with the time stamp
+            model_save_path = self.model_save_path + datetime.datetime.now().strftime(
+                "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.pt"
+            torch.save(model.state_dict(), model_save_path)
+
+            # Save the parameters
+            parameters['model_save_path'] = model_save_path
+            config_save_path = self.config_save_path + datetime.datetime.now().strftime(
+                "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.json"
+            util.save_json(parameters, config_save_path)
+
+            print("Model saved at: ", model_save_path)
+            print("Config saved at: ", config_save_path)
+            print("Training completed")
 
 
 
@@ -222,6 +236,5 @@ if __name__ == "__main__":
 
     grid_search = GridSearchCV(estimator=train_model, param_grid=param_grid, cv=3)
     grid_search.fit(X, y)
-
 
     print("Best parameters found: ", grid_search.best_params_)
