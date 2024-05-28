@@ -117,7 +117,9 @@ if __name__ == "__main__":
     model = Networks.EEGToBERTModel(eeg_input_dim, bert_output_dim)
 
     if loss_function == "ContrastiveLossEuclidNER":
-        criterion = Loss.ContrastiveLossEuclidNER(margin=1.0)
+        margin = 1.0
+        parameters['margin'] = 1.0
+        criterion = Loss.ContrastiveLossEuclidNER(margin=margin)
 
     if optimizer == "Adam":
         optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
