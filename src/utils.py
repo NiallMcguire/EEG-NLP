@@ -2,9 +2,12 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 import nltk
+from torch.utils.data import Dataset
+
 nltk.download('punkt')
 from gensim.models import Word2Vec
 from transformers import BertTokenizer, BertModel
+import json
 
 
 class Utils:
@@ -101,10 +104,10 @@ class Utils:
 
         return expanded_named_entity_list
 
-
-
-
-
+    #util save json
+    def save_json(self, data, filename):
+        with open(filename, 'w') as f:
+            json.dump(data, f)
 
 
 class NER_BERT:

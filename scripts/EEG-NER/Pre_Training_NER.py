@@ -198,3 +198,4 @@ if __name__ == "__main__":
 
     config_save_path = config_save_path + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.json"
 
+    util.save_json(parameters, config_save_path)
