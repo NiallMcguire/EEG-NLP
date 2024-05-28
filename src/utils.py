@@ -109,6 +109,12 @@ class Utils:
         with open(filename, 'w') as f:
             json.dump(data, f)
 
+    #util load json
+    def load_json(self, filename):
+        with open(filename, 'r') as f:
+            data = json.load(f)
+        return data
+
 
 class NER_BERT:
     def __init__(self, model_name='bert-base-uncased'):

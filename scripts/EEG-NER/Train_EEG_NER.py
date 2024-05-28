@@ -19,8 +19,8 @@ if __name__ == "__main__":
 
     parameters = {}
 
+
     evaluation = True
-    pre_training = True
     parameters['evaluation'] = evaluation
     inputs = "EEG" # "EEG", "Text", "EEE+Text"
     parameters['inputs'] = inputs
@@ -63,6 +63,23 @@ if __name__ == "__main__":
 
     d = data.Data()
     util = utils.Utils()
+
+    pre_training = True
+    if pre_training == True:
+        parameters['pre_training'] = pre_training
+        pre_training_config = "/users/gxb18167/configs/20240528-130339EEG_NER_Pre_Training.json"
+        parameters['pre_training_config'] = pre_training_config
+
+        # load pre-training config
+        pre_training_config = util.load_json(pre_training_config)
+        model_save_path = pre_training_config['model_save_path']
+        eeg_input_dim = pre_training_config['eeg_input_dim']
+        bert_output_dim = pre_training_config['bert_output_dim']
+
+        # load pre-trained model
+
+        pre_train_model = Networks.EEGToBERTModel(eeg_input_dim, bert_output_dim)
+        pre_train_model.load_state_dict(torch.load(model_save_path))
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
@@ -137,6 +154,21 @@ if __name__ == "__main__":
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=False)
 
+    if pre_training == True:
+        pre_train_model.to(device)
+        pre_train_model.eval()
+        #replace train_loader with new encoded data
+        Aligned_EEG = []
+        Y_label = []
+        with torch.no_grad():
+            for batch in train_loader:
+                batch_EEG, batch_y = batch
+                batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
+                aligned_EEG_outputs = pre_train_model(batch_EEG)
+                Aligned_EEG.append(aligned_EEG_outputs)
+                Y_label.append(batch_y)
+
+    '''
     # Instantiate the model
     if inputs == "EEG+Text":
         model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_classes, num_layers, dropout)
@@ -223,6 +255,7 @@ if __name__ == "__main__":
                     break
 
     parameters['Loss'] = loss_over_batches
+    '''
 
     '''
     # Save the trained model
