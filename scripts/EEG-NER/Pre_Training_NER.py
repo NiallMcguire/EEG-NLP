@@ -12,6 +12,7 @@ from src import Networks
 from src import Loss
 import numpy as np
 from random import sample
+import datetime
 
 
 from torch.utils.data import Dataset, DataLoader
@@ -185,3 +186,9 @@ if __name__ == "__main__":
         return total_loss / total_samples
 
     train_contrastive(model, train_loader, criterion, optimizer)
+
+    #model save path with the time stamp
+
+
+    model_save_path = model_save_path + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.pt"
+
