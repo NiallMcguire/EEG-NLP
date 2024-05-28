@@ -13,8 +13,6 @@ from src import Loss
 import numpy as np
 from random import sample
 import datetime
-
-
 from torch.utils.data import Dataset, DataLoader
 
 if __name__ == "__main__":
@@ -143,7 +141,7 @@ if __name__ == "__main__":
                 output1 = model(eeg_vectors)
                 output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
 
-                print("labels shape", labels.shape)
+                #print("labels shape", labels.shape)
 
                 loss = criterion(output1, output2, labels)
                 loss.backward()
