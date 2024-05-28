@@ -20,17 +20,17 @@ if __name__ == "__main__":
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
     #save_path = r"/users/gxb18167/EEG-NLP/"
 
-    parameters = {}
-
     d = data.Data()
     util = utils.Utils()
     Loss = Loss
     Networks = Networks
 
-    train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
+    parameters = {}
     vector_size = 768
     test_size = 0.2
+
+    train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
     ner_bert = utils.NER_BERT()
 
