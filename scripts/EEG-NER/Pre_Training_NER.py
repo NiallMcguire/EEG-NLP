@@ -61,7 +61,6 @@ if __name__ == "__main__":
         min_count = 1
         parameters['min_count'] = min_count
         workers = 4
-
         train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count, workers)
 
 

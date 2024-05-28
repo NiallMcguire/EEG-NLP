@@ -56,10 +56,18 @@ class MLP(nn.Module):
         out = self.fc2(out)
         return out
 
-
-class EEGToBERTModel(nn.Module):
+class EEGToBERTModel_v1(nn.Module):
     def __init__(self, eeg_input_dim, bert_output_dim):
-        super(EEGToBERTModel, self).__init__()
+        super(EEGToBERTModel_v1, self).__init__()
+        self.lstm = nn.LSTM(eeg_input_dim, bert_output_dim * 7, batch_first=True)
+
+    def forward(self, x):
+        x, _ = self.lstm(x)
+        return x
+
+class EEGToBERTModel_v2(nn.Module):
+    def __init__(self, eeg_input_dim, bert_output_dim):
+        super(EEGToBERTModel_v2, self).__init__()
         self.lstm = nn.LSTM(eeg_input_dim, 512, batch_first=True)
         self.fc1 = nn.Linear(512, 256)
         self.fc2 = nn.Linear(256, bert_output_dim * 7)  # Adjusted output dimension
@@ -73,3 +81,5 @@ class EEGToBERTModel(nn.Module):
         # Reshape x to match the shape of output2
         x = x.view(x.size(0), 7, -1)
         return x
+
+
