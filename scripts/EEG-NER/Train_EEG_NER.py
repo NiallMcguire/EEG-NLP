@@ -158,15 +158,36 @@ if __name__ == "__main__":
         pre_train_model.to(device)
         pre_train_model.eval()
         #replace train_loader with new encoded data
-        Aligned_EEG = []
-        Y_label = []
+        train_aligned_EEG = []
+        train_aligned_y = []
+
+        validation_aligned_EEG = []
+        validation_aligned_y = []
+
+        test_aligned_EEG = []
+        test_aligned_y = []
+
         with torch.no_grad():
             for batch in train_loader:
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG)
-                Aligned_EEG.append(aligned_EEG_outputs)
-                Y_label.append(batch_y)
+                train_aligned_EEG.append(aligned_EEG_outputs)
+                train_aligned_y.append(batch_y)
+
+            for batch in val_loader:
+                batch_EEG, batch_y = batch
+                batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
+                aligned_EEG_outputs = pre_train_model(batch_EEG)
+                validation_aligned_EEG.append(aligned_EEG_outputs)
+                validation_aligned_y.append(batch_y)
+
+            for batch in test_loader:
+                batch_EEG, batch_y = batch
+                batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
+                aligned_EEG_outputs = pre_train_model(batch_EEG)
+                test_aligned_EEG.append(aligned_EEG_outputs)
+                test_aligned_y.append(batch_y)
 
     '''
     # Instantiate the model
