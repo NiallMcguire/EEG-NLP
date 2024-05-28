@@ -169,20 +169,19 @@ if __name__ == "__main__":
                     print(f'No improvement for {patience} epochs. Stopping training.')
                     break
 
-    def evaluate(model, data_loader, criterion):
+    def evaluate(model, data_loader, criterion) -> float:
         model.eval()
         total_loss = 0.0
         total_samples = 0
 
         with torch.no_grad():
-            for eeg_vectors, bert_vectors, labels in data_loader:
+            for eeg_vectors, embeddings, labels in data_loader:
                 output1 = model(eeg_vectors)
-                output2 = bert_vectors
+                output2 = embeddings
                 loss = criterion(output1, output2, labels)
                 total_loss += loss.item() * eeg_vectors.size(0)
                 total_samples += eeg_vectors.size(0)
 
         return total_loss / total_samples
-
 
     train_contrastive(model, train_loader, criterion, optimizer)

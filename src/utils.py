@@ -102,6 +102,11 @@ class Utils:
         return expanded_named_entity_list
 
 
+
+
+
+
+
 class NER_BERT:
     def __init__(self, model_name='bert-base-uncased'):
         self.tokenizer = BertTokenizer.from_pretrained(model_name)
