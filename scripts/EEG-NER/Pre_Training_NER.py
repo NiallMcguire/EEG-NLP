@@ -46,6 +46,8 @@ if __name__ == "__main__":
     parameters['learning_rate'] = learning_rate
     Embedding_model = 'BERT'  # 'Word2Vec' or 'BERT'
     parameters['Embedding_model'] = Embedding_model
+    model_name = 'EEGToBERTModel_v2' # 'EEGToBERTModel_v1' or 'EEGToBERTModel_v2' or 'EEGToBERTModel_v3'
+    parameters['model_name'] = model_name
 
     if Embedding_model == 'BERT':
         vector_size = 768
@@ -116,7 +118,13 @@ if __name__ == "__main__":
 
 
     # Assuming the model is already defined as EEGToBERTModel
-    model = Networks.EEGToBERTModel(eeg_input_dim, bert_output_dim)
+    if model_name == 'EEGToBERTModel_v1':
+        model = Networks.EEGToBERTModel_v1(eeg_input_dim, bert_output_dim)
+    elif model_name == 'EEGToBERTModel_v2':
+        model = Networks.EEGToBERTModel_v2(eeg_input_dim, bert_output_dim)
+    elif model_name == 'EEGToBERTModel_v3':
+        model = Networks.EEGToBERTModel_v3(eeg_input_dim, bert_output_dim)
+
 
     if loss_function == "ContrastiveLossEuclidNER":
         margin = 1.0
