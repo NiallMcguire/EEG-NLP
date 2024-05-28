@@ -172,22 +172,22 @@ if __name__ == "__main__":
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG)
-                train_aligned_EEG.append(aligned_EEG_outputs)
-                train_aligned_y.append(batch_y)
+                #train_aligned_EEG.append(aligned_EEG_outputs)
+                #train_aligned_y.append(batch_y)
 
             for batch in val_loader:
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG)
-                validation_aligned_EEG.append(aligned_EEG_outputs)
-                validation_aligned_y.append(batch_y)
+                #validation_aligned_EEG.append(aligned_EEG_outputs)
+                #validation_aligned_y.append(batch_y)
 
             for batch in test_loader:
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG)
-                test_aligned_EEG.append(aligned_EEG_outputs)
-                test_aligned_y.append(batch_y)
+                #test_aligned_EEG.append(aligned_EEG_outputs)
+                #test_aligned_y.append(batch_y)
 
     '''
     # Instantiate the model
