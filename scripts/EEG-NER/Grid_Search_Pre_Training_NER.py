@@ -233,18 +233,13 @@ if __name__ == "__main__":
     keys, values = zip(*param_grid.items())
     param_combinations = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
-    print(len(param_combinations))
-
-
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
-
-
-
 
     for params in param_combinations:
         train_model = EEGToBERTModelEstimator(model_save_path, config_save_path, params)
         train_model.fit(train_NE, train_EEG_segments, train_Classes)
         print("Model trained with parameters: ", params)
 
+    print("Grid search completed")
 
 
