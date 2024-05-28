@@ -116,7 +116,7 @@ if __name__ == "__main__":
     # Assuming the model is already defined as EEGToBERTModel
     model = Networks.EEGToBERTModel(eeg_input_dim, bert_output_dim)
 
-    if criterion == "ContrastiveLossEuclidNER":
+    if loss_function == "ContrastiveLossEuclidNER":
         criterion = Loss.ContrastiveLossEuclidNER(margin=1.0)
 
     if optimizer == "Adam":
