@@ -110,6 +110,7 @@ class Attention(nn.Module):
         seq_len = encoder_outputs.size(1)
         energy = self.attn(encoder_outputs.contiguous().view(-1, self.hidden_dim * 2))
         energy = energy.view(-1, seq_len)  # Reshape to (batch_size, seq_len)
+        print("Energy shape:", energy.shape)
         attention_weights = torch.softmax(energy, dim=1).unsqueeze(2)  # Add dimension for broadcasting
         context_vector = torch.sum(encoder_outputs * attention_weights, dim=1).unsqueeze(1)
         return context_vector
@@ -124,9 +125,13 @@ class EEGToBERTModel_v4(nn.Module):
     def forward(self, x):
         # LSTM expects input of shape (batch_size, sequence_length, input_dim)
         lstm_out, _ = self.lstm(x)  # LSTM output and (hidden_state, cell_state)
+        print("LSTM output shape:", lstm_out.shape)
         attn_output = self.attention(lstm_out)
+        print("Attention output shape:", attn_output.shape)
         lstm_out = torch.cat((lstm_out[:, -1, :], attn_output.squeeze(1)), dim=1)  # Concatenate LSTM output and attention output
+        print("Concatenated output shape:", lstm_out.shape)
         output = self.fc1(lstm_out)  # Final output
+        print("Final output shape:", output.shape)
         # Reshape output to match the shape of [batchsize, 7, bert_output_dim]
         output = output.view(output.size(0), 7, -1)
         return output
