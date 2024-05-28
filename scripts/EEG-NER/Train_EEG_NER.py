@@ -288,6 +288,7 @@ if __name__ == "__main__":
     loaded_model.eval()  # Switch to evaluation mode
     '''
 
+    '''
     if evaluation == True:
         model.eval()
         with torch.no_grad():
@@ -306,6 +307,7 @@ if __name__ == "__main__":
                 correct += (predicted == torch.argmax(batch_y, 1)).sum().item()
             print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
             parameters['Accuracy'] = 100 * correct / total
+    '''
 
 
 
