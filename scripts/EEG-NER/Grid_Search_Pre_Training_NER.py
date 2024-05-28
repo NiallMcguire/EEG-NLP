@@ -39,6 +39,8 @@ class EEGToBERTModelEstimator(BaseEstimator):
         Embedding_model = parameters['Embedding_model']
         model_name = parameters['model_name']
 
+        print("Parameters: ", parameters)
+
 
         if Embedding_model == 'BERT':
             vector_size = 768
@@ -68,6 +70,7 @@ class EEGToBERTModelEstimator(BaseEstimator):
         positive_pairs = [(X[i], train_NE_expanded[i], 1) for i in range(len(X))]
         negative_pairs = []
 
+        '''
         # Create negative pairs
         for i in range(len(X)):
             negative_indices = sample([j for j in range(len(train_NE_expanded)) if j != i],
@@ -182,7 +185,7 @@ class EEGToBERTModelEstimator(BaseEstimator):
 
             model = train_contrastive(model, train_loader, criterion, optimizer)
 
-            '''
+        
             # model save path with the time stamp
             model_save_path = self.model_save_path + datetime.datetime.now().strftime(
                 "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.pt"
