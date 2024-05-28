@@ -64,22 +64,6 @@ if __name__ == "__main__":
     d = data.Data()
     util = utils.Utils()
 
-    pre_training = True
-    if pre_training == True:
-        parameters['pre_training'] = pre_training
-        pre_training_config = "/users/gxb18167/configs/20240528-130339EEG_NER_Pre_Training.json"
-        parameters['pre_training_config'] = pre_training_config
-
-        # load pre-training config
-        pre_training_config = util.load_json(pre_training_config)
-        model_save_path = pre_training_config['model_save_path']
-        eeg_input_dim = pre_training_config['eeg_input_dim']
-        bert_output_dim = pre_training_config['bert_output_dim']
-
-        # load pre-trained model
-
-        pre_train_model = Networks.EEGToBERTModel(eeg_input_dim, bert_output_dim)
-        pre_train_model.load_state_dict(torch.load(model_save_path))
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
@@ -153,6 +137,21 @@ if __name__ == "__main__":
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=False)
+
+    pre_training = True
+    if pre_training == True:
+        parameters['pre_training'] = pre_training
+        pre_training_config = "/users/gxb18167/configs/20240528-130339EEG_NER_Pre_Training.json"
+        parameters['pre_training_config'] = pre_training_config
+
+        # load pre-training config
+        pre_training_config = util.load_json(pre_training_config)
+        model_save_path = pre_training_config['model_save_path']
+
+        # load pre-trained model
+
+        pre_train_model = Networks.EEGToBERTModel(input_size, vector_size)
+        pre_train_model.load_state_dict(torch.load(model_save_path))
 
     if pre_training == True:
         pre_train_model.to(device)
