@@ -1,10 +1,7 @@
 import sys
 sys.path.append('/users/gxb18167/EEG-NLP')
 import torch
-import torch.nn as nn
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.base import BaseEstimator
-import torch.nn.functional as F
+from sklearn.model_selection import train_test_split
 from src import data
 from src import utils
 from src import Networks
@@ -15,8 +12,8 @@ import datetime
 from torch.utils.data import Dataset, DataLoader
 import itertools
 
-class EEGToBERTModelEstimator(BaseEstimator):
-    def __init__(self, model_save_path, config_save_path, **kwargs):
+class EEGToBERTModelEstimator():
+    def __init__(self, model_save_path, config_save_path, kwargs):
         self.parameters = kwargs
         self.model_save_path = model_save_path
         self.config_save_path = config_save_path
@@ -35,11 +32,9 @@ class EEGToBERTModelEstimator(BaseEstimator):
                 total_samples += eeg_vectors.size(0)
         return total_loss / total_samples
 
-    def fit(self, X, y):
+    def fit(self, train_NE, train_EEG_segments, train_Classes):
         parameters = self.parameters
 
-        train_NE, train_EEG_segments = X
-        train_Classes = y
 
         epochs = parameters['epochs']
         patience = parameters['patience']
@@ -241,12 +236,15 @@ if __name__ == "__main__":
     print(len(param_combinations))
 
 
-    #train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
-
-    #y = train_Classes
-
-    #train_model = EEGToBERTModelEstimator(model_save_path, config_save_path)
+    train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
 
-    #grid_search = GridSearchCV(estimator=train_model, param_grid=param_grid, cv=0)
-    #grid_search.fit((train_NE, train_EEG_segments), y)
+    train_model = EEGToBERTModelEstimator(model_save_path, config_save_path)
+
+    for params in param_combinations:
+        train_model.set_params(**params)
+        train_model.fit(train_NE, train_EEG_segments, train_Classes)
+        print("Model trained with parameters: ", params)
+
+
+
