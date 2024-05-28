@@ -17,8 +17,8 @@ from torch.utils.data import Dataset, DataLoader
 
 if __name__ == "__main__":
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
-    model_save_path = "/users/gxb18167/configs/model_checkpoints"
-    config_save_path = "/users/gxb18167/configs/model_configs"
+    model_save_path = "/users/gxb18167/configs/model_checkpoints/"
+    config_save_path = "/users/gxb18167/configs/"
 
     d = data.Data()
     util = utils.Utils()
