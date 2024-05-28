@@ -153,7 +153,6 @@ if __name__ == "__main__":
         pre_train_model = Networks.EEGToBERTModel(input_size, vector_size)
         pre_train_model.load_state_dict(torch.load(model_save_path))
 
-    if pre_training == True:
         pre_train_model.to(device)
         pre_train_model.eval()
         #replace train_loader with new encoded data
