@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 
 # Define the BLSTM classifier model
@@ -82,4 +83,30 @@ class EEGToBERTModel_v2(nn.Module):
         x = x.view(x.size(0), 7, -1)
         return x
 
+class Attention(nn.Module):
+    def __init__(self, hidden_dim):
+        super(Attention, self).__init__()
+        self.hidden_dim = hidden_dim
+        self.attn = nn.Linear(hidden_dim * 2, hidden_dim)
+        self.v = nn.Parameter(torch.rand(hidden_dim))
 
+    def forward(self, encoder_outputs):
+        energy = torch.tanh(self.attn(encoder_outputs))
+        energy = energy.transpose(1, 2)
+        v = self.v.repeat(encoder_outputs.size(0), 1).unsqueeze(1)
+        attention = torch.bmm(v, energy).squeeze(1)
+        return F.softmax(attention, dim=1)
+
+class EEGToBERTModel_v3(nn.Module):
+    def __init__(self, eeg_input_dim, bert_output_dim, hidden_dim=512):
+        super(EEGToBERTModel_v3, self).__init__()
+        self.lstm = nn.LSTM(eeg_input_dim, hidden_dim, batch_first=True, bidirectional=True)
+        self.attention = Attention(hidden_dim)
+        self.fc = nn.Linear(hidden_dim * 2, bert_output_dim * 7)
+
+    def forward(self, x):
+        lstm_out, _ = self.lstm(x)
+        attn_weights = self.attention(lstm_out)
+        context = torch.bmm(attn_weights.unsqueeze(1), lstm_out).squeeze(1)
+        output = self.fc(context)
+        return output
