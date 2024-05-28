@@ -55,7 +55,6 @@ class EEGToBERTModelEstimator(BaseEstimator):
 
         print("Parameters: ", parameters)
 
-
         if Embedding_model == 'BERT':
             vector_size = 768
             parameters['vector_size'] = vector_size
@@ -188,9 +187,6 @@ class EEGToBERTModelEstimator(BaseEstimator):
 
             model = train_contrastive(model, train_loader, criterion, optimizer)
 
-            self.model = model
-
-        
             # model save path with the time stamp
             model_save_path = self.model_save_path + datetime.datetime.now().strftime(
                 "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.pt"
@@ -206,52 +202,6 @@ class EEGToBERTModelEstimator(BaseEstimator):
             print("Config saved at: ", config_save_path)
             print("Training completed")
 
-
-    def score(self, X, y):
-
-        train_NE, train_EEG_segments = X
-        train_Classes = y
-
-        train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE, self.parameters['vector_size'])
-        train_NE_expanded = np.array(train_NE_expanded)
-
-        X, y = util.NER_padding_x_y(train_EEG_segments, train_Classes)
-        X = np.array(X)
-        X = util.NER_reshape_data(X)
-        y_categorical = util.encode_labels(y)
-
-        positive_pairs = [(X[i], train_NE_expanded[i], 1) for i in range(len(X))]
-        negative_pairs = []
-
-        for i in range(len(X)):
-            negative_indices = sample([j for j in range(len(train_NE_expanded)) if j != i],
-                                      self.parameters['num_negative_pairs_per_positive'])
-            for neg_index in negative_indices:
-                negative_pairs.append((X[i], train_NE_expanded[neg_index], 0))
-
-        all_pairs = positive_pairs + negative_pairs
-
-        eeg_array = np.array([pair[0] for pair in all_pairs])
-        bert_array = np.array([pair[1] for pair in all_pairs])
-        labels_array = np.array([pair[2] for pair in all_pairs])
-
-        eeg_pairs = torch.tensor(eeg_array, dtype=torch.float32)
-        bert_pairs = torch.tensor(bert_array, dtype=torch.float32)
-        labels = torch.tensor(labels_array, dtype=torch.float32)
-
-        eeg_train, eeg_test, bert_train, bert_test, labels_train, labels_test = train_test_split(eeg_pairs,
-                                                                                                 bert_pairs, labels,
-                                                                                                 test_size=
-                                                                                                 self.parameters[
-                                                                                                     'test_size'],
-                                                                                                 random_state=42)
-
-        validation_dataset = utils.EEGToBERTContrastiveDataset(eeg_test, bert_test, labels_test)
-        validation_loader = DataLoader(validation_dataset, batch_size=self.parameters['batch_size'], shuffle=False)
-
-        validation_loss = self.evaluate(self.model, validation_loader,
-                                        Loss.ContrastiveLossEuclidNER(margin=self.parameters['margin']))
-        return -validation_loss
 
 
 
@@ -285,11 +235,10 @@ if __name__ == "__main__":
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
-    X = (train_NE, train_EEG_segments)
     y = train_Classes
 
     train_model = EEGToBERTModelEstimator(model_save_path, config_save_path)
 
 
     grid_search = GridSearchCV(estimator=train_model, param_grid=param_grid, cv=0)
-    grid_search.fit(X, y)
+    grid_search.fit((train_NE, train_EEG_segments), y)
