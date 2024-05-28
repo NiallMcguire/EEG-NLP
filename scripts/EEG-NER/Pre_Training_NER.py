@@ -32,6 +32,8 @@ if __name__ == "__main__":
     parameters['test_size'] = test_size
     num_negative_pairs_per_positive = 1
     parameters['num_negative_pairs_per_positive'] = num_negative_pairs_per_positive
+    batch_size = 32
+    parameters['batch_size'] = batch_size
 
     Embedding_model = 'BERT'  # 'Word2Vec' or 'BERT'
     parameters['Embedding_model'] = Embedding_model
@@ -88,7 +90,7 @@ if __name__ == "__main__":
 
     eeg_train, eeg_test, bert_train, bert_test, labels_train, labels_test = train_test_split(eeg_pairs, bert_pairs, labels, test_size=test_size, random_state=42)
 
-    #validation
+    # validation
     eeg_train, eeg_val, bert_train, bert_val, labels_train, labels_val = train_test_split(eeg_train, bert_train, labels_train, test_size=0.2, random_state=42)
 
 
