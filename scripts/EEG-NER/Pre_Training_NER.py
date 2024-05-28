@@ -28,8 +28,10 @@ if __name__ == "__main__":
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
     parameters = {}
-    epochs = 20
+    epochs = 100
     parameters['epochs'] = epochs
+    patience = 10
+    parameters['patience'] = patience
     test_size = 0.2
     parameters['test_size'] = test_size
     validation_size = 0.2
@@ -134,8 +136,7 @@ if __name__ == "__main__":
     if optimizer == "Adam":
         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-    patience = 5
-    parameters['patience'] = patience
+
 
     def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=epochs):
         model.train()
