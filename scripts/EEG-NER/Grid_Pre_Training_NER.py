@@ -130,6 +130,8 @@ class EEGToBERTModelEstimator():
                 model = Networks.EEGToBERTModel_v2(eeg_input_dim, bert_output_dim)
             elif model_name == 'EEGToBERTModel_v3':
                 model = Networks.EEGToBERTModel_v3(eeg_input_dim, bert_output_dim)
+            elif model_name == 'EEGToBERTModel_v4':
+                model = Networks.EEGToBERTModel_v4(eeg_input_dim, bert_output_dim)
 
             if loss_function == "ContrastiveLossEuclidNER":
                 criterion = Loss.ContrastiveLossEuclidNER(margin=margin)
