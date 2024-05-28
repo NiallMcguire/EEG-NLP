@@ -205,6 +205,7 @@ class EEGToBERTModelEstimator():
 
 if __name__ == "__main__":
     # Define parameter grid for grid search
+    '''
     param_grid = {
         'epochs': [100],
         'patience': [10, 20],
@@ -218,6 +219,22 @@ if __name__ == "__main__":
         'learning_rate': [0.0001, 0.001, 0.01],
         'Embedding_model': ['BERT'],
         'model_name': ['EEGToBERTModel_v1', 'EEGToBERTModel_v2', 'EEGToBERTModel_v3']
+    }
+    '''
+
+    param_grid = {
+        'epochs': [100],
+        'patience': [10],
+        'test_size': [0.2],
+        'validation_size': [0.2],
+        'num_negative_pairs_per_positive': [1],
+        'batch_size': [64],
+        'loss_function': ["ContrastiveLossEuclidNER"],
+        'margin': [1.0],
+        'optimizer': ["Adam"],
+        'learning_rate': [0.0001],
+        'Embedding_model': ['BERT'],
+        'model_name': ['EEGToBERTModel_v3']
     }
 
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
