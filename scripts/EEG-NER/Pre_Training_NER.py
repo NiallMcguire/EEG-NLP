@@ -18,7 +18,8 @@ from torch.utils.data import Dataset, DataLoader
 
 if __name__ == "__main__":
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
-    #save_path = r"/users/gxb18167/EEG-NLP/"
+    model_save_path = "/users/gxb18167/configs/model_checkpoints"
+    config_save_path = "/users/gxb18167/configs/model_configs"
 
     d = data.Data()
     util = utils.Utils()
@@ -44,7 +45,6 @@ if __name__ == "__main__":
     parameters['optimizer'] = optimizer
     learning_rate = 0.001
     parameters['learning_rate'] = learning_rate
-
     Embedding_model = 'BERT'  # 'Word2Vec' or 'BERT'
     parameters['Embedding_model'] = Embedding_model
 
