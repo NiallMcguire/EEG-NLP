@@ -129,6 +129,6 @@ class EEGToBERTModel_v4(nn.Module):
         lstm_out = torch.cat((lstm_out[:, -1, :], attn_output.squeeze(1)), dim=1)  # Concatenate LSTM output and attention output
         output = self.fc1(lstm_out)  # Final output
         # Reshape output to match the shape of [batchsize, 7, bert_output_dim]
-        output = output.view(output.size(0), 1, -1).repeat(1, 7, 1)
+        output = output.view(output.size(0), 7, -1)
         return output
 
