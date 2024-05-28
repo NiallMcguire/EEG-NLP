@@ -209,16 +209,16 @@ if __name__ == "__main__":
     # Define parameter grid for grid search
     param_grid = {
         'epochs': [100],
-        'patience': [5, 10, 20],
+        'patience': [20],
         'test_size': [0.2],
-        'validation_size': [0.1, 0.2],
+        'validation_size': [0.2],
         'num_negative_pairs_per_positive': [1, 2, 3],
-        'batch_size': [32, 64],
+        'batch_size': [64, 128],
         'loss_function': ["ContrastiveLossEuclidNER"],
         'margin': [0.5, 1.0, 2.0],
-        'optimizer': ["Adam", "SGD"],
+        'optimizer': ["Adam"],
         'learning_rate': [0.0001, 0.001, 0.01],
-        'Embedding_model': ['BERT', 'Word2Vec'],
+        'Embedding_model': ['BERT'],
         'model_name': ['EEGToBERTModel_v1', 'EEGToBERTModel_v2', 'EEGToBERTModel_v3']
     }
 
