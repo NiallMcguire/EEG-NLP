@@ -233,12 +233,12 @@ if __name__ == "__main__":
     Loss = Loss
     Networks = Networks
 
-    train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
+    #train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
-    y = train_Classes
+    #y = train_Classes
 
-    train_model = EEGToBERTModelEstimator(model_save_path, config_save_path)
+    #train_model = EEGToBERTModelEstimator(model_save_path, config_save_path)
 
 
-    grid_search = GridSearchCV(estimator=train_model, param_grid=param_grid, cv=0)
-    grid_search.fit((train_NE, train_EEG_segments), y)
+    #grid_search = GridSearchCV(estimator=train_model, param_grid=param_grid, cv=0)
+    #grid_search.fit((train_NE, train_EEG_segments), y)
