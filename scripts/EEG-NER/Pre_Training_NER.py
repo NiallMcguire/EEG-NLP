@@ -25,18 +25,22 @@ if __name__ == "__main__":
     Loss = Loss
     Networks = Networks
 
+    train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
     parameters = {}
-    vector_size = 768
-    parameters['vector_size'] = vector_size
     test_size = 0.2
     parameters['test_size'] = test_size
 
-    train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
+    Embedding_model = 'BERT'  # 'Word2Vec' or 'BERT'
+    parameters['Embedding_model'] = Embedding_model
 
-    ner_bert = utils.NER_BERT()
+    if Embedding_model == 'BERT':
+        vector_size = 768
+        parameters['vector_size'] = vector_size
+        ner_bert = utils.NER_BERT()
+        train_NE_embedded = ner_bert.get_embeddings(train_NE)
 
-    train_NE_embedded = ner_bert.get_embeddings(train_NE)
+
 
     train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
     train_NE_expanded = np.array(train_NE_expanded)
