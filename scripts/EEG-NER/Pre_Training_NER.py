@@ -20,6 +20,8 @@ if __name__ == "__main__":
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
     #save_path = r"/users/gxb18167/EEG-NLP/"
 
+    parameters = {}
+
     d = data.Data()
     util = utils.Utils()
     Loss = Loss
