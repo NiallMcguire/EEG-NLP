@@ -158,14 +158,14 @@ if __name__ == "__main__":
         pre_train_model.eval()
         #replace train_loader with new encoded data
         # Initialize empty tensors
-        train_aligned_EEG = torch.empty((0, vector_size)).to(device)
-        train_aligned_y = torch.empty((0,)).to(device)
+        train_aligned_EEG = torch.empty((0, 7, 768)).to(device)  # Initialize with the correct shape
+        train_aligned_y = torch.empty((0, 3)).to(device)
 
-        validation_aligned_EEG = torch.empty((0, vector_size)).to(device)
-        validation_aligned_y = torch.empty((0,)).to(device)
+        validation_aligned_EEG = torch.empty((0, 7, 768)).to(device)
+        validation_aligned_y = torch.empty((0, 3)).to(device)
 
-        test_aligned_EEG = torch.empty((0, vector_size)).to(device)
-        test_aligned_y = torch.empty((0,)).to(device)
+        test_aligned_EEG = torch.empty((0, 7, 768)).to(device)
+        test_aligned_y = torch.empty((0, 3)).to(device)
 
         with torch.no_grad():
             for batch in train_loader:
