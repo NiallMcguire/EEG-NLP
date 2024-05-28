@@ -108,7 +108,7 @@ class Attention(nn.Module):
 
     def forward(self, encoder_outputs):
         seq_len = encoder_outputs.size(1)
-        energy = self.attn(encoder_outputs.contiguous().view(-1, self.hidden_dim * 2)) # Encoder output is the output of the BLSTM hence the hidden_dim is doubled
+        energy = self.attn(encoder_outputs.contiguous().view(-1, self.hidden_dim * 2))
         energy = energy.view(-1, seq_len)  # Reshape to (batch_size, seq_len)
         attention_weights = torch.softmax(energy, dim=1).unsqueeze(2)  # Add dimension for broadcasting
         context_vector = torch.sum(encoder_outputs * attention_weights, dim=1).unsqueeze(1)
