@@ -36,7 +36,7 @@ if __name__ == "__main__":
     parameters['validation_size'] = validation_size
     num_negative_pairs_per_positive = 1
     parameters['num_negative_pairs_per_positive'] = num_negative_pairs_per_positive
-    batch_size = 32
+    batch_size = 64
     parameters['batch_size'] = batch_size
     loss_function = "ContrastiveLossEuclidNER"
     parameters['loss_function'] = loss_function
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     parameters['learning_rate'] = learning_rate
     Embedding_model = 'BERT'  # 'Word2Vec' or 'BERT'
     parameters['Embedding_model'] = Embedding_model
-    model_name = 'EEGToBERTModel_v2' # 'EEGToBERTModel_v1' or 'EEGToBERTModel_v2' or 'EEGToBERTModel_v3'
+    model_name = 'EEGToBERTModel_v3' # 'EEGToBERTModel_v1' or 'EEGToBERTModel_v2' or 'EEGToBERTModel_v3'
     parameters['model_name'] = model_name
 
     if Embedding_model == 'BERT':
