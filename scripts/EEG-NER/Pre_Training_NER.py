@@ -40,6 +40,17 @@ if __name__ == "__main__":
         ner_bert = utils.NER_BERT()
         train_NE_embedded = ner_bert.get_embeddings(train_NE)
 
+    elif Embedding_model == 'Word2Vec':
+        vector_size = 50
+        parameters['vector_size'] = vector_size
+        window = 5
+        parameters['window'] = window
+        min_count = 1
+        parameters['min_count'] = min_count
+        workers = 4
+
+        train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count, workers)
+
 
 
     train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
