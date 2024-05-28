@@ -19,6 +19,20 @@ class EEGToBERTModelEstimator(BaseEstimator):
         self.parameters = kwargs
         self.model_save_path = model_save_path
         self.config_save_path = config_save_path
+        self.model = None
+
+    def evaluate(self, model, data_loader, criterion) -> float:
+        model.eval()
+        total_loss = 0.0
+        total_samples = 0
+        with torch.no_grad():
+            for eeg_vectors, embeddings, labels in data_loader:
+                output1 = model(eeg_vectors)
+                output2 = embeddings
+                loss = criterion(output1, output2, labels)
+                total_loss += loss.item() * eeg_vectors.size(0)
+                total_samples += eeg_vectors.size(0)
+        return total_loss / total_samples
 
     def fit(self, X, y):
         parameters = self.parameters
@@ -70,7 +84,7 @@ class EEGToBERTModelEstimator(BaseEstimator):
         positive_pairs = [(X[i], train_NE_expanded[i], 1) for i in range(len(X))]
         negative_pairs = []
 
-        '''
+
         # Create negative pairs
         for i in range(len(X)):
             negative_indices = sample([j for j in range(len(train_NE_expanded)) if j != i],
@@ -154,7 +168,7 @@ class EEGToBERTModelEstimator(BaseEstimator):
 
                     # Evaluate validation loss if validation loader is provided
                     if validation_loader is not None:
-                        validation_loss = evaluate(model, validation_loader, criterion)
+                        validation_loss = self.evaluate(model, validation_loader, criterion)
                         print(f'Epoch {epoch + 1}/{num_epochs}, Validation Loss: {validation_loss:.4f}')
 
                         # Check for early stopping criteria
@@ -170,20 +184,11 @@ class EEGToBERTModelEstimator(BaseEstimator):
 
                 return model
 
-            def evaluate(model, data_loader, criterion) -> float:
-                model.eval()
-                total_loss = 0.0
-                total_samples = 0
-                with torch.no_grad():
-                    for eeg_vectors, embeddings, labels in data_loader:
-                        output1 = model(eeg_vectors)
-                        output2 = embeddings
-                        loss = criterion(output1, output2, labels)
-                        total_loss += loss.item() * eeg_vectors.size(0)
-                        total_samples += eeg_vectors.size(0)
-                return total_loss / total_samples
+
 
             model = train_contrastive(model, train_loader, criterion, optimizer)
+
+            self.model = model
 
         
             # model save path with the time stamp
@@ -200,10 +205,10 @@ class EEGToBERTModelEstimator(BaseEstimator):
             print("Model saved at: ", model_save_path)
             print("Config saved at: ", config_save_path)
             print("Training completed")
-            '''
+
 
     def score(self, X, y):
-        '''
+
         train_NE, train_EEG_segments = X
         train_Classes = y
 
@@ -247,7 +252,7 @@ class EEGToBERTModelEstimator(BaseEstimator):
         validation_loss = self.evaluate(self.model, validation_loader,
                                         Loss.ContrastiveLossEuclidNER(margin=self.parameters['margin']))
         return -validation_loss
-        '''
+
 
 
 
