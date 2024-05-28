@@ -30,6 +30,8 @@ if __name__ == "__main__":
     parameters = {}
     test_size = 0.2
     parameters['test_size'] = test_size
+    num_negative_pairs_per_positive = 1
+    parameters['num_negative_pairs_per_positive'] = num_negative_pairs_per_positive
 
     Embedding_model = 'BERT'  # 'Word2Vec' or 'BERT'
     parameters['Embedding_model'] = Embedding_model
@@ -60,18 +62,17 @@ if __name__ == "__main__":
     X = util.NER_reshape_data(X)
     y_categorical = util.encode_labels(y)
 
+    # Create positive and negative pairs
     positive_pairs = [(X[i], train_NE_expanded[i], 1) for i in range(len(X))]
-
-    num_negative_pairs_per_positive = 1
-    parameters['num_negative_pairs_per_positive'] = num_negative_pairs_per_positive
-
     negative_pairs = []
 
+    # Create negative pairs
     for i in range(len(X)):
         negative_indices = sample([j for j in range(len(train_NE_expanded)) if j != i], num_negative_pairs_per_positive)
         for neg_index in negative_indices:
             negative_pairs.append((X[i], train_NE_expanded[neg_index], 0))
 
+    # Combine positive and negative pairs
     all_pairs = positive_pairs + negative_pairs
 
     # Convert lists of numpy.ndarrays to single numpy.ndarrays
