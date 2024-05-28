@@ -173,12 +173,6 @@ if __name__ == "__main__":
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG)
-                print("aligned_EEG_outputs shape: ", aligned_EEG_outputs.shape)
-                print("batch_y shape: ", batch_y.shape)
-
-                print("train_aligned_EEG shape: ", train_aligned_EEG.shape)
-                print("train_aligned_y shape: ", train_aligned_y.shape)
-
                 train_aligned_EEG = torch.cat((train_aligned_EEG, aligned_EEG_outputs), dim=0)
                 train_aligned_y = torch.cat((train_aligned_y, batch_y), dim=0)
 
