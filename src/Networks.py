@@ -126,7 +126,10 @@ class EEGToBERTModel_v4(nn.Module):
         # LSTM expects input of shape (batch_size, sequence_length, input_dim)
         lstm_out, _ = self.lstm(x)  # LSTM output and (hidden_state, cell_state)
         attn_output = self.attention(lstm_out)
-        lstm_out = torch.cat((lstm_out[:, -1, :], attn_output.squeeze(1)), dim=1)  # Concatenate LSTM output and attention output
+        print("lstm_out shape:", lstm_out.shape)
+        print("attn_output shape:", attn_output.shape)
+        lstm_out = torch.cat((lstm_out[:, -1, :], attn_output.squeeze(1)), dim=1)
+        print("Concatenated tensor shape:", lstm_out.shape)
         output = self.fc1(lstm_out)  # Final output
         # Reshape output to match the shape of [batchsize, 7, bert_output_dim]
         output = output.view(output.size(0), 1, -1).repeat(1, 7, 1)
