@@ -204,6 +204,7 @@ if __name__ == "__main__":
 
         print("Pre-training complete")
         print("train aligned shape: ", train_aligned_EEG.shape)
+        print("tensor dataset shape: ", train_dataset.tensors[0].shape)
 
     '''
     # Instantiate the model
