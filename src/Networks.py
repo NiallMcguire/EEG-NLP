@@ -120,18 +120,14 @@ class EEGToBERTModel_v4(nn.Module):
         super(EEGToBERTModel_v4, self).__init__()
         self.lstm = nn.LSTM(eeg_input_dim, hidden_dim, batch_first=True, bidirectional=True)
         self.attention = Attention(hidden_dim)
-        self.fc1 = nn.Linear(hidden_dim * 2 + hidden_dim, bert_output_dim)  # Adjusted input dimension
+        self.fc1 = nn.Linear(hidden_dim * 2 + hidden_dim, bert_output_dim * 7)  # Adjusted output dimension
 
     def forward(self, x):
         # LSTM expects input of shape (batch_size, sequence_length, input_dim)
         lstm_out, _ = self.lstm(x)  # LSTM output and (hidden_state, cell_state)
-        print("LSTM output shape:", lstm_out.shape)
         attn_output = self.attention(lstm_out)
-        print("Attention output shape:", attn_output.shape)
         lstm_out = torch.cat((lstm_out[:, -1, :], attn_output.squeeze(1)), dim=1)  # Concatenate LSTM output and attention output
-        print("Concatenated output shape:", lstm_out.shape)
         output = self.fc1(lstm_out)  # Final output
-        print("Final output shape:", output.shape)
         # Reshape output to match the shape of [batchsize, 7, bert_output_dim]
         output = output.view(output.size(0), 7, -1)
         return output
