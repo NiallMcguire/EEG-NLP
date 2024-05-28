@@ -102,11 +102,13 @@ class EEGToBERTModel_v3(nn.Module):
         super(EEGToBERTModel_v3, self).__init__()
         self.lstm = nn.LSTM(eeg_input_dim, hidden_dim, batch_first=True, bidirectional=True)
         self.attention = Attention(hidden_dim)
-        self.fc = nn.Linear(hidden_dim * 2, bert_output_dim * 7)
+        self.fc = nn.Linear(hidden_dim * 2, bert_output_dim)
 
     def forward(self, x):
         lstm_out, _ = self.lstm(x)
         attn_weights = self.attention(lstm_out)
         context = torch.bmm(attn_weights.unsqueeze(1), lstm_out).squeeze(1)
         output = self.fc(context)
+        # Reshape to match the output shape (batch_size, 7, bert_output_dim)
+        output = output.view(output.size(0), 7, -1)
         return output
