@@ -200,14 +200,12 @@ if __name__ == "__main__":
 
         # Re-create the data loaders
         train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-        validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
+        val_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
         test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
         print("Pre-training complete")
         print("train aligned shape: ", train_aligned_EEG.shape)
         input_size = 768
-
-
 
     # Instantiate the model
     if inputs == "EEG+Text":
