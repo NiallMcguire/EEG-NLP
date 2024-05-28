@@ -192,10 +192,15 @@ if __name__ == "__main__":
                 test_aligned_y = torch.cat((test_aligned_y, batch_y), dim=0)
 
 
-        # Create the train loader
-        train_aligned_loader = DataLoader(dataset=train_aligned_EEG, batch_size=batch_size, shuffle=True)
-        validation_aligned_loader = DataLoader(dataset=validation_aligned_EEG, batch_size=batch_size, shuffle=False)
-        test_aligned_loader = DataLoader(dataset=test_aligned_EEG, batch_size=batch_size, shuffle=False)
+        # Create TensorDataset instances
+        train_dataset = TensorDataset(train_aligned_EEG, train_aligned_y)
+        validation_dataset = TensorDataset(validation_aligned_EEG, validation_aligned_y)
+        test_dataset = TensorDataset(test_aligned_EEG, test_aligned_y)
+
+        # Re-create the data loaders
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+        validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
+        test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
     print("Pre-training complete")
 
