@@ -132,6 +132,8 @@ class EEGToBERTModelEstimator():
                 model = Networks.EEGToBERTModel_v3(eeg_input_dim, bert_output_dim)
             elif model_name == 'EEGToBERTModel_v4':
                 model = Networks.EEGToBERTModel_v4(eeg_input_dim, bert_output_dim)
+            elif model_name == 'EEGToBERTModel_v5':
+                model = Networks.EEGToBERTModel_v5(eeg_input_dim, bert_output_dim)
 
             if loss_function == "ContrastiveLossEuclidNER":
                 criterion = Loss.ContrastiveLossEuclidNER(margin=margin)
@@ -147,17 +149,27 @@ class EEGToBERTModelEstimator():
                 no_improvement_count = 0
                 for epoch in range(num_epochs):
                     running_loss = 0.0
-                    for eeg_vectors, bert_vectors, labels in train_loader:
-                        optimizer.zero_grad()
-                        output1 = model(eeg_vectors)
-                        output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
+                    if model == 'EEGToBERTModel_v5':
+                        for eeg_vectors, bert_vectors, labels, attention_mask in train_loader:
+                            optimizer.zero_grad()
+                            eeg_proj, bert_proj = model(eeg_vectors, attention_mask)
+                            loss = criterion(eeg_proj, bert_proj, labels)
+                            loss.backward()
+                            optimizer.step()
+                            running_loss += loss.item() * eeg_vectors.size(0)
+                    else:
+                        for eeg_vectors, bert_vectors, labels in train_loader:
+                            optimizer.zero_grad()
+                            output1 = model(eeg_vectors)
+                            output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
 
-                        # print("labels shape", labels.shape)
+                            # print("labels shape", labels.shape)
 
-                        loss = criterion(output1, output2, labels)
-                        loss.backward()
-                        optimizer.step()
-                        running_loss += loss.item() * eeg_vectors.size(0)
+                            loss = criterion(output1, output2, labels)
+                            loss.backward()
+                            optimizer.step()
+                            running_loss += loss.item() * eeg_vectors.size(0)
+
 
                     epoch_loss = running_loss / len(train_loader.dataset)
                     print(f'Epoch {epoch + 1}/{num_epochs}, Loss: {epoch_loss:.4f}')

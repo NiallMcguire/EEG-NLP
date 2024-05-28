@@ -132,3 +132,38 @@ class EEGToBERTModel_v4(nn.Module):
         output = output.view(output.size(0), 1, -1).repeat(1, 7, 1)
         return output
 
+import torch.nn as nn
+
+class ProjectionHead(nn.Module):
+    def __init__(self, input_dim, output_dim):
+        super().__init__()
+        self.projection = nn.Sequential(
+            nn.Linear(input_dim, output_dim),
+            nn.ReLU(),
+            nn.Linear(output_dim, output_dim)
+        )
+
+    def forward(self, x):
+        return self.projection(x)
+
+class EEGToBERTModel_v5(nn.Module):
+    def __init__(self, eeg_input_dim, bert_output_dim, projection_dim=256):
+        super(EEGToBERTModel_v5, self).__init__()
+        self.lstm = nn.LSTM(eeg_input_dim, 512, batch_first=True, bidirectional=True)
+        self.fc1 = nn.Linear(1024, 256)
+        self.fc2 = nn.Linear(256, bert_output_dim * 7)
+        self.eeg_proj_head = ProjectionHead(bert_output_dim * 7, projection_dim)
+        self.bert_proj_head = ProjectionHead(bert_output_dim, projection_dim)
+
+    def forward(self, x, bert_embeddings):
+        # LSTM expects input of shape (batch_size, sequence_length, input_dim)
+        x, _ = self.lstm(x)  # LSTM output and (hidden_state, cell_state)
+        x = torch.relu(self.fc1(x[:, -1, :]))  # Take the output of the last time step and pass it through the fully connected layer
+        x = self.fc2(x)
+        x = x.view(x.size(0), 7, -1)  # Reshape x to match the shape of bert_embeddings
+
+        # Project EEG and BERT embeddings to the same embedding space
+        eeg_proj = self.eeg_proj_head(x)
+        bert_proj = self.bert_proj_head(bert_embeddings)
+
+        return eeg_proj, bert_proj
