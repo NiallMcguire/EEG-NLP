@@ -52,7 +52,6 @@ if __name__ == "__main__":
         train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count, workers)
 
 
-
     train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
     train_NE_expanded = np.array(train_NE_expanded)
 
@@ -64,6 +63,8 @@ if __name__ == "__main__":
     positive_pairs = [(X[i], train_NE_expanded[i], 1) for i in range(len(X))]
 
     num_negative_pairs_per_positive = 1
+    parameters['num_negative_pairs_per_positive'] = num_negative_pairs_per_positive
+
     negative_pairs = []
 
     for i in range(len(X)):
