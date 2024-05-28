@@ -19,7 +19,7 @@ class ContrastiveLossEuclidNER(nn.Module):
         super(ContrastiveLossEuclidNER, self).__init__()
         self.margin = margin
 
-    def forward(self, output1, output2, label):
+    def forward(self, output1, output2, label) -> torch.Tensor:
         euclidean_distance = F.pairwise_distance(output1, output2)
         # Reshape label tensor to match the shape of euclidean_distance tensor
         label = label.unsqueeze(1).expand_as(euclidean_distance)
