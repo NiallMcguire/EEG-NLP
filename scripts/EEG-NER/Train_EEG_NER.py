@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
 
     evaluation = True
-    pre_training = True
+    pre_training = False
 
     parameters['evaluation'] = evaluation
     inputs = "EEG" # "EEG", "Text", "EEE+Text"
