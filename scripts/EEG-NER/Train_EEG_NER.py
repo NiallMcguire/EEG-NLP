@@ -139,7 +139,7 @@ if __name__ == "__main__":
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch_size, shuffle=False)
 
-    print("Data before pre-training: ", train_loader.dataset.tensors[0].shape)
+    print("Data before pre-training: ", train_dataset[0][0].shape)
 
     if pre_training == True:
         parameters['pre_training'] = pre_training
