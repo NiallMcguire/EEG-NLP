@@ -42,7 +42,9 @@ if __name__ == "__main__":
     parameters['batch_size'] = batch_size
     loss_function = "ContrastiveLossEuclidNER"
     parameters['loss_function'] = loss_function
-    optimizer = "Adam"
+    margin = 1.0
+    parameters['margin'] = 1.0
+    optimizer = "Adam" # 'Adam' or 'SGD'
     parameters['optimizer'] = optimizer
     learning_rate = 0.001
     parameters['learning_rate'] = learning_rate
@@ -129,12 +131,13 @@ if __name__ == "__main__":
 
 
     if loss_function == "ContrastiveLossEuclidNER":
-        margin = 1.0
-        parameters['margin'] = 1.0
+
         criterion = Loss.ContrastiveLossEuclidNER(margin=margin)
 
     if optimizer == "Adam":
         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    elif optimizer == "SGD":
+        optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 
 
