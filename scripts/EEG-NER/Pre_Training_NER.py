@@ -114,7 +114,7 @@ if __name__ == "__main__":
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
     eeg_input_dim = eeg_train.shape[2]  # Adjusted input dimension
-    bert_output_dim = bert_train.shape[2]  # Keep as is since we have reshape the outpus
+    bert_output_dim = bert_train.shape[2]  # Keep as is since we have reshape the outputs
 
 
     # Assuming the model is already defined as EEGToBERTModel
