@@ -115,20 +115,18 @@ class Attention(nn.Module):
         return context_vector
 
 class EEGToBERTModel_v4(nn.Module):
-    def __init__(self, eeg_input_dim, bert_output_dim, hidden_dim=512):
+    def __init__(self, eeg_input_dim, bert_output_dim, hidden_dim=256):
         super(EEGToBERTModel_v4, self).__init__()
         self.lstm = nn.LSTM(eeg_input_dim, hidden_dim, batch_first=True, bidirectional=True)
         self.attention = Attention(hidden_dim)
-        self.fc1 = nn.Linear(hidden_dim * 2 + hidden_dim, 256)  # Adjusted input dimension
-        self.fc2 = nn.Linear(256, bert_output_dim)
+        self.fc1 = nn.Linear(hidden_dim * 2 + hidden_dim, bert_output_dim)  # Adjusted input dimension
 
     def forward(self, x):
         # LSTM expects input of shape (batch_size, sequence_length, input_dim)
         lstm_out, _ = self.lstm(x)  # LSTM output and (hidden_state, cell_state)
         attn_output = self.attention(lstm_out)
         lstm_out = torch.cat((lstm_out[:, -1, :], attn_output.squeeze(1)), dim=1)  # Concatenate LSTM output and attention output
-        lstm_out = torch.relu(self.fc1(lstm_out))  # Pass through fully connected layer
-        output = self.fc2(lstm_out)  # Final output
+        output = self.fc1(lstm_out)  # Final output
         # Reshape output to match the shape of [batchsize, 7, bert_output_dim]
         output = output.view(output.size(0), 7, -1)
         return output
