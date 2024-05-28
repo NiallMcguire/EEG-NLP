@@ -132,6 +132,6 @@ class EEGToBERTModel_v4(nn.Module):
         print("Concatenated tensor shape:", lstm_out.shape)
         output = self.fc1(lstm_out)  # Final output
         # Reshape output to match the shape of [batchsize, 7, bert_output_dim]
-        output = output.view(output.size(0), 1, -1).repeat(1, 7, 1)
+        output = output.view(output.size(0), 7, -1)
         return output
 
