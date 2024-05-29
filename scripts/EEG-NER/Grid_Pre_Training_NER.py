@@ -152,7 +152,7 @@ class EEGToBERTModelEstimator():
                 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
             def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=epochs):
-                model.to(device)
+                modle = model.to(device)
                 model.train()
                 best_validation_loss = float('inf')
                 no_improvement_count = 0
@@ -201,7 +201,6 @@ class EEGToBERTModelEstimator():
                             break
 
                 return model
-
 
 
             model = train_contrastive(model, train_loader, criterion, optimizer)
