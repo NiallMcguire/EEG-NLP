@@ -256,11 +256,11 @@ if __name__ == "__main__":
         'test_size': [0.2],
         'validation_size': [0.2],
         'num_negative_pairs_per_positive': [1],
-        'batch_size': [64],
+        'batch_size': [32],
         'loss_function': ["ContrastiveLossEuclidNER"],
         'margin': [1.0],
         'optimizer': ["Adam"],
-        'learning_rate': [0.0001],
+        'learning_rate': [0.001],
         'Embedding_model': ['BERT'],
         'model_name': ['EEGToBERTModel_v3']
     }
