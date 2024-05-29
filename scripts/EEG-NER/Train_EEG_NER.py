@@ -216,6 +216,8 @@ if __name__ == "__main__":
         model = Networks.BLSTM(input_size, hidden_size, num_classes, num_layers, dropout)
     else:
         model = Networks.BLSTM(input_size, hidden_size, num_classes,num_layers, dropout)
+
+    # Move the model to the GPU if available
     model.to(device)
 
     # Define loss function and optimizer
