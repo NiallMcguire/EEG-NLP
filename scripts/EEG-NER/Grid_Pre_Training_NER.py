@@ -18,6 +18,7 @@ class EEGToBERTModelEstimator():
         self.model_save_path = model_save_path
         self.config_save_path = config_save_path
         self.model = None
+        self.device = None
 
 
     def evaluate(self, model, data_loader, criterion) -> float:
@@ -26,6 +27,8 @@ class EEGToBERTModelEstimator():
         total_samples = 0
         with torch.no_grad():
             for eeg_vectors, embeddings, labels in data_loader:
+                eeg_vectors, embeddings, labels = eeg_vectors.to(self.device), embeddings.to(self.device), labels.to(self.device)
+
                 output1 = model(eeg_vectors)
                 output2 = embeddings
                 loss = criterion(output1, output2, labels)
@@ -56,6 +59,8 @@ class EEGToBERTModelEstimator():
             device = torch.device("cuda")
         else:
             device = torch.device("cpu")
+
+        self.device = device
 
         print("Device: ", device)
 
