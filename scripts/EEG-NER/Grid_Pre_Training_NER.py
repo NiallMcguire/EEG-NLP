@@ -57,6 +57,8 @@ class EEGToBERTModelEstimator():
         else:
             device = torch.device("cpu")
 
+        print("Device: ", device)
+
         if Embedding_model == 'BERT':
             vector_size = 768
             parameters['vector_size'] = vector_size
