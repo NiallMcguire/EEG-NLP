@@ -258,7 +258,7 @@ if __name__ == "__main__":
         'optimizer': ["Adam"],
         'learning_rate': [0.001],
         'Embedding_model': ['BERT'],
-        'model_name': ['EEGToBERTModel_v3']
+        'model_name': ['EEGToBERTModel_v4']
     }
 
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
