@@ -158,10 +158,11 @@ class EEGToBERTModelEstimator():
 
             def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=epochs):
                 model = model.to(device)
-                model.train()
+
                 best_validation_loss = float('inf')
                 no_improvement_count = 0
                 for epoch in range(num_epochs):
+                    model.train()
                     running_loss = 0.0
                     if model == 'EEGToBERTModel_v5':
                         for eeg_vectors, bert_vectors, labels in train_loader:
