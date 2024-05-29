@@ -76,6 +76,8 @@ class EEGToBERTModelEstimator():
         train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
         train_NE_expanded = np.array(train_NE_expanded)
 
+        exit(0)
+
         X, y = util.NER_padding_x_y(train_EEG_segments, train_Classes)
         X = np.array(X)
         X = util.NER_reshape_data(X)
