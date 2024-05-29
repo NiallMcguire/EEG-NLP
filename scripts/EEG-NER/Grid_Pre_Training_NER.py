@@ -157,9 +157,9 @@ class EEGToBERTModelEstimator():
                 for epoch in range(num_epochs):
                     running_loss = 0.0
                     if model == 'EEGToBERTModel_v5':
-                        for eeg_vectors, bert_vectors, labels, attention_mask in train_loader:
+                        for eeg_vectors, bert_vectors, labels in train_loader:
                             optimizer.zero_grad()
-                            eeg_proj, bert_proj = model(eeg_vectors, attention_mask)
+                            eeg_proj, bert_proj = model(eeg_vectors, bert_vectors)
                             loss = criterion(eeg_proj, bert_proj, labels)
                             loss.backward()
                             optimizer.step()
@@ -167,9 +167,9 @@ class EEGToBERTModelEstimator():
                     else:
                         for eeg_vectors, bert_vectors, labels in train_loader:
                             optimizer.zero_grad()
+                            eeg_vectors, bert_vectors, labels = eeg_vectors.to(device), bert_vectors.to(device), labels.to(device)
                             output1 = model(eeg_vectors)
                             output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
-
                             # print("labels shape", labels.shape)
 
                             loss = criterion(output1, output2, labels)

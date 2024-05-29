@@ -203,6 +203,8 @@ if __name__ == "__main__":
         val_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
         test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
+
+
         print("Pre-training complete")
         print("train aligned shape: ", train_aligned_EEG.shape)
         input_size = 768
