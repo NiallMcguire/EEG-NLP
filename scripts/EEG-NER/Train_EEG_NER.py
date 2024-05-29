@@ -62,6 +62,8 @@ if __name__ == "__main__":
 
     print("Device: ", device)
 
+    exit(0)
+
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
 
 
