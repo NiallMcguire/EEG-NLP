@@ -60,6 +60,10 @@ if __name__ == "__main__":
     else:
         device = torch.device("cpu")
 
+    print("Device: ", device)
+
+    exit(0)
+
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
 
 
