@@ -19,6 +19,7 @@ class EEGToBERTModelEstimator():
         self.config_save_path = config_save_path
         self.model = None
 
+
     def evaluate(self, model, data_loader, criterion) -> float:
         model.eval()
         total_loss = 0.0
@@ -50,6 +51,11 @@ class EEGToBERTModelEstimator():
         model_name = parameters['model_name']
 
         print("Parameters: ", parameters)
+
+        if torch.cuda.is_available():
+            device = torch.device("cuda")
+        else:
+            device = torch.device("cpu")
 
         if Embedding_model == 'BERT':
             vector_size = 768
@@ -144,6 +150,7 @@ class EEGToBERTModelEstimator():
                 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
             def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=epochs):
+                model.to(device)
                 model.train()
                 best_validation_loss = float('inf')
                 no_improvement_count = 0
