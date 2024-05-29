@@ -38,8 +38,6 @@ class EEGToBERTModelEstimator():
 
     def fit(self, train_NE, train_EEG_segments, train_Classes):
         parameters = self.parameters
-
-
         epochs = parameters['epochs']
         patience = parameters['patience']
         test_size = parameters['test_size']
@@ -92,139 +90,137 @@ class EEGToBERTModelEstimator():
         positive_pairs = [(X[i], train_NE_expanded[i], 1) for i in range(len(X))]
         negative_pairs = []
 
-
-        # Create negative pairs
         for i in range(len(X)):
             negative_indices = sample([j for j in range(len(train_NE_expanded)) if j != i],
                                       num_negative_pairs_per_positive)
             for neg_index in negative_indices:
                 negative_pairs.append((X[i], train_NE_expanded[neg_index], 0))
 
-            # Combine positive and negative pairs
-            all_pairs = positive_pairs + negative_pairs
+        # Combine positive and negative pairs
+        all_pairs = positive_pairs + negative_pairs
 
-            # Convert lists of numpy.ndarrays to single numpy.ndarrays
-            eeg_array = np.array([pair[0] for pair in all_pairs])
-            bert_array = np.array([pair[1] for pair in all_pairs])
-            labels_array = np.array([pair[2] for pair in all_pairs])
+        # Convert lists of numpy.ndarrays to single numpy.ndarrays
+        eeg_array = np.array([pair[0] for pair in all_pairs])
+        bert_array = np.array([pair[1] for pair in all_pairs])
+        labels_array = np.array([pair[2] for pair in all_pairs])
 
-            # Convert numpy.ndarrays to tensors
-            eeg_pairs = torch.tensor(eeg_array, dtype=torch.float32)
-            bert_pairs = torch.tensor(bert_array, dtype=torch.float32)
-            labels = torch.tensor(labels_array, dtype=torch.float32)
+        # Convert numpy.ndarrays to tensors
+        eeg_pairs = torch.tensor(eeg_array, dtype=torch.float32)
+        bert_pairs = torch.tensor(bert_array, dtype=torch.float32)
+        labels = torch.tensor(labels_array, dtype=torch.float32)
 
-            eeg_train, eeg_test, bert_train, bert_test, labels_train, labels_test = train_test_split(eeg_pairs,
-                                                                                                     bert_pairs, labels,
-                                                                                                     test_size=test_size,
-                                                                                                     random_state=42)
+        eeg_train, eeg_test, bert_train, bert_test, labels_train, labels_test = train_test_split(eeg_pairs,
+                                                                                                 bert_pairs, labels,
+                                                                                                 test_size=test_size,
+                                                                                                 random_state=42)
 
-            # validation
-            eeg_train, eeg_val, bert_train, bert_val, labels_train, labels_val = train_test_split(eeg_train, bert_train,
-                                                                                                  labels_train,
-                                                                                                  test_size=validation_size,
-                                                                                                  random_state=42)
+        # validation
+        eeg_train, eeg_val, bert_train, bert_val, labels_train, labels_val = train_test_split(eeg_train, bert_train,
+                                                                                              labels_train,
+                                                                                              test_size=validation_size,
+                                                                                              random_state=42)
 
-            train_dataset = utils.EEGToBERTContrastiveDataset(eeg_train, bert_train, labels_train)
-            validation_dataset = utils.EEGToBERTContrastiveDataset(eeg_val, bert_val, labels_val)
+        train_dataset = utils.EEGToBERTContrastiveDataset(eeg_train, bert_train, labels_train)
+        validation_dataset = utils.EEGToBERTContrastiveDataset(eeg_val, bert_val, labels_val)
 
-            test_dataset = utils.EEGToBERTContrastiveDataset(eeg_test, bert_test, labels_test)
+        test_dataset = utils.EEGToBERTContrastiveDataset(eeg_test, bert_test, labels_test)
 
-            train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-            validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
-            test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+        validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
+        test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
-            eeg_input_dim = eeg_train.shape[2]  # Adjusted input dimension
-            bert_output_dim = bert_train.shape[2]  # Keep as is since we have reshape the outputs
+        eeg_input_dim = eeg_train.shape[2]  # Adjusted input dimension
+        bert_output_dim = bert_train.shape[2]  # Keep as is since we have reshape the outputs
 
-            # Assuming the model is already defined as EEGToBERTModel
-            if model_name == 'EEGToBERTModel_v1':
-                model = Networks.EEGToBERTModel_v1(eeg_input_dim, bert_output_dim)
-            elif model_name == 'EEGToBERTModel_v2':
-                model = Networks.EEGToBERTModel_v2(eeg_input_dim, bert_output_dim)
-            elif model_name == 'EEGToBERTModel_v3':
-                model = Networks.EEGToBERTModel_v3(eeg_input_dim, bert_output_dim)
-            elif model_name == 'EEGToBERTModel_v4':
-                model = Networks.EEGToBERTModel_v4(eeg_input_dim, bert_output_dim)
-            elif model_name == 'EEGToBERTModel_v5':
-                model = Networks.EEGToBERTModel_v5(eeg_input_dim, bert_output_dim)
+        # Assuming the model is already defined as EEGToBERTModel
+        if model_name == 'EEGToBERTModel_v1':
+            model = Networks.EEGToBERTModel_v1(eeg_input_dim, bert_output_dim)
+        elif model_name == 'EEGToBERTModel_v2':
+            model = Networks.EEGToBERTModel_v2(eeg_input_dim, bert_output_dim)
+        elif model_name == 'EEGToBERTModel_v3':
+            model = Networks.EEGToBERTModel_v3(eeg_input_dim, bert_output_dim)
+        elif model_name == 'EEGToBERTModel_v4':
+            model = Networks.EEGToBERTModel_v4(eeg_input_dim, bert_output_dim)
+        elif model_name == 'EEGToBERTModel_v5':
+            model = Networks.EEGToBERTModel_v5(eeg_input_dim, bert_output_dim)
 
-            if loss_function == "ContrastiveLossEuclidNER":
-                criterion = Loss.ContrastiveLossEuclidNER(margin=margin)
+        if loss_function == "ContrastiveLossEuclidNER":
+            criterion = Loss.ContrastiveLossEuclidNER(margin=margin)
 
-            if optimizer == "Adam":
-                optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-            elif optimizer == "SGD":
-                optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+        if optimizer == "Adam":
+            optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+        elif optimizer == "SGD":
+            optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
-            def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=epochs):
-                model = model.to(device)
+        def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=epochs):
+            model = model.to(device)
 
-                best_validation_loss = float('inf')
-                no_improvement_count = 0
-                for epoch in range(num_epochs):
-                    model.train()
-                    running_loss = 0.0
-                    if model == 'EEGToBERTModel_v5':
-                        for eeg_vectors, bert_vectors, labels in train_loader:
-                            optimizer.zero_grad()
-                            eeg_proj, bert_proj = model(eeg_vectors, bert_vectors)
-                            loss = criterion(eeg_proj, bert_proj, labels)
-                            loss.backward()
-                            optimizer.step()
-                            running_loss += loss.item() * eeg_vectors.size(0)
+            best_validation_loss = float('inf')
+            no_improvement_count = 0
+            for epoch in range(num_epochs):
+                model.train()
+                running_loss = 0.0
+                if model == 'EEGToBERTModel_v5':
+                    for eeg_vectors, bert_vectors, labels in train_loader:
+                        optimizer.zero_grad()
+                        eeg_proj, bert_proj = model(eeg_vectors, bert_vectors)
+                        loss = criterion(eeg_proj, bert_proj, labels)
+                        loss.backward()
+                        optimizer.step()
+                        running_loss += loss.item() * eeg_vectors.size(0)
+                else:
+                    for eeg_vectors, bert_vectors, labels in train_loader:
+                        optimizer.zero_grad()
+                        eeg_vectors, bert_vectors, labels = eeg_vectors.to(device), bert_vectors.to(device), labels.to(device)
+                        output1 = model(eeg_vectors)
+                        output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
+                        # print("labels shape", labels.shape)
+
+                        loss = criterion(output1, output2, labels)
+                        loss.backward()
+                        optimizer.step()
+                        running_loss += loss.item() * eeg_vectors.size(0)
+
+
+                epoch_loss = running_loss / len(train_loader.dataset)
+                print(f'Epoch {epoch + 1}/{num_epochs}, Loss: {epoch_loss:.4f}')
+                # Evaluate validation loss if validation loader is provided
+
+                # Evaluate validation loss if validation loader is provided
+                if validation_loader is not None:
+                    validation_loss = self.evaluate(model, validation_loader, criterion)
+                    print(f'Epoch {epoch + 1}/{num_epochs}, Validation Loss: {validation_loss:.4f}')
+
+                    # Check for early stopping criteria
+                    if validation_loss < best_validation_loss:
+                        best_validation_loss = validation_loss
+                        no_improvement_count = 0
                     else:
-                        for eeg_vectors, bert_vectors, labels in train_loader:
-                            optimizer.zero_grad()
-                            eeg_vectors, bert_vectors, labels = eeg_vectors.to(device), bert_vectors.to(device), labels.to(device)
-                            output1 = model(eeg_vectors)
-                            output2 = bert_vectors  # Assuming bert_vectors are treated as target embeddings
-                            # print("labels shape", labels.shape)
+                        no_improvement_count += 1
 
-                            loss = criterion(output1, output2, labels)
-                            loss.backward()
-                            optimizer.step()
-                            running_loss += loss.item() * eeg_vectors.size(0)
+                    if no_improvement_count >= patience:
+                        print(f'No improvement for {patience} epochs. Stopping training.')
+                        break
+
+            return model
 
 
-                    epoch_loss = running_loss / len(train_loader.dataset)
-                    print(f'Epoch {epoch + 1}/{num_epochs}, Loss: {epoch_loss:.4f}')
-                    # Evaluate validation loss if validation loader is provided
+        model = train_contrastive(model, train_loader, criterion, optimizer)
 
-                    # Evaluate validation loss if validation loader is provided
-                    if validation_loader is not None:
-                        validation_loss = self.evaluate(model, validation_loader, criterion)
-                        print(f'Epoch {epoch + 1}/{num_epochs}, Validation Loss: {validation_loss:.4f}')
+        # model save path with the time stamp
+        model_save_path = self.model_save_path + datetime.datetime.now().strftime(
+            "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.pt"
+        torch.save(model.state_dict(), model_save_path)
 
-                        # Check for early stopping criteria
-                        if validation_loss < best_validation_loss:
-                            best_validation_loss = validation_loss
-                            no_improvement_count = 0
-                        else:
-                            no_improvement_count += 1
+        # Save the parameters
+        parameters['model_save_path'] = model_save_path
+        config_save_path = self.config_save_path + datetime.datetime.now().strftime(
+            "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.json"
+        util.save_json(parameters, config_save_path)
 
-                        if no_improvement_count >= patience:
-                            print(f'No improvement for {patience} epochs. Stopping training.')
-                            break
-
-                return model
-
-
-            model = train_contrastive(model, train_loader, criterion, optimizer)
-
-            # model save path with the time stamp
-            model_save_path = self.model_save_path + datetime.datetime.now().strftime(
-                "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.pt"
-            torch.save(model.state_dict(), model_save_path)
-
-            # Save the parameters
-            parameters['model_save_path'] = model_save_path
-            config_save_path = self.config_save_path + datetime.datetime.now().strftime(
-                "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.json"
-            util.save_json(parameters, config_save_path)
-
-            print("Model saved at: ", model_save_path)
-            print("Config saved at: ", config_save_path)
-            print("Training completed")
+        print("Model saved at: ", model_save_path)
+        print("Config saved at: ", config_save_path)
+        print("Training completed")
 
 
 
