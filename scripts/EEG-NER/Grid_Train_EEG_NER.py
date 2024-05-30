@@ -136,15 +136,15 @@ class NER_Estimator():
                 parameters['pre_training'] = pre_training
 
                 # load pre-training config
-                model_save_path = parameters['pre_trained_model_path']
+                pre_trained_model_path = parameters['pre_trained_model_path']
 
                 # load pre-trained model
                 if parameters['pre_trained_model_name'] == 'EEGToBERTModel_v4':
                     pre_train_model = Networks.EEGToBERTModel_v4(input_size, vector_size)
+                    pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
                 elif parameters['pre_trained_model_name'] == 'EEGToBERTModel_v3':
                     pre_train_model = Networks.EEGToBERTModel_v3(input_size, vector_size)
-
-                pre_train_model.load_state_dict(torch.load(model_save_path))
+                    pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
 
                 '''
                 d.pre_training_NER_encoding(train_loader, pre_train_model, device, vector_size, inputs)
@@ -195,6 +195,8 @@ class NER_Estimator():
                 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
                 val_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
                 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+                pre_train_model.train()
 
                 print("Pre-training complete")
                 #print("train aligned shape: ", train_aligned_EEG.shape)
@@ -257,7 +259,6 @@ class NER_Estimator():
                 # early stopping
                 model.eval()
                 with torch.no_grad():
-
                     val_loss = 0
                     for batch in val_loader:
                         if inputs == "EEG+Text":

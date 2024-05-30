@@ -330,8 +330,6 @@ class Data:
 
             pre_train_model.train()
             tensor_dataset = TensorDataset(aligned_EEG, aligned_NE, aligned_y)
-            # remove pre_train_model from GPU
-            pre_train_model.to('cpu')
             return tensor_dataset
         else:
             for batch in loader:
@@ -343,8 +341,6 @@ class Data:
 
             pre_train_model.train()
             tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
-            # remove pre_train_model from GPU
-            pre_train_model.to('cpu')
             return tensor_dataset
 
 
