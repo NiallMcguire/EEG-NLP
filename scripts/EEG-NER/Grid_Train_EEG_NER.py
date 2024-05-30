@@ -55,45 +55,45 @@ class NER_Estimator():
         cross_val = self.parameters['cross_val']
         parameters = self.parameters
 
-
-
-        if inputs == "EEE+Text" or "Text":
-            # create word embeddings
-
-            if Embedding_model == 'Word2Vec':
-                vector_size = 50
-                parameters['vector_size'] = vector_size
-                window = 5
-                parameters['window'] = window
-                min_count = 1
-                parameters['min_count'] = min_count
-                workers = 4
-
-                train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count,
-                                                                             workers)
-
-            elif Embedding_model == 'BERT':
-                vector_size = 768
-                parameters['vector_size'] = vector_size
-
-                ner_bert = utils.NER_BERT()
-
-                train_NE_embedded = ner_bert.get_embeddings(train_NE)
-
-            train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
-
-            train_NE_expanded = np.array(train_NE_expanded)
-
-            train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
-
-        X, y = util.NER_padding_x_y(train_EEG_segments, train_Classes)
-        X = np.array(X)
-        X = util.NER_reshape_data(X)
-        y_categorical = util.encode_labels(y)
-
         # cross validation
         cross_val_accuracy = []
         for i in range(cross_val):
+
+            if inputs == "EEE+Text" or "Text":
+                # create word embeddings
+
+                if Embedding_model == 'Word2Vec':
+                    vector_size = 50
+                    parameters['vector_size'] = vector_size
+                    window = 5
+                    parameters['window'] = window
+                    min_count = 1
+                    parameters['min_count'] = min_count
+                    workers = 4
+
+                    train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count,
+                                                                                 workers)
+
+                elif Embedding_model == 'BERT':
+                    vector_size = 768
+                    parameters['vector_size'] = vector_size
+
+                    ner_bert = utils.NER_BERT()
+
+                    train_NE_embedded = ner_bert.get_embeddings(train_NE)
+
+                train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
+
+                train_NE_expanded = np.array(train_NE_expanded)
+
+                train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
+
+            X, y = util.NER_padding_x_y(train_EEG_segments, train_Classes)
+            X = np.array(X)
+            X = util.NER_reshape_data(X)
+            y_categorical = util.encode_labels(y)
+
+
 
 
             train_NE_padded_tensor, test_NE_padded_tensor, _, _ = train_test_split(
