@@ -20,9 +20,10 @@ if __name__ == "__main__":
         #check if file is a .json file and contains NER
         if file.endswith(".json") and "NER_Pre_Training" in file:
             parameter_dictionary = util.load_json(config_paths + file)
-            for model in models:
-                if model in parameter_dictionary['model_name']:
-                    print(f"Loading model: {model}")
+            if 'model_name' in parameter_dictionary:
+                for model in models:
+                    if model in parameter_dictionary['model_name']:
+                        print(f"Loading model: {model}")
 
 
 
