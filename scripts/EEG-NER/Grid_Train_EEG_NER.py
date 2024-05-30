@@ -308,7 +308,7 @@ class NER_Estimator():
                     cross_val_accuracy.append(100 * correct / total)
 
 
-        print("Cross validation accuracy: ", cross_val_accuracy)
+        print("Mean accuracy: ", np.mean(cross_val_accuracy))
 
         model_save_path = self.model_save_path + datetime.datetime.now().strftime(
             "%Y%m%d-%H%M%S") + "EEG_NER.pt"
