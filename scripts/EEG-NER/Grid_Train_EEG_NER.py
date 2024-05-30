@@ -312,13 +312,13 @@ class NER_Estimator():
 
 
         model_save_path = self.model_save_path + datetime.datetime.now().strftime(
-            "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.pt"
+            "%Y%m%d-%H%M%S") + "EEG_NER.pt"
         torch.save(model.state_dict(), model_save_path)
 
         # Save the parameters
         parameters['model_save_path'] = model_save_path
         config_save_path = self.config_save_path + datetime.datetime.now().strftime(
-            "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.json"
+            "%Y%m%d-%H%M%S") + "EEG_NER.json"
         util.save_json(parameters, config_save_path)
 
         print("Model saved at: ", model_save_path)
