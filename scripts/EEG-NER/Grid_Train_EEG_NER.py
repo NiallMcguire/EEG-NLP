@@ -333,6 +333,7 @@ if __name__ == "__main__":
 
 
     param_grid = {
+        'pre_training': [False],
         'evaluation': [True],
         'inputs': ["EEG"],
         'Embedding_model': ['BERT'],
@@ -349,7 +350,6 @@ if __name__ == "__main__":
         'criterion': ['CrossEntropyLoss'],
         'val_size': [0.1],
         'test_size': [0.1],
-        'pre_training': [False]
     }
 
 
