@@ -322,7 +322,7 @@ class Data:
         if inputs == 'EEG+Text':
             for batch in loader:
                 batch_EEG, batch_NE, batch_y = batch
-                batch_EEG, batch_NE, batch_y = batch_EEG.to(device), batch_NE, batch_y.to(device)
+                batch_EEG, batch_NE, batch_y = batch_EEG.to(device), batch_NE.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG)
                 aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
                 aligned_NE = torch.cat((aligned_NE, batch_NE), dim=0)
