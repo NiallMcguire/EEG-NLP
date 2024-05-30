@@ -27,6 +27,24 @@ class NER_Estimator():
         else:
             device = torch.device("cpu")
 
+        self.device = device
+
+        # Define parameters
+        num_epochs = self.parameters['epochs']
+        test_size = self.parameters['test_size']
+        val_size = self.parameters['validation_size']
+        num_negative_pairs_per_positive = self.parameters['num_negative_pairs_per_positive']
+        batch_size = self.parameters['batch_size']
+        criterion = self.parameters['loss_function']
+        margin = self.parameters['margin']
+        optimizer = self.parameters['optimizer']
+        learning_rate = self.parameters['learning_rate']
+        Embedding_model = self.parameters['Embedding_model']
+        model_name = self.parameters['model_name']
+        inputs = self.parameters['inputs']
+        pre_training = self.parameters['pre_training']
+        parameters = self.parameters
+
 
         if inputs == "EEE+Text" or "Text":
             # create word embeddings
@@ -296,6 +314,7 @@ class NER_Estimator():
 if __name__ == "__main__":
     # Define parameter grid for grid search
 
+    '''
     param_grid = {
         'epochs': [100],
         'patience': [5, 10],
@@ -310,6 +329,30 @@ if __name__ == "__main__":
         'Embedding_model': ['BERT'],
         'model_name': ['EEGToBERTModel_v4', 'EEGToBERTModel_v3']
     }
+    '''
+
+
+    param_grid = {
+        'evaluation': [True],
+        'inputs': ["EEG"],
+        'Embedding_model': ['BERT'],
+        'batch_size': [32],
+        'input_size': [840],
+        'hidden_size': [64],
+        'dropout': [0.2],
+        'num_layers': [4],
+        'num_classes': [3],
+        'num_epochs': [100],
+        'LSTM_layers': [2],
+        'learning_rate': [0.001],
+        'optimizer': ['Adam'],
+        'criterion': ['CrossEntropyLoss'],
+        'val_size': [0.1],
+        'test_size': [0.1],
+        'pre_training': [False]
+    }
+
+
 
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
     model_save_path = "/users/gxb18167/configs/model_checkpoints/"
