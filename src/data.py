@@ -311,7 +311,6 @@ class Data:
 
     def pre_training_NER_encoding(self, pre_train_model, loader, device, vector_size, inputs):
         #NOTE if adding version 5 model, will need to include the input to the model i.e. will need if state to determine the model.
-
         pre_train_model.to(device)
         pre_train_model.eval()
 
@@ -327,6 +326,8 @@ class Data:
                 aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
                 aligned_NE = torch.cat((aligned_NE, batch_NE), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
+
+                return aligned_EEG, aligned_NE, aligned_y
         else:
             for batch in loader:
                 batch_EEG, batch_y = batch
@@ -335,7 +336,7 @@ class Data:
                 aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
-        return aligned_EEG, aligned_NE, aligned_y
+            return aligned_EEG, aligned_y
 
 
 
