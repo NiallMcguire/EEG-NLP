@@ -380,19 +380,26 @@ if __name__ == "__main__":
     Loss = Loss
     Networks = Networks
 
-    if param_grid['pre_training'] == [True]:
-        model_save_paths = util.load_pre_training_gridsearch(models, config_save_path)
-
     # Generate all combinations of parameters
     keys, values = zip(*param_grid.items())
     param_combinations = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
-    for params in param_combinations:
-        train_model = NER_Estimator(model_save_path, config_save_path, params)
-        train_model.fit(train_NE, train_EEG_segments, train_Classes)
-        #print("Model trained with parameters: ", params)
-    print("Grid search completed")
+
+    if param_grid['pre_training'] == [True]:
+        model_save_paths = util.load_pre_training_gridsearch(models, config_save_path)
+        for pre_trained_models_path in model_save_paths:
+            for params in param_combinations:
+                params['pre_trained_model_path'] = pre_trained_models_path
+                train_model = NER_Estimator(model_save_path, config_save_path, params)
+                train_model.fit(train_NE, train_EEG_segments, train_Classes)
+                #print("Model trained with parameters: ", params)
+
+    else:
+        for params in param_combinations:
+            train_model = NER_Estimator(model_save_path, config_save_path, params)
+            train_model.fit(train_NE, train_EEG_segments, train_Classes)
+            # print("Model trained with parameters: ", params)
 
 
