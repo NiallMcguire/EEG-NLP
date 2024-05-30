@@ -141,7 +141,11 @@ class NER_Estimator():
                 model_save_path = parameters['pre_trained_model_path']
 
                 # load pre-trained model
-                pre_train_model = Networks.EEGToBERTModel(input_size, vector_size)
+                if parameters['pre_trained_model_name'] == 'EEGToBERTModel_v4':
+                    pre_train_model = Networks.EEGToBERTModel_v4(input_size, vector_size)
+                elif parameters['pre_trained_model_name'] == 'EEGToBERTModel_v3':
+                    pre_train_model = Networks.EEGToBERTModel_v3(input_size, vector_size)
+
                 pre_train_model.load_state_dict(torch.load(model_save_path))
 
                 pre_train_model.to(device)
@@ -378,12 +382,14 @@ if __name__ == "__main__":
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
     if param_grid['pre_training'] == [True]:
-        model_save_paths = util.load_pre_training_gridsearch(models, config_save_path)
+        model_save_paths, model_names = util.load_pre_training_gridsearch(models, config_save_path)
         #for pre_trained_models_path in model_save_paths:
         for i in range(0, 1):
             pre_trained_models_path = model_save_paths[i]
+            model_name = model_names[i]
             for params in param_combinations:
                 params['pre_trained_model_path'] = pre_trained_models_path
+                params['pre_trained_model_name'] = model_name
                 train_model = NER_Estimator(model_save_path, config_save_path, params)
                 train_model.fit(train_NE, train_EEG_segments, train_Classes)
                 #print("Model trained with parameters: ", params)

@@ -120,6 +120,7 @@ class Utils:
     def load_pre_training_gridsearch(self, models, config_paths):
         # list all files in directory
         model_save_paths = []
+        model_names = []
         for file in os.listdir(config_paths):
             # check if file is a .json file and contains NER
             if file.endswith(".json") and "NER_Pre_Training" in file:
@@ -127,10 +128,11 @@ class Utils:
                 if 'model_name' in parameter_dictionary:
                     for model in models:
                         if model in parameter_dictionary['model_name']:
-                            print(f"Loading model: {model}")
+                            #print(f"Loading model: {model}")
                             model_save_path = parameter_dictionary['model_save_path']
                             model_save_paths.append(model_save_path)
-        return model_save_paths
+                            model_names.append(model)
+        return model_save_paths, model_names
 
 
 
