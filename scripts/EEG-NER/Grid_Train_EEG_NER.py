@@ -93,9 +93,6 @@ class NER_Estimator():
             X = util.NER_reshape_data(X)
             y_categorical = util.encode_labels(y)
 
-
-
-
             train_NE_padded_tensor, test_NE_padded_tensor, _, _ = train_test_split(
                 train_NE_padded_tensor, y_categorical, test_size=test_size, random_state=42)
 
@@ -139,15 +136,11 @@ class NER_Estimator():
 
             if pre_training == True:
                 parameters['pre_training'] = pre_training
-                pre_training_config = "/users/gxb18167/configs/20240528-130339EEG_NER_Pre_Training.json"
-                parameters['pre_training_config'] = pre_training_config
 
                 # load pre-training config
-                pre_training_config = util.load_json(pre_training_config)
-                model_save_path = pre_training_config['model_save_path']
+                model_save_path = parameters['pre_trained_model_path']
 
                 # load pre-trained model
-
                 pre_train_model = Networks.EEGToBERTModel(input_size, vector_size)
                 pre_train_model.load_state_dict(torch.load(model_save_path))
 
@@ -223,7 +216,6 @@ class NER_Estimator():
             # early stopping
             counter = 0
             best_val_loss = None
-            best_model = None
 
             loss_over_batches = []
             for epoch in range(num_epochs):
