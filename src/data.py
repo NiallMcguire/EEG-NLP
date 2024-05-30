@@ -328,6 +328,8 @@ class Data:
                 aligned_NE = torch.cat((aligned_NE, batch_NE), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
+            pre_train_model.train()
+            pre_train_model.detach()
             tensor_dataset = TensorDataset(aligned_EEG, aligned_NE, aligned_y)
             return tensor_dataset
         else:
