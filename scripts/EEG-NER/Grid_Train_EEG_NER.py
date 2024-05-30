@@ -370,9 +370,6 @@ if __name__ == "__main__":
 
     models = ['EEGToBERTModel_v4', 'EEGToBERTModel_v3']
 
-    if param_grid['pre_training'] == [True]:
-
-
 
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
     model_save_path = "/users/gxb18167/configs/model_checkpoints/"
@@ -382,6 +379,9 @@ if __name__ == "__main__":
     util = utils.Utils()
     Loss = Loss
     Networks = Networks
+
+    if param_grid['pre_training'] == [True]:
+        model_save_paths = util.load_pre_training_gridsearch(models, config_save_path)
 
     # Generate all combinations of parameters
     keys, values = zip(*param_grid.items())
@@ -393,7 +393,6 @@ if __name__ == "__main__":
         train_model = NER_Estimator(model_save_path, config_save_path, params)
         train_model.fit(train_NE, train_EEG_segments, train_Classes)
         #print("Model trained with parameters: ", params)
-
     print("Grid search completed")
 
 
