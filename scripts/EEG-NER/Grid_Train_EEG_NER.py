@@ -346,13 +346,11 @@ if __name__ == "__main__":
         'model_name': ['EEGToBERTModel_v4', 'EEGToBERTModel_v3']
     }
     '''
-
-
     param_grid = {
         'pre_training': [False],
         'evaluation': [True],
         'Patience': [10],
-        'inputs': ["EEG"],
+        'inputs': ["EEG+Text"], # EEG, Text, EEG+Text
         'Embedding_model': ['BERT'],
         'batch_size': [32],
         'input_size': [840],
