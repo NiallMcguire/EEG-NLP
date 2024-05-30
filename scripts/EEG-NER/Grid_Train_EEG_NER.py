@@ -1,16 +1,18 @@
 import sys
-sys.path.append('/users/gxb18167/EEG-NLP')
-import torch
+
 from sklearn.model_selection import train_test_split
+
+sys.path.append('/users/gxb18167/EEG-NLP')
 from src import data
 from src import utils
 from src import Networks
 from src import Loss
+
 import numpy as np
-from random import sample
-import datetime
-from torch.utils.data import Dataset, DataLoader
-import itertools
+import torch
+from torch.utils.data import DataLoader, TensorDataset
+import torch.nn as nn
+import torch.optim as optim
 
 class NER_Estimator():
     def __init__(self, model_save_path, config_save_path, kwargs):
@@ -47,6 +49,7 @@ class NER_Estimator():
         test_size = self.parameters['test_size']
         pre_training = self.parameters['pre_training']
         evaluation = self.parameters['evaluation']
+        parameters = self.parameters
 
 
         if inputs == "EEE+Text" or "Text":
