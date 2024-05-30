@@ -215,6 +215,8 @@ class NER_Estimator():
             # Move the model to the GPU if available
             model.to(device)
 
+            model.train()
+
             # Define loss function and optimizer
             if criterion == 'CrossEntropyLoss':
                 criterion = nn.CrossEntropyLoss()

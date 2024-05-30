@@ -311,6 +311,11 @@ class Data:
 
 
     def pre_training_NER_encoding(self, pre_train_model, loader, device, vector_size, inputs):
+        if torch.cuda.is_available():
+            device = torch.device("cuda")
+        else:
+            device = torch.device("cpu")
+
         #NOTE if adding version 5 model, will need to include the input to the model i.e. will need if state to determine the model.
         pre_train_model.to(device)
         pre_train_model.eval()
@@ -328,7 +333,6 @@ class Data:
                 aligned_NE = torch.cat((aligned_NE, batch_NE), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
-            pre_train_model.train()
             tensor_dataset = TensorDataset(aligned_EEG, aligned_NE, aligned_y)
             return tensor_dataset
         else:
@@ -337,9 +341,8 @@ class Data:
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG)
                 aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
-                aligned_y = torch.cat((aligned_y, batch_y), dim=0)
+                aligned_y = torch.cat((aligned_y, batch_y), dim=0))
 
-            pre_train_model.train()
             tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
             return tensor_dataset
 
