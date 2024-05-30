@@ -329,7 +329,6 @@ class Data:
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
             pre_train_model.train()
-            pre_train_model.to('cpu')
             tensor_dataset = TensorDataset(aligned_EEG, aligned_NE, aligned_y)
             return tensor_dataset
         else:
@@ -341,7 +340,6 @@ class Data:
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
             pre_train_model.train()
-            pre_train_model.to('cpu')
             tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
             return tensor_dataset
 
