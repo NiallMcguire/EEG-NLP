@@ -199,7 +199,7 @@ class NER_Estimator():
                 print("Pre-training complete")
                 #print("train aligned shape: ", train_aligned_EEG.shape)
                 input_size = 768
-                model = model.train()
+
 
             # Instantiate the model
             if inputs == "EEG+Text":
@@ -224,7 +224,6 @@ class NER_Estimator():
             # early stopping
             counter = 0
             best_val_loss = None
-
             loss_over_batches = []
             for epoch in range(num_epochs):
                 model.train()
@@ -253,7 +252,7 @@ class NER_Estimator():
                     total_loss += loss.item()
 
                 avg_loss = total_loss / len(train_loader)
-                #print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_loss:.4f}')
+                print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_loss:.4f}')
 
                 # early stopping
                 model.eval()
