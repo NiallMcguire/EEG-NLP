@@ -327,7 +327,7 @@ class Data:
                 aligned_NE = torch.cat((aligned_NE, batch_NE), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
-                return aligned_EEG, aligned_NE, aligned_y
+            return aligned_EEG, aligned_NE, aligned_y
         else:
             for batch in loader:
                 batch_EEG, batch_y = batch
