@@ -196,7 +196,6 @@ class NER_Estimator():
                 val_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
                 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
-                pre_train_model.train()
 
                 print("Pre-training complete")
                 #print("train aligned shape: ", train_aligned_EEG.shape)
