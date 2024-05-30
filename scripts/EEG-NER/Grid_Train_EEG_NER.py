@@ -381,7 +381,9 @@ if __name__ == "__main__":
 
     if param_grid['pre_training'] == [True]:
         model_save_paths = util.load_pre_training_gridsearch(models, config_save_path)
-        for pre_trained_models_path in model_save_paths:
+        #for pre_trained_models_path in model_save_paths:
+        for i in range(0, 1):
+            pre_trained_models_path = model_save_paths[i]
             for params in param_combinations:
                 params['pre_trained_model_path'] = pre_trained_models_path
                 train_model = NER_Estimator(model_save_path, config_save_path, params)
