@@ -309,6 +309,7 @@ class NER_Estimator():
 
 
         print("Mean accuracy: ", np.mean(cross_val_accuracy))
+        parameters['Mean_Accuracy'] = np.mean(cross_val_accuracy)
 
         model_save_path = self.model_save_path + datetime.datetime.now().strftime(
             "%Y%m%d-%H%M%S") + "EEG_NER.pt"
