@@ -328,8 +328,8 @@ class Data:
                 aligned_NE = torch.cat((aligned_NE, batch_NE), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
-                tensor_dataset = TensorDataset(aligned_EEG, aligned_NE, aligned_y)
-
+            tensor_dataset = TensorDataset(aligned_EEG, aligned_NE, aligned_y)
+            return tensor_dataset
         else:
             for batch in loader:
                 batch_EEG, batch_y = batch
@@ -338,7 +338,8 @@ class Data:
                 aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
-                tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
+            tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
+            return tensor_dataset
 
 
 
