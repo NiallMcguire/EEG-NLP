@@ -309,19 +309,34 @@ class Data:
         return EEG_word_level_embeddings, EEG_word_level_labels
 
 
-    def pre_training_NER_encoding(self, pre_train_model, loader, device):
+    def pre_training_NER_encoding(self, pre_train_model, loader, device, vector_size, inputs):
+        #NOTE if adding version 5 model, will need to include the input to the model i.e. will need if state to determine the model.
 
-        
-        aligned_EEG = torch.empty((0, 7, 768)).to(device)
+        pre_train_model.to(device)
+        pre_train_model.eval()
+
+        aligned_EEG = torch.empty((0, 7, vector_size)).to(device)
+        aligned_NE = torch.empty((0, 7, vector_size)).to(device)
         aligned_y = torch.empty((0, 3)).to(device)
 
+        if inputs == 'EEG+Text':
+            for batch in loader:
+                batch_EEG, batch_NE, batch_y = batch
+                batch_EEG,batch_NE, batch_NE, batch_y = batch_EEG.to(device), batch_NE, batch_y.to(device)
+                aligned_EEG_outputs = pre_train_model(batch_EEG)
+                aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
+                aligned_NE = torch.cat((aligned_NE, batch_NE), dim=0)
+                aligned_y = torch.cat((aligned_y, batch_y), dim=0)
+        else:
+            for batch in loader:
+                batch_EEG, batch_y = batch
+                batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
+                aligned_EEG_outputs = pre_train_model(batch_EEG)
+                aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
+                aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
-        for batch in loader:
-            batch_EEG, batch_y = batch
-            batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
-            aligned_EEG_outputs = pre_train_model(batch_EEG)
-            aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
-            aligned_y = torch.cat((aligned_y, batch_y), dim=0)
+        return aligned_EEG, aligned_NE, aligned_y
+
 
 
 
