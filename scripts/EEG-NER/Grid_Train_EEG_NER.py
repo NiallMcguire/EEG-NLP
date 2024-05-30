@@ -362,7 +362,6 @@ if __name__ == "__main__":
 
     models = ['EEGToBERTModel_v4', 'EEGToBERTModel_v3']
 
-
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
     model_save_path = "/users/gxb18167/configs/model_checkpoints/"
     config_save_path = "/users/gxb18167/configs/"
@@ -377,7 +376,6 @@ if __name__ == "__main__":
     param_combinations = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
-
 
     if param_grid['pre_training'] == [True]:
         model_save_paths = util.load_pre_training_gridsearch(models, config_save_path)
