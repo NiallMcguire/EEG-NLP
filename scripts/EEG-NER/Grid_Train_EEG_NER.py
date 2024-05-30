@@ -29,21 +29,24 @@ class NER_Estimator():
 
         self.device = device
 
-        # Define parameters
-        num_epochs = self.parameters['epochs']
-        test_size = self.parameters['test_size']
-        val_size = self.parameters['validation_size']
-        num_negative_pairs_per_positive = self.parameters['num_negative_pairs_per_positive']
-        batch_size = self.parameters['batch_size']
-        criterion = self.parameters['loss_function']
-        margin = self.parameters['margin']
-        optimizer = self.parameters['optimizer']
-        learning_rate = self.parameters['learning_rate']
-        Embedding_model = self.parameters['Embedding_model']
-        model_name = self.parameters['model_name']
+        # Define parameters from kwargs
         inputs = self.parameters['inputs']
+        Embedding_model = self.parameters['Embedding_model']
+        batch_size = self.parameters['batch_size']
+        input_size = self.parameters['input_size']
+        hidden_size = self.parameters['hidden_size']
+        dropout = self.parameters['dropout']
+        num_layers = self.parameters['num_layers']
+        num_classes = self.parameters['num_classes']
+        num_epochs = self.parameters['num_epochs']
+        LSTM_layers = self.parameters['LSTM_layers']
+        learning_rate = self.parameters['learning_rate']
+        optimizer = self.parameters['optimizer']
+        criterion = self.parameters['criterion']
+        val_size = self.parameters['val_size']
+        test_size = self.parameters['test_size']
         pre_training = self.parameters['pre_training']
-        parameters = self.parameters
+        evaluation = self.parameters['evaluation']
 
 
         if inputs == "EEE+Text" or "Text":
