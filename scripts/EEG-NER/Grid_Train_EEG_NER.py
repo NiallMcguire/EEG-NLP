@@ -59,9 +59,8 @@ class NER_Estimator():
         cross_val_accuracy = []
         for i in range(cross_val):
 
-            if inputs == "EEE+Text" or "Text":
+            if inputs == "EEG+Text" or "Text":
                 # create word embeddings
-
                 if Embedding_model == 'Word2Vec':
                     vector_size = 50
                     parameters['vector_size'] = vector_size
@@ -70,7 +69,6 @@ class NER_Estimator():
                     min_count = 1
                     parameters['min_count'] = min_count
                     workers = 4
-
                     train_word_embeddings, train_NE_embedded = util.NER_Word2Vec(train_NE, vector_size, window, min_count,
                                                                                  workers)
 
