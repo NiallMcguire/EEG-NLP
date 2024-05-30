@@ -2,6 +2,7 @@ import pickle
 import re
 import numpy as np
 import torch
+from torch.utils.data import DataLoader, TensorDataset
 
 class Data:
     def __init__(self):
@@ -327,7 +328,8 @@ class Data:
                 aligned_NE = torch.cat((aligned_NE, batch_NE), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
-            return aligned_EEG, aligned_NE, aligned_y
+                tensor_dataset = TensorDataset(aligned_EEG, aligned_NE, aligned_y)
+
         else:
             for batch in loader:
                 batch_EEG, batch_y = batch
@@ -336,7 +338,8 @@ class Data:
                 aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
-            return aligned_EEG, aligned_y
+                tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
+
 
 
 

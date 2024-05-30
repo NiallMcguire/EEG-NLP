@@ -146,6 +146,9 @@ class NER_Estimator():
 
                 pre_train_model.load_state_dict(torch.load(model_save_path))
 
+                '''
+                d.pre_training_NER_encoding(train_loader, pre_train_model, device, vector_size, inputs)
+
                 pre_train_model.to(device)
                 pre_train_model.eval()
                 # replace train_loader with new encoded data
@@ -181,10 +184,12 @@ class NER_Estimator():
                         test_aligned_EEG = torch.cat((test_aligned_EEG, aligned_EEG_outputs), dim=0)
                         test_aligned_y = torch.cat((test_aligned_y, batch_y), dim=0)
 
+                '''
+
                 # Create TensorDataset instances
-                train_dataset = TensorDataset(train_aligned_EEG, train_aligned_y)
-                validation_dataset = TensorDataset(validation_aligned_EEG, validation_aligned_y)
-                test_dataset = TensorDataset(test_aligned_EEG, test_aligned_y)
+                train_dataset = d.pre_training_NER_encoding(train_loader, pre_train_model, device, vector_size, inputs)
+                validation_dataset = d.pre_training_NER_encoding(val_loader, pre_train_model, device, vector_size, inputs)
+                test_dataset = d.pre_training_NER_encoding(test_loader, pre_train_model, device, vector_size, inputs)
 
                 # Re-create the data loaders
                 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
@@ -192,7 +197,7 @@ class NER_Estimator():
                 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
                 print("Pre-training complete")
-                print("train aligned shape: ", train_aligned_EEG.shape)
+                #print("train aligned shape: ", train_aligned_EEG.shape)
                 input_size = 768
 
             # Instantiate the model
