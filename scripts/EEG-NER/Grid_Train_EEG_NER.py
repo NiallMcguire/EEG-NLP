@@ -368,6 +368,10 @@ if __name__ == "__main__":
         'cross_val': [3]
     }
 
+    models = ['EEGToBERTModel_v4', 'EEGToBERTModel_v3']
+
+    if param_grid['pre_training'] == [True]:
+
 
 
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"

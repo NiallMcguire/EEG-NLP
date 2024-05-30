@@ -1,3 +1,5 @@
+import os
+
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -114,6 +116,17 @@ class Utils:
         with open(filename, 'r') as f:
             data = json.load(f)
         return data
+
+    def load_pre_training_gridsearch(self, models, config_paths):
+        # list all files in directory
+        for file in os.listdir(config_paths):
+            # check if file is a .json file and contains NER
+            if file.endswith(".json") and "NER_Pre_Training" in file:
+                parameter_dictionary = self.load_json(config_paths + file)
+                if 'model_name' in parameter_dictionary:
+                    for model in models:
+                        if model in parameter_dictionary['model_name']:
+                            print(f"Loading model: {model}")
 
 
 class NER_BERT:
