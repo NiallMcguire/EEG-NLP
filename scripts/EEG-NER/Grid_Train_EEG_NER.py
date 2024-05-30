@@ -14,6 +14,7 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 import torch.nn as nn
 import torch.optim as optim
+import datetime
 
 class NER_Estimator():
     def __init__(self, model_save_path, config_save_path, kwargs):
@@ -308,6 +309,17 @@ class NER_Estimator():
                     correct += (predicted == torch.argmax(batch_y, 1)).sum().item()
                 print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
                 parameters['Accuracy'] = 100 * correct / total
+
+
+        model_save_path = self.model_save_path + datetime.datetime.now().strftime(
+            "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.pt"
+        torch.save(model.state_dict(), model_save_path)
+
+        # Save the parameters
+        parameters['model_save_path'] = model_save_path
+        config_save_path = self.config_save_path + datetime.datetime.now().strftime(
+            "%Y%m%d-%H%M%S") + "EEG_NER_Pre_Training.json"
+        util.save_json(parameters, config_save_path)
 
         print("Model saved at: ", model_save_path)
         print("Config saved at: ", config_save_path)
