@@ -347,7 +347,7 @@ if __name__ == "__main__":
     }
     '''
     param_grid = {
-        'pre_training': [True],
+        'pre_training': [False],
         'evaluation': [True],
         'Patience': [10],
         'inputs': ["EEG+Text"], # EEG, Text, EEG+Text
