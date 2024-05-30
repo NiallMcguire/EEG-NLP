@@ -350,7 +350,7 @@ if __name__ == "__main__":
     param_grid = {
         'pre_training': [False],
         'evaluation': [True],
-        'Patience': [4],
+        'Patience': [10],
         'inputs': ["EEG"],
         'Embedding_model': ['BERT'],
         'batch_size': [32],
