@@ -187,9 +187,9 @@ class NER_Estimator():
                 '''
 
                 # Create TensorDataset instances
-                train_dataset = d.pre_training_NER_encoding(train_loader, pre_train_model, device, vector_size, inputs)
-                validation_dataset = d.pre_training_NER_encoding(val_loader, pre_train_model, device, vector_size, inputs)
-                test_dataset = d.pre_training_NER_encoding(test_loader, pre_train_model, device, vector_size, inputs)
+                train_dataset = d.pre_training_NER_encoding(pre_train_model, train_loader, device, vector_size, inputs)
+                validation_dataset = d.pre_training_NER_encoding(pre_train_model, val_loader, device, vector_size, inputs)
+                test_dataset = d.pre_training_NER_encoding(pre_train_model, test_loader, device, vector_size, inputs)
 
                 # Re-create the data loaders
                 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
