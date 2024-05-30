@@ -51,6 +51,7 @@ class NER_Estimator():
         test_size = self.parameters['test_size']
         pre_training = self.parameters['pre_training']
         evaluation = self.parameters['evaluation']
+        patience = self.parameters['Patience']
         parameters = self.parameters
 
 
@@ -213,8 +214,6 @@ class NER_Estimator():
             optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
         # early stopping
-        patience = 4
-        parameters['patience'] = patience
         counter = 0
         best_val_loss = None
         best_model = None
@@ -327,9 +326,6 @@ class NER_Estimator():
 
 
 
-
-
-
 if __name__ == "__main__":
     # Define parameter grid for grid search
 
@@ -354,6 +350,7 @@ if __name__ == "__main__":
     param_grid = {
         'pre_training': [False],
         'evaluation': [True],
+        'Patience': [5],
         'inputs': ["EEG"],
         'Embedding_model': ['BERT'],
         'batch_size': [32],
