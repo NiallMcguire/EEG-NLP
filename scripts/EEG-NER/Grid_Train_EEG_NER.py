@@ -246,7 +246,7 @@ class NER_Estimator():
                 total_loss += loss.item()
 
             avg_loss = total_loss / len(train_loader)
-            print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_loss:.4f}')
+            #print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_loss:.4f}')
 
             # early stopping
             model.eval()
@@ -264,7 +264,7 @@ class NER_Estimator():
                         outputs = model(batch_x)
                     loss = criterion(outputs, batch_y.squeeze())
                     val_loss += loss.item()
-                print(f'Validation loss: {val_loss:.4f}')
+                #print(f'Validation loss: {val_loss:.4f}')
                 if best_val_loss is None:
                     best_val_loss = val_loss
                     best_model = model.state_dict()
@@ -388,7 +388,7 @@ if __name__ == "__main__":
     for params in param_combinations:
         train_model = NER_Estimator(model_save_path, config_save_path, params)
         train_model.fit(train_NE, train_EEG_segments, train_Classes)
-        print("Model trained with parameters: ", params)
+        #print("Model trained with parameters: ", params)
 
     print("Grid search completed")
 
