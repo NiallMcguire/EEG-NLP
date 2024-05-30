@@ -309,6 +309,21 @@ class Data:
         return EEG_word_level_embeddings, EEG_word_level_labels
 
 
+    def pre_training_NER_encoding(self, pre_train_model, loader, device):
+
+        
+        aligned_EEG = torch.empty((0, 7, 768)).to(device)
+        aligned_y = torch.empty((0, 3)).to(device)
+
+
+        for batch in loader:
+            batch_EEG, batch_y = batch
+            batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
+            aligned_EEG_outputs = pre_train_model(batch_EEG)
+            aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
+            aligned_y = torch.cat((aligned_y, batch_y), dim=0)
+
+
 
 
 
