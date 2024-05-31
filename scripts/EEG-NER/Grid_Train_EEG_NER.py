@@ -301,7 +301,7 @@ class NER_Estimator():
                     correct += (predicted == torch.argmax(batch_y, 1)).sum().item()
                 print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
                 parameters['Accuracy'] = 100 * correct / total
-                cross_val_accuracy.append(100 * correct / total)
+                #cross_val_accuracy.append(100 * correct / total)
 
 
     #print("Mean accuracy: ", np.mean(cross_val_accuracy))
