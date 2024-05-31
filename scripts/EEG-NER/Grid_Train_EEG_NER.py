@@ -64,17 +64,16 @@ class NER_Estimator():
             # load pre-trained model
             if parameters['pre_trained_model_name'] == 'EEGToBERTModel_v4':
                 pre_train_model = Networks.EEGToBERTModel_v4(input_size, 768)
-                pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
             elif parameters['pre_trained_model_name'] == 'EEGToBERTModel_v3':
                 pre_train_model = Networks.EEGToBERTModel_v3(input_size, 768)
-                pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
+
+            pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
 
             print("Loaded pre-trained model: ", parameters['pre_trained_model_name'])
 
         # cross validation
         cross_val_accuracy = []
         for i in range(cross_val):
-
             if inputs == "EEG+Text" or "Text":
                 # create word embeddings
                 if Embedding_model == 'Word2Vec':
@@ -272,13 +271,11 @@ class NER_Estimator():
                             outputs = model(batch_x)
                         loss = criterion(outputs, batch_y.squeeze())
                         val_loss += loss.item()
-                    #print(f'Validation loss: {val_loss:.4f}')
+                    print(f'Validation loss: {val_loss:.4f}')
                     if best_val_loss is None:
                         best_val_loss = val_loss
-                        best_model = model.state_dict()
                     elif val_loss < best_val_loss:
                         best_val_loss = val_loss
-                        best_model = model.state_dict()
                         counter = 0
                     else:
                         counter += 1
@@ -312,6 +309,7 @@ class NER_Estimator():
         print("Mean accuracy: ", np.mean(cross_val_accuracy))
         parameters['Mean_Accuracy'] = np.mean(cross_val_accuracy)
 
+        '''
         model_save_path = self.model_save_path + datetime.datetime.now().strftime(
             "%Y%m%d-%H%M%S") + "EEG_NER.pt"
         torch.save(model.state_dict(), model_save_path)
@@ -325,6 +323,7 @@ class NER_Estimator():
         print("Model saved at: ", model_save_path)
         print("Config saved at: ", config_save_path)
         print("Training completed")
+        '''
 
 
 
