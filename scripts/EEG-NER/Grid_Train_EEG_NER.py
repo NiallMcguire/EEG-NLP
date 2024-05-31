@@ -146,7 +146,7 @@ class NER_Estimator():
                     pre_train_model = Networks.EEGToBERTModel_v3(input_size, vector_size)
                     pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
 
-
+                '''
                 pre_train_model.to(device)
                 pre_train_model.eval()
                 # replace train_loader with new encoded data
@@ -181,11 +181,12 @@ class NER_Estimator():
                         aligned_EEG_outputs = pre_train_model(batch_EEG)
                         test_aligned_EEG = torch.cat((test_aligned_EEG, aligned_EEG_outputs), dim=0)
                         test_aligned_y = torch.cat((test_aligned_y, batch_y), dim=0)
+                    '''
 
                     # Create TensorDataset instances
-                    train_dataset = TensorDataset(train_aligned_EEG, train_aligned_y)
-                    validation_dataset = TensorDataset(validation_aligned_EEG, validation_aligned_y)
-                    test_dataset = TensorDataset(test_aligned_EEG, test_aligned_y)
+                    train_dataset = d.pre_training_NER_encoding(pre_train_model, train_loader, device, vector_size, inputs)
+                    validation_dataset = d.pre_training_NER_encoding(pre_train_model, val_loader, device, vector_size, inputs)
+                    test_dataset = d.pre_training_NER_encoding(pre_train_model, test_loader, device, vector_size, inputs)
 
                     # Re-create the data loaders
                     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)

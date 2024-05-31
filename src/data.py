@@ -325,26 +325,28 @@ class Data:
         aligned_y = torch.empty((0, 3)).to(device)
 
         if inputs == 'EEG+Text':
-            for batch in loader:
-                batch_EEG, batch_NE, batch_y = batch
-                batch_EEG, batch_NE, batch_y = batch_EEG.to(device), batch_NE.to(device), batch_y.to(device)
-                aligned_EEG_outputs = pre_train_model(batch_EEG)
-                aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
-                aligned_NE = torch.cat((aligned_NE, batch_NE), dim=0)
-                aligned_y = torch.cat((aligned_y, batch_y), dim=0)
+            with torch.no_grad():
+                for batch in loader:
+                    batch_EEG, batch_NE, batch_y = batch
+                    batch_EEG, batch_NE, batch_y = batch_EEG.to(device), batch_NE.to(device), batch_y.to(device)
+                    aligned_EEG_outputs = pre_train_model(batch_EEG)
+                    aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
+                    aligned_NE = torch.cat((aligned_NE, batch_NE), dim=0)
+                    aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
-            tensor_dataset = TensorDataset(aligned_EEG, aligned_NE, aligned_y)
-            return tensor_dataset
+                tensor_dataset = TensorDataset(aligned_EEG, aligned_NE, aligned_y)
+                return tensor_dataset
         else:
-            for batch in loader:
-                batch_EEG, batch_y = batch
-                batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
-                aligned_EEG_outputs = pre_train_model(batch_EEG)
-                aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
-                aligned_y = torch.cat((aligned_y, batch_y), dim=0)
+            with torch.no_grad():
+                for batch in loader:
+                    batch_EEG, batch_y = batch
+                    batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
+                    aligned_EEG_outputs = pre_train_model(batch_EEG)
+                    aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
+                    aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
-            tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
-            return tensor_dataset
+                tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
+                return tensor_dataset
 
 
 
