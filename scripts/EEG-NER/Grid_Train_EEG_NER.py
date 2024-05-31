@@ -55,6 +55,22 @@ class NER_Estimator():
         cross_val = self.parameters['cross_val']
         parameters = self.parameters
 
+        if pre_training == True:
+            parameters['pre_training'] = pre_training
+
+            # load pre-training config
+            pre_trained_model_path = parameters['pre_trained_model_path']
+
+            # load pre-trained model
+            if parameters['pre_trained_model_name'] == 'EEGToBERTModel_v4':
+                pre_train_model = Networks.EEGToBERTModel_v4(input_size, 768)
+                pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
+            elif parameters['pre_trained_model_name'] == 'EEGToBERTModel_v3':
+                pre_train_model = Networks.EEGToBERTModel_v3(input_size, 768)
+                pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
+
+            print("Loaded pre-trained model: ", parameters['pre_trained_model_name'])
+
         # cross validation
         cross_val_accuracy = []
         for i in range(cross_val):
@@ -133,20 +149,6 @@ class NER_Estimator():
             print("Data before pre-training: ", train_dataset[0][0].shape)
 
             if pre_training == True:
-                parameters['pre_training'] = pre_training
-
-                # load pre-training config
-                pre_trained_model_path = parameters['pre_trained_model_path']
-
-                # load pre-trained model
-                if parameters['pre_trained_model_name'] == 'EEGToBERTModel_v4':
-                    pre_train_model = Networks.EEGToBERTModel_v4(input_size, vector_size)
-                    pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
-                elif parameters['pre_trained_model_name'] == 'EEGToBERTModel_v3':
-                    pre_train_model = Networks.EEGToBERTModel_v3(input_size, vector_size)
-                    pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
-
-                print("Loaded pre-trained model: ", parameters['pre_trained_model_name'])
 
                 '''
                 pre_train_model.to(device)
