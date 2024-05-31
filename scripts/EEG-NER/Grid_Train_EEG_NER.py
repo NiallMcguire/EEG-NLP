@@ -348,7 +348,7 @@ if __name__ == "__main__":
     }
     '''
     param_grid = {
-        'pre_training': [True],
+        'pre_training': [False],
         'evaluation': [True],
         'Patience': [10],
         'inputs': ["EEG+Text"], # EEG, Text, EEG+Text
@@ -366,7 +366,7 @@ if __name__ == "__main__":
         'criterion': ['CrossEntropyLoss'],
         'val_size': [0.1],
         'test_size': [0.1],
-        'cross_val': [3]
+        'cross_val': [5]
     }
 
     models = ['EEGToBERTModel_v4']
