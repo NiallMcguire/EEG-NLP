@@ -327,7 +327,6 @@ class NER_Estimator():
 
 if __name__ == "__main__":
     # Define parameter grid for grid search
-
     '''
     param_grid = {
         'epochs': [100],
@@ -344,6 +343,7 @@ if __name__ == "__main__":
         'model_name': ['EEGToBERTModel_v4', 'EEGToBERTModel_v3']
     }
     '''
+
     param_grid = {
         'pre_training': [False],
         'evaluation': [True],
