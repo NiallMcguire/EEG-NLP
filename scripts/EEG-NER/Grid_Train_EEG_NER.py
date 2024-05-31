@@ -198,7 +198,6 @@ class NER_Estimator():
                 input_size = 768
 
 
-
             # Instantiate the model
             if inputs == "EEG+Text":
                 model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_classes, num_layers, dropout)
@@ -366,7 +365,7 @@ if __name__ == "__main__":
         'cross_val': [3]
     }
 
-    models = ['EEGToBERTModel_v4', 'EEGToBERTModel_v3']
+    models = ['EEGToBERTModel_v4']
 
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
     model_save_path = "/users/gxb18167/configs/model_checkpoints/"
