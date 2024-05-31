@@ -146,6 +146,8 @@ class NER_Estimator():
                     pre_train_model = Networks.EEGToBERTModel_v3(input_size, vector_size)
                     pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
 
+                print("Loaded pre-trained model: ", pre_trained_model_path)
+
                 '''
                 pre_train_model.to(device)
                 pre_train_model.eval()
