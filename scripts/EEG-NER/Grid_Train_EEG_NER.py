@@ -348,7 +348,7 @@ if __name__ == "__main__":
         'pre_training': [False],
         'evaluation': [True],
         'Patience': [10],
-        'inputs': ["EEG+Text"], # EEG, Text, EEG+Text
+        'inputs': ["EEG"], # EEG, Text, EEG+Text
         'Embedding_model': ['BERT'],
         'batch_size': [32],
         'input_size': [840],
