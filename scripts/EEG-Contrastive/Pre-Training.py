@@ -38,10 +38,10 @@ if __name__ == "__main__":
     NE_expanded = util.NER_expanded_NER_list(EEG_segments, NE_embedded, vector_size)
     NE_expanded = np.array(NE_expanded)
 
-    EEG_X, y = util.NER_padding_x_y(EEG_segments, Classes)
+    EEG_X, named_entity_class = util.NER_padding_x_y(EEG_segments, Classes)
     EEG_X = np.array(EEG_X)
     EEG_X = util.NER_reshape_data(EEG_X)
-    y_categorical = util.encode_labels(y)
+    named_entity_class_categorical = util.encode_labels(named_entity_class)
 
     print(EEG_X.shape)
 
