@@ -146,44 +146,6 @@ class NER_Estimator():
         print("Data before pre-training: ", train_dataset[0][0].shape)
 
         if pre_training == True:
-
-            '''
-            pre_train_model.to(device)
-            pre_train_model.eval()
-            # replace train_loader with new encoded data
-            # Initialize empty tensors
-            train_aligned_EEG = torch.empty((0, 7, 768)).to(device)  # Initialize with the correct shape
-            train_aligned_y = torch.empty((0, 3)).to(device)
-
-            validation_aligned_EEG = torch.empty((0, 7, 768)).to(device)
-            validation_aligned_y = torch.empty((0, 3)).to(device)
-
-            test_aligned_EEG = torch.empty((0, 7, 768)).to(device)
-            test_aligned_y = torch.empty((0, 3)).to(device)
-
-            with torch.no_grad():
-                for batch in train_loader:
-                    batch_EEG, batch_y = batch
-                    batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
-                    aligned_EEG_outputs = pre_train_model(batch_EEG)
-                    train_aligned_EEG = torch.cat((train_aligned_EEG, aligned_EEG_outputs), dim=0)
-                    train_aligned_y = torch.cat((train_aligned_y, batch_y), dim=0)
-
-                for batch in val_loader:
-                    batch_EEG, batch_y = batch
-                    batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
-                    aligned_EEG_outputs = pre_train_model(batch_EEG)
-                    validation_aligned_EEG = torch.cat((validation_aligned_EEG, aligned_EEG_outputs), dim=0)
-                    validation_aligned_y = torch.cat((validation_aligned_y, batch_y), dim=0)
-
-                for batch in test_loader:
-                    batch_EEG, batch_y = batch
-                    batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
-                    aligned_EEG_outputs = pre_train_model(batch_EEG)
-                    test_aligned_EEG = torch.cat((test_aligned_EEG, aligned_EEG_outputs), dim=0)
-                    test_aligned_y = torch.cat((test_aligned_y, batch_y), dim=0)
-                '''
-
             # Create TensorDataset instances
             train_dataset = d.pre_training_NER_encoding(pre_train_model, train_loader, device, vector_size, inputs)
             validation_dataset = d.pre_training_NER_encoding(pre_train_model, val_loader, device, vector_size, inputs)
