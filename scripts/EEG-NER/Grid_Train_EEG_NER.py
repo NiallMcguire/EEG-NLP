@@ -152,122 +152,106 @@ class NER_Estimator():
             print("Pre-training complete")
             input_size = 768
 
-        torch.manual_seed(42)
-        if torch.cuda.is_available():
-            torch.cuda.manual_seed(42)
+        # Instantiate the model
+        if inputs == "EEG+Text":
+            model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_classes, num_layers, dropout)
+        elif inputs == "Text":
+            input_size = vector_size
+            parameters['input_size'] = input_size
+            model = Networks.BLSTM(input_size, hidden_size, num_classes, num_layers, dropout)
+        else:
+            model = Networks.BLSTM(input_size, hidden_size, num_classes, num_layers, dropout)
 
-        cross_val_accuracy = []
-        for i in range(cross_val):
-            print("Cross-validation iteration: ", i)
+        # Move the model to the GPU if available
+        model.to(device)
 
+        # Define loss function and optimizer
+        if criterion == 'CrossEntropyLoss':
+            criterion = nn.CrossEntropyLoss()
 
+        if optimizer == 'Adam':
+            optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
+        counter = 0
+        best_val_loss = None
+        loss_over_batches = []
+        for epoch in range(num_epochs):
+            model.train()
+            total_loss = 0
+            for batch in train_loader:
+                if inputs == "EEG+Text":
+                    batch_x, batch_NE, batch_y = batch
+                    batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
+                    optimizer.zero_grad()
+                    outputs = model(batch_x, batch_NE)
+                else:
+                    batch_x, batch_y = batch
+                    batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+                    optimizer.zero_grad()
+                    outputs = model(batch_x)
 
-            # Instantiate the model
-            if inputs == "EEG+Text":
-                model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_classes, num_layers, dropout)
-            elif inputs == "Text":
-                input_size = vector_size
-                parameters['input_size'] = input_size
-                model = Networks.BLSTM(input_size, hidden_size, num_classes, num_layers, dropout)
-            else:
-                model = Networks.BLSTM(input_size, hidden_size, num_classes, num_layers, dropout)
+                # Convert class probabilities to class indices
+                _, predicted = torch.max(outputs, 1)
 
-            # Move the model to the GPU if available
-            model.to(device)
+                loss = criterion(outputs, batch_y.squeeze())  # Ensure target tensor is Long type
+                loss_over_batches.append(loss.item())
 
-            # Define loss function and optimizer
-            if criterion == 'CrossEntropyLoss':
-                criterion = nn.CrossEntropyLoss()
+                loss.backward()
+                optimizer.step()
 
-            if optimizer == 'Adam':
-                optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+                total_loss += loss.item()
 
+            avg_loss = total_loss / len(train_loader)
+            print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_loss:.4f}')
 
-
-            counter = 0
-            best_val_loss = None
-            loss_over_batches = []
-            for epoch in range(num_epochs):
-                model.train()
-                total_loss = 0
-                for batch in train_loader:
+            # early stopping
+            model.eval()
+            with torch.no_grad():
+                val_loss = 0
+                for batch in val_loader:
                     if inputs == "EEG+Text":
                         batch_x, batch_NE, batch_y = batch
                         batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
-                        optimizer.zero_grad()
                         outputs = model(batch_x, batch_NE)
                     else:
                         batch_x, batch_y = batch
                         batch_x, batch_y = batch_x.to(device), batch_y.to(device)
-                        optimizer.zero_grad()
                         outputs = model(batch_x)
+                    loss = criterion(outputs, batch_y.squeeze())
+                    val_loss += loss.item()
+                print(f'Validation loss: {val_loss:.4f}')
+                if best_val_loss is None:
+                    best_val_loss = val_loss
+                elif val_loss < best_val_loss:
+                    best_val_loss = val_loss
+                    counter = 0
+                else:
+                    counter += 1
+                    if counter > patience:
+                        print("Early stopping at epoch: ", epoch)
+                        break
 
-                    # Convert class probabilities to class indices
-                    _, predicted = torch.max(outputs, 1)
+        parameters['Loss'] = loss_over_batches
 
-                    loss = criterion(outputs, batch_y.squeeze())  # Ensure target tensor is Long type
-                    loss_over_batches.append(loss.item())
-
-                    loss.backward()
-                    optimizer.step()
-
-                    total_loss += loss.item()
-
-                avg_loss = total_loss / len(train_loader)
-                print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_loss:.4f}')
-
-                # early stopping
-                model.eval()
-                with torch.no_grad():
-                    val_loss = 0
-                    for batch in val_loader:
-                        if inputs == "EEG+Text":
-                            batch_x, batch_NE, batch_y = batch
-                            batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
-                            outputs = model(batch_x, batch_NE)
-                        else:
-                            batch_x, batch_y = batch
-                            batch_x, batch_y = batch_x.to(device), batch_y.to(device)
-                            outputs = model(batch_x)
-                        loss = criterion(outputs, batch_y.squeeze())
-                        val_loss += loss.item()
-                    print(f'Validation loss: {val_loss:.4f}')
-                    if best_val_loss is None:
-                        best_val_loss = val_loss
-                    elif val_loss < best_val_loss:
-                        best_val_loss = val_loss
-                        counter = 0
+        if evaluation == True:
+            model.eval()
+            with torch.no_grad():
+                correct = 0
+                total = 0
+                for batch in test_loader:
+                    if inputs == "EEG+Text":
+                        batch_x, batch_NE, batch_y = batch
+                        batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
+                        outputs = model(batch_x, batch_NE)
                     else:
-                        counter += 1
-                        if counter > patience:
-                            print("Early stopping at epoch: ", epoch)
-                            break
+                        batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+                        outputs = model(batch_x)
+                    _, predicted = torch.max(outputs, 1)
+                    total += batch_y.size(0)
+                    correct += (predicted == torch.argmax(batch_y, 1)).sum().item()
+                print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
+                parameters['Accuracy'] = 100 * correct / total
 
-            parameters['Loss'] = loss_over_batches
-
-            if evaluation == True:
-                model.eval()
-                with torch.no_grad():
-                    correct = 0
-                    total = 0
-                    for batch in test_loader:
-                        if inputs == "EEG+Text":
-                            batch_x, batch_NE, batch_y = batch
-                            batch_x, batch_NE, batch_y = batch_x.to(device), batch_NE.to(device), batch_y.to(device)
-                            outputs = model(batch_x, batch_NE)
-                        else:
-                            batch_x, batch_y = batch_x.to(device), batch_y.to(device)
-                            outputs = model(batch_x)
-                        _, predicted = torch.max(outputs, 1)
-                        total += batch_y.size(0)
-                        correct += (predicted == torch.argmax(batch_y, 1)).sum().item()
-                    print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
-                    parameters['Accuracy'] = 100 * correct / total
-                    cross_val_accuracy.append(100 * correct / total)
-
-        print("Mean accuracy: ", np.mean(cross_val_accuracy))
-        parameters['Mean_Accuracy'] = np.mean(cross_val_accuracy)
 
     '''
     model_save_path = self.model_save_path + datetime.datetime.now().strftime(
@@ -307,7 +291,7 @@ if __name__ == "__main__":
         'criterion': ['CrossEntropyLoss'],
         'val_size': [0.1],
         'test_size': [0.1],
-        'cross_val': [3]
+        'cross_val': [1]
     }
 
     models = ['EEGToBERTModel_v4']
