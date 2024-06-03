@@ -26,4 +26,11 @@ if __name__ == "__main__":
     Loss = Loss
     Networks = Networks
 
-    train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(data_path)
+    NE, EEG_segments, Classes = d.NER_read_custom_files(data_path)
+
+    parameters = {}
+
+    vector_size = 768
+    parameters['vector_size'] = vector_size
+    ner_bert = utils.NER_BERT()
+    train_NE_embedded = ner_bert.get_embeddings(NE)
