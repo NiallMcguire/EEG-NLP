@@ -18,7 +18,7 @@ from torch.utils.data import Dataset, DataLoader
 
 
 if __name__ == "__main__":
-    train_path = r"C:\Users\gxb18167\PycharmProjects\EEG-NLP\NER.pkl"
+    data_path = r"C:\Users\gxb18167\PycharmProjects\EEG-NLP\NER.pkl"
 
 
     d = data.Data()
@@ -26,4 +26,4 @@ if __name__ == "__main__":
     Loss = Loss
     Networks = Networks
 
-    train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
+    train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(data_path)
