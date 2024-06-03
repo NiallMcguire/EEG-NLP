@@ -230,7 +230,7 @@ class NER_Estimator():
                 else:
                     counter += 1
                     if counter > patience:
-                        print("Early stopping")
+                        print("Early stopping at epoch: ", epoch)
                         break
 
         parameters['Loss'] = loss_over_batches
