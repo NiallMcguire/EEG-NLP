@@ -157,9 +157,7 @@ class NER_Estimator():
             test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
             print("Pre-training complete")
-            #print("train aligned shape: ", train_aligned_EEG.shape)
             input_size = 768
-
 
         # Instantiate the model
         if inputs == "EEG+Text":
