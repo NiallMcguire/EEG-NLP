@@ -33,4 +33,15 @@ if __name__ == "__main__":
     vector_size = 768
     parameters['vector_size'] = vector_size
     ner_bert = utils.NER_BERT()
-    train_NE_embedded = ner_bert.get_embeddings(NE)
+    NE_embedded = ner_bert.get_embeddings(NE)
+
+    NE_expanded = util.NER_expanded_NER_list(EEG_segments, NE_embedded, vector_size)
+    NE_expanded = np.array(NE_expanded)
+
+    EEG_X, y = util.NER_padding_x_y(EEG_segments, Classes)
+    EEG_X = np.array(EEG_X)
+    EEG_X = util.NER_reshape_data(EEG_X)
+    y_categorical = util.encode_labels(y)
+
+    print(X.shape)
+
