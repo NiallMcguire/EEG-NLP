@@ -43,7 +43,6 @@ class NER_Estimator():
         num_layers = self.parameters['num_layers']
         num_classes = self.parameters['num_classes']
         num_epochs = self.parameters['num_epochs']
-        LSTM_layers = self.parameters['LSTM_layers']
         learning_rate = self.parameters['learning_rate']
         optimizer = self.parameters['optimizer']
         criterion = self.parameters['criterion']
@@ -319,7 +318,6 @@ if __name__ == "__main__":
         'num_layers': [4],
         'num_classes': [3],
         'num_epochs': [100],
-        'LSTM_layers': [2],
         'learning_rate': [0.001],
         'optimizer': ['Adam'],
         'criterion': ['CrossEntropyLoss'],
