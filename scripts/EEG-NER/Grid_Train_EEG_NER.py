@@ -88,15 +88,11 @@ class NER_Estimator():
             elif Embedding_model == 'BERT':
                 vector_size = 768
                 parameters['vector_size'] = vector_size
-
                 ner_bert = utils.NER_BERT()
-
                 train_NE_embedded = ner_bert.get_embeddings(train_NE)
 
             train_NE_expanded = util.NER_expanded_NER_list(train_EEG_segments, train_NE_embedded, vector_size)
-
             train_NE_expanded = np.array(train_NE_expanded)
-
             train_NE_padded_tensor = torch.tensor(train_NE_expanded, dtype=torch.float32)
 
         X, y = util.NER_padding_x_y(train_EEG_segments, train_Classes)
@@ -301,7 +297,7 @@ if __name__ == "__main__":
     '''
 
     param_grid = {
-        'pre_training': [False],
+        'pre_training': [True],
         'evaluation': [True],
         'Patience': [10],
         'inputs': ["EEG"], # EEG, Text, EEG+Text
