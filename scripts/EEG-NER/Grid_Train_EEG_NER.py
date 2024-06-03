@@ -260,31 +260,31 @@ class NER_Estimator():
         print("Mean accuracy: ", np.mean(cross_val_accuracy))
         parameters['Mean_Accuracy'] = np.mean(cross_val_accuracy)
 
-            '''
-            model_save_path = self.model_save_path + datetime.datetime.now().strftime(
-                "%Y%m%d-%H%M%S") + "EEG_NER.pt"
-            torch.save(model.state_dict(), model_save_path)
-    
-            # Save the parameters
-            parameters['model_save_path'] = model_save_path
-            config_save_path = self.config_save_path + datetime.datetime.now().strftime(
-                "%Y%m%d-%H%M%S") + "EEG_NER.json"
-            util.save_json(parameters, config_save_path)
-    
-            print("Model saved at: ", model_save_path)
-            print("Config saved at: ", config_save_path)
-            print("Training completed")
-            '''
+        '''
+        model_save_path = self.model_save_path + datetime.datetime.now().strftime(
+            "%Y%m%d-%H%M%S") + "EEG_NER.pt"
+        torch.save(model.state_dict(), model_save_path)
+
+        # Save the parameters
+        parameters['model_save_path'] = model_save_path
+        config_save_path = self.config_save_path + datetime.datetime.now().strftime(
+            "%Y%m%d-%H%M%S") + "EEG_NER.json"
+        util.save_json(parameters, config_save_path)
+
+        print("Model saved at: ", model_save_path)
+        print("Config saved at: ", config_save_path)
+        print("Training completed")
+        '''
 
 
 
 if __name__ == "__main__":
     # Define parameter grid for grid search
     param_grid = {
-        'pre_training': [True],
+        'pre_training': [False],
         'evaluation': [True],
-        'Patience': [10],
-        'inputs': ["EEG+Text"], # EEG, Text, EEG+Text
+        'Patience': [1],
+        'inputs': ["Text"], # EEG, Text, EEG+Text
         'Embedding_model': ['BERT'],
         'batch_size': [32],
         'input_size': [840],
@@ -292,7 +292,7 @@ if __name__ == "__main__":
         'dropout': [0.2],
         'num_layers': [4],
         'num_classes': [3],
-        'num_epochs': [100],
+        'num_epochs': [10],
         'learning_rate': [0.001],
         'optimizer': ['Adam'],
         'criterion': ['CrossEntropyLoss'],
