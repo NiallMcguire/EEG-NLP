@@ -43,5 +43,5 @@ if __name__ == "__main__":
     EEG_X = util.NER_reshape_data(EEG_X)
     y_categorical = util.encode_labels(y)
 
-    print(X.shape)
+    print(EEG_X.shape)
 
