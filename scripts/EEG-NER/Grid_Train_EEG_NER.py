@@ -71,6 +71,7 @@ class NER_Estimator():
             print("Loaded pre-trained model: ", parameters['pre_trained_model_name'])
 
         # cross validation
+
         if inputs == "EEG+Text" or "Text":
             # create word embeddings
             if Embedding_model == 'Word2Vec':
@@ -172,8 +173,6 @@ class NER_Estimator():
 
         # Move the model to the GPU if available
         model.to(device)
-
-        model.train()
 
         # Define loss function and optimizer
         if criterion == 'CrossEntropyLoss':
