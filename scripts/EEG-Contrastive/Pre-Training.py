@@ -45,3 +45,7 @@ if __name__ == "__main__":
 
     print(EEG_X.shape)
 
+    if parameters['Contrastive_label_setting'] == 'EEGtoBERT':
+        # Create positive and negative pairs
+        positive_pairs = [(EEG_X[i], NE_expanded[i], 1) for i in range(len(EEG_X))]
+
