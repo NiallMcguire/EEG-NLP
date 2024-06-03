@@ -51,7 +51,6 @@ class NER_Estimator():
         pre_training = self.parameters['pre_training']
         evaluation = self.parameters['evaluation']
         patience = self.parameters['Patience']
-        cross_val = self.parameters['cross_val']
         parameters = self.parameters
 
         if pre_training == True:
