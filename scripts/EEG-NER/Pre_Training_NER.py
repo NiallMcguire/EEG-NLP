@@ -139,8 +139,6 @@ if __name__ == "__main__":
     elif optimizer == "SGD":
         optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
-
-
     def train_contrastive(model, train_loader, criterion, optimizer, num_epochs=epochs):
         model.train()
         best_validation_loss = float('inf')
