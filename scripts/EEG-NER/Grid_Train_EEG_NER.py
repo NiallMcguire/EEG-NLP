@@ -152,9 +152,17 @@ class NER_Estimator():
             print("Pre-training complete")
             input_size = 768
 
+        torch.manual_seed(42)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed(42)
 
         cross_val_accuracy = []
         for i in range(cross_val):
+            print("Cross-validation iteration: ", i)
+
+
+
+
             # Instantiate the model
             if inputs == "EEG+Text":
                 model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_classes, num_layers, dropout)
@@ -174,6 +182,8 @@ class NER_Estimator():
 
             if optimizer == 'Adam':
                 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+
+
 
             counter = 0
             best_val_loss = None
