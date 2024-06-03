@@ -58,7 +58,8 @@ def create_limited_contrastive_pairs(EEG_X, named_entity_class, max_negative_pai
 
 
 if __name__ == "__main__":
-    data_path = r"C:\Users\gxb18167\PycharmProjects\EEG-NLP\NER.pkl"
+    #data_path = r"C:\Users\gxb18167\PycharmProjects\EEG-NLP\NER.pkl"
+    data_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
 
 
     d = data.Data()
