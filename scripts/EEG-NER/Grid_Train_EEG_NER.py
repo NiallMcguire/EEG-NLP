@@ -279,28 +279,11 @@ class NER_Estimator():
 
 if __name__ == "__main__":
     # Define parameter grid for grid search
-    '''
-    param_grid = {
-        'epochs': [100],
-        'patience': [5, 10],
-        'test_size': [0.2],
-        'validation_size': [0.2],
-        'num_negative_pairs_per_positive': [1, 2],
-        'batch_size': [32, 64, 128],
-        'loss_function': ["ContrastiveLossEuclidNER"],
-        'margin': [0.5, 1.0, 2.0],
-        'optimizer': ["Adam"],
-        'learning_rate': [0.001, 0.0001],
-        'Embedding_model': ['BERT'],
-        'model_name': ['EEGToBERTModel_v4', 'EEGToBERTModel_v3']
-    }
-    '''
-
     param_grid = {
         'pre_training': [True],
         'evaluation': [True],
         'Patience': [10],
-        'inputs': ["EEG"], # EEG, Text, EEG+Text
+        'inputs': ["EEG+Text"], # EEG, Text, EEG+Text
         'Embedding_model': ['BERT'],
         'batch_size': [32],
         'input_size': [840],
@@ -314,7 +297,7 @@ if __name__ == "__main__":
         'criterion': ['CrossEntropyLoss'],
         'val_size': [0.1],
         'test_size': [0.1],
-        'cross_val': [5]
+        'cross_val': [3]
     }
 
     models = ['EEGToBERTModel_v4']
