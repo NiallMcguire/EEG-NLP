@@ -152,30 +152,29 @@ class NER_Estimator():
             print("Pre-training complete")
             input_size = 768
 
-        # Instantiate the model
-        if inputs == "EEG+Text":
-            model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_classes, num_layers, dropout)
-        elif inputs == "Text":
-            input_size = vector_size
-            parameters['input_size'] = input_size
-            model = Networks.BLSTM(input_size, hidden_size, num_classes, num_layers, dropout)
-        else:
-            model = Networks.BLSTM(input_size, hidden_size, num_classes, num_layers, dropout)
-
-        # Move the model to the GPU if available
-        model.to(device)
-
-        # Define loss function and optimizer
-        if criterion == 'CrossEntropyLoss':
-            criterion = nn.CrossEntropyLoss()
-
-        if optimizer == 'Adam':
-            optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-
-
 
         cross_val_accuracy = []
         for i in range(cross_val):
+            # Instantiate the model
+            if inputs == "EEG+Text":
+                model = Networks.BLSTM_Text(input_size, vector_size, hidden_size, num_classes, num_layers, dropout)
+            elif inputs == "Text":
+                input_size = vector_size
+                parameters['input_size'] = input_size
+                model = Networks.BLSTM(input_size, hidden_size, num_classes, num_layers, dropout)
+            else:
+                model = Networks.BLSTM(input_size, hidden_size, num_classes, num_layers, dropout)
+
+            # Move the model to the GPU if available
+            model.to(device)
+
+            # Define loss function and optimizer
+            if criterion == 'CrossEntropyLoss':
+                criterion = nn.CrossEntropyLoss()
+
+            if optimizer == 'Adam':
+                optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+
             counter = 0
             best_val_loss = None
             loss_over_batches = []
