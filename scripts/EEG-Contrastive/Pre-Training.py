@@ -17,13 +17,14 @@ import datetime
 from torch.utils.data import Dataset, DataLoader
 
 
-def create_limited_contrastive_pairs(EEG_X, named_entity_class, max_negative_pairs=1000):
+def create_limited_contrastive_pairs(EEG_X, named_entity_class, max_positive_pairs=20000, max_negative_pairs=20000):
     """
-    Create pairs of EEG samples and their contrastive labels with a limit on the number of negative pairs.
+    Create pairs of EEG samples and their contrastive labels with limits on the number of positive and negative pairs.
 
     Args:
     - EEG_X (array-like): Array of EEG samples.
     - named_entity_class (array-like): Array of named entity labels for EEG samples.
+    - max_positive_pairs (int): Maximum number of positive pairs to include.
     - max_negative_pairs (int): Maximum number of negative pairs to include.
 
     Returns:
@@ -34,6 +35,7 @@ def create_limited_contrastive_pairs(EEG_X, named_entity_class, max_negative_pai
     labels = []
 
     num_samples = len(EEG_X)
+    positive_pairs = 0
     negative_pairs = 0
 
     for i in range(num_samples):
@@ -45,8 +47,10 @@ def create_limited_contrastive_pairs(EEG_X, named_entity_class, max_negative_pai
 
             if label_i == label_j:
                 # Positive pair
-                pairs.append((EEG_sample_i, EEG_sample_j))
-                labels.append(1)
+                if positive_pairs < max_positive_pairs:
+                    pairs.append((EEG_sample_i, EEG_sample_j))
+                    labels.append(1)
+                    positive_pairs += 1
             else:
                 # Negative pair
                 if negative_pairs < max_negative_pairs:
