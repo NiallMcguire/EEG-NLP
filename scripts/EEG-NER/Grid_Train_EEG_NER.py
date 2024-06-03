@@ -120,7 +120,6 @@ class NER_Estimator():
         if inputs == "EEG+Text":
             train_dataset = TensorDataset(x_train_tensor, train_NE_padded_tensor, y_train_tensor)
             test_dataset = TensorDataset(x_test_tensor, test_NE_padded_tensor, y_test_tensor)
-
             train_size = len(train_dataset) - int(len(train_dataset) * val_size)
             train_dataset, val_dataset = torch.utils.data.random_split(train_dataset,
                                                                        [train_size, int(len(train_dataset) * val_size)])
@@ -133,7 +132,6 @@ class NER_Estimator():
         else:
             train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
             test_dataset = TensorDataset(x_test_tensor, y_test_tensor)
-
             train_size = len(train_dataset) - int(len(train_dataset) * val_size)
             train_dataset, val_dataset = torch.utils.data.random_split(train_dataset,
                                                                        [train_size, int(len(train_dataset) * val_size)])
