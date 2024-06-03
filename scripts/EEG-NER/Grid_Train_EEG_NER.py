@@ -276,22 +276,21 @@ if __name__ == "__main__":
     param_grid = {
         'pre_training': [False],
         'evaluation': [True],
-        'Patience': [100],
+        'Patience': [10],
         'inputs': ["Text"], # EEG, Text, EEG+Text
         'Embedding_model': ['BERT'],
         'batch_size': [32],
         'input_size': [840],
         'hidden_size': [64],
-        'dropout': [0.5],
+        'dropout': [0.2],
         'num_layers': [4],
         'num_classes': [3],
-        'num_epochs': [10],
+        'num_epochs': [100],
         'learning_rate': [0.001],
         'optimizer': ['Adam'],
         'criterion': ['CrossEntropyLoss'],
         'val_size': [0.1],
         'test_size': [0.1],
-        'cross_val': [1]
     }
 
     models = ['EEGToBERTModel_v4']
