@@ -298,7 +298,7 @@ if __name__ == "__main__":
         'batch_size': [32],
         'input_size': [840],
         'hidden_size': [64],
-        'dropout': [0.2],
+        'dropout': [0.5],
         'num_layers': [4],
         'num_classes': [3],
         'num_epochs': [10],
