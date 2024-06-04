@@ -204,3 +204,21 @@ class SiameseNetwork_v2(nn.Module):
         output1 = self.forward_once(input1)
         output2 = self.forward_once(input2)
         return output1, output2
+
+class SiameseNetwork_v3(nn.Module):
+    def __init__(self, input_dim):
+        super(SiameseNetwork_v3, self).__init__()
+        self.lstm = nn.LSTM(input_dim, 512, batch_first=True, bidirectional=True)
+        self.fc1 = nn.Linear(1024, 256)
+        self.fc2 = nn.Linear(256, 128)
+
+    def forward_once(self, x):
+        x, _ = self.lstm(x)
+        x = torch.relu(self.fc1(x[:, -1, :]))
+        x = self.fc2(x)
+        return x
+
+    def forward(self, input1, input2):
+        output1 = self.forward_once(input1)
+        output2 = self.forward_once(input2)
+        return output1, output2
