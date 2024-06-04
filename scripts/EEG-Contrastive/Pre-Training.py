@@ -189,7 +189,7 @@ if __name__ == "__main__":
 
     eeg_input_dim = pair_one_train.shape[2]
     # Initialize model
-    model = Networks.SiameseNetwork_v2(eeg_input_dim).to(device)
+    model = Networks.SiameseNetwork_v2().to(device)
     criterion = ContrastiveLoss(margin=0.5)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
