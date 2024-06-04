@@ -1,3 +1,4 @@
+import itertools
 import sys
 
 sys.path.append('/users/gxb18167/EEG-NLP')
@@ -196,8 +197,13 @@ if __name__ == "__main__":
 
     NE, EEG_segments, Classes = d.NER_read_custom_files(data_path)
 
-    PreTraining = PreTraining((NE, EEG_segments, Classes), model_save_path=None, config_save_path=None, kwargs=param_grid)
-    PreTraining.train()
+    # Generate all combinations of parameters
+    keys, values = zip(*param_grid.items())
+    param_combinations = [dict(zip(keys, v)) for v in itertools.product(*values)]
+
+    for param in param_combinations:
+        PreTraining = PreTraining((NE, EEG_segments, Classes), model_save_path=None, config_save_path=None, kwargs=param)
+        PreTraining.train()
 
 
 
