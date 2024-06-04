@@ -167,6 +167,23 @@ class PreTraining():
                     break
 
 
+        # Save model
+        # model save path with the time stamp
+        model_save_path = self.model_save_path + datetime.datetime.now().strftime(
+            "%Y%m%d-%H%M%S") + "-EEG_NER_Pre_Training.pt"
+        torch.save(model.state_dict(), model_save_path)
+
+        # Save the parameters
+        self.parameters['model_save_path'] = model_save_path
+        config_save_path = self.config_save_path + datetime.datetime.now().strftime(
+            "%Y%m%d-%H%M%S") + "-EEG_NER_Pre_Training.json"
+        util.save_json(self.parameters, config_save_path)
+
+        print("Model saved at: ", model_save_path)
+        print("Config saved at: ", config_save_path)
+        print("Training completed")
+
+
 
 
 if __name__ == "__main__":
