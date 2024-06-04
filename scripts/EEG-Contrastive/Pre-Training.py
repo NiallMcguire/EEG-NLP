@@ -106,27 +106,6 @@ def NER_EEGtoBERT_create_pairs(EEG_X, NE_Expanded, named_entity_class, max_posit
 
     return np.array(pairs), np.array(labels)
 
-
-# Siamese Network Model
-class SiameseNetwork(nn.Module):
-    def __init__(self, input_dim):
-        super(SiameseNetwork, self).__init__()
-        self.fc1 = nn.Linear(input_dim, 512)
-        self.fc2 = nn.Linear(512, 128)
-        self.fc3 = nn.Linear(128, 64)
-
-    def forward_once(self, x):
-        x = x.view(x.size(0), -1)  # Flatten to [batch_size, 7 * 840]
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
-
-    def forward(self, input1, input2):
-        output1 = self.forward_once(input1)
-        output2 = self.forward_once(input2)
-        return output1, output2
-
 # Contrastive Loss
 class ContrastiveLoss(nn.Module):
     def __init__(self, margin=1.0):
@@ -209,7 +188,7 @@ if __name__ == "__main__":
     print("Training data shapes: ", pair_one_train.shape, pair_two_train.shape, labels_train.shape)
 
     # Initialize model
-    model = SiameseNetwork(7*840).to(device)
+    model = Networks.SiameseNetwork_v1(7*840).to(device)
     criterion = ContrastiveLoss(margin=0.5)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
