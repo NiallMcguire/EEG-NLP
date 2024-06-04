@@ -109,7 +109,7 @@ def NER_EEGtoBERT_create_pairs(EEG_X, NE_Expanded, named_entity_class, max_posit
 
 # Siamese Network Model
 class SiameseNetwork(nn.Module):
-    def __init__(self, input_dim, hidden_dim=128):
+    def __init__(self, input_dim):
         super(SiameseNetwork, self).__init__()
         self.fc1 = nn.Linear(input_dim, 512)
         self.fc2 = nn.Linear(512, 128)
