@@ -188,6 +188,8 @@ if __name__ == "__main__":
     print("Training data shapes: ", pair_one_train.shape, pair_two_train.shape, labels_train.shape)
 
     eeg_input_dim = pair_one_train.shape[2]
+    print("EEG input dimension: ", eeg_input_dim)
+
     # Initialize model
     model = Networks.SiameseNetwork_v2().to(device)
     criterion = ContrastiveLoss(margin=0.5)

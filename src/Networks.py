@@ -153,8 +153,6 @@ class SiameseNetwork_v1(nn.Module):
         return output1, output2
 
 
-
-
 class SiameseNetwork_v2(nn.Module):
     def __init__(self):
         super(SiameseNetwork_v2, self).__init__()
@@ -175,7 +173,6 @@ class SiameseNetwork_v2(nn.Module):
     def forward_once(self, x):
         # Convolutional layers
         x = self.conv1(x)
-
         x = self.conv2(x)
 
         # Max pooling
