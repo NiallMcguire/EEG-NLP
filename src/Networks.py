@@ -168,6 +168,16 @@ class SiameseNetwork_v2(nn.Module):
         self.fc3 = nn.Linear(128, 64)
 
     def forward_once(self, x):
+        ## Reshape input to [batch_size, 7 * 840]
+        x = x.view(x.size(0), -1)
+
+        ## Reshape to [batch_size, 7, 840] for convolutional layers
+        x = x.view(x.size(0), 7, 840)
+
+        print(x.size())
+
+
+
         ## Convolutional Layers
         x = F.relu(self.conv1(x))
         x = F.max_pool1d(x, kernel_size=2, stride=2)
