@@ -108,10 +108,10 @@ if __name__ == "__main__":
     eeg_train, eeg_val, bert_train, bert_val, labels_train, labels_val = train_test_split(eeg_train, bert_train, labels_train, test_size=validation_size, random_state=42)
 
 
-    train_dataset = utils.EEGToBERTContrastiveDataset(eeg_train, bert_train, labels_train)
-    validation_dataset = utils.EEGToBERTContrastiveDataset(eeg_val, bert_val, labels_val)
+    train_dataset = utils.EEGContrastiveDataset(eeg_train, bert_train, labels_train)
+    validation_dataset = utils.EEGContrastiveDataset(eeg_val, bert_val, labels_val)
 
-    test_dataset = utils.EEGToBERTContrastiveDataset(eeg_test, bert_test, labels_test)
+    test_dataset = utils.EEGContrastiveDataset(eeg_test, bert_test, labels_test)
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=False)
