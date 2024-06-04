@@ -76,8 +76,11 @@ def NER_EEGtoBERT_create_pairs(EEG_X, NE_Expanded, named_entity_class, max_posit
     - pairs (list of tuples): List of tuples where each tuple contains an EEG sample and a BERT embedding.
     - labels (array-like): Array of contrastive labels indicating similarity (1) or dissimilarity (0).
     """
-    pairs = []
     labels = []
+
+    EEG_pair = []
+    BERT_pair = []
+
 
     num_samples = len(EEG_X)
     positive_pairs = 0
@@ -94,17 +97,23 @@ def NER_EEGtoBERT_create_pairs(EEG_X, NE_Expanded, named_entity_class, max_posit
             if label_i == label_j:
                 # Positive pair
                 if positive_pairs < max_positive_pairs:
-                    pairs.append((EEG_sample_i, BERT_embedding_j))
+                    #pairs.append((EEG_sample_i, BERT_embedding_j))
+                    EEG_pair.append(EEG_sample_i)
+                    BERT_pair.append(BERT_embedding_j)
+
                     labels.append(1)
                     positive_pairs += 1
             else:
                 # Negative pair
                 if negative_pairs < max_negative_pairs:
-                    pairs.append((EEG_sample_i, BERT_embedding_j))
+                    #pairs.append((EEG_sample_i, BERT_embedding_j))
+                    EEG_pair.append(EEG_sample_i)
+                    BERT_pair.append(BERT_embedding_j)
+
                     labels.append(0)
                     negative_pairs += 1
 
-    return pairs, np.array(labels)
+    return np.array(EEG_pair), np.array(BERT_pair), np.array(labels)
 
 # Contrastive Loss
 class ContrastiveLoss(nn.Module):
@@ -154,9 +163,6 @@ if __name__ == "__main__":
         NE_expanded = util.NER_expanded_NER_list(EEG_segments, NE_embedded, vector_size)
         NE_expanded = np.array(NE_expanded)
         pairs, labels = NER_EEGtoBERT_create_pairs(EEG_X, NE_expanded, named_entity_class, max_positive_pairs, max_negative_pairs)
-        pair_one = pairs[0]
-        pair_two = pairs[1]
-        print("length of pair one and pair two: ", len(pair_one), len(pair_two))
 
 
     elif contrastive_learning_setting == "EEGtoEEG":
@@ -167,7 +173,6 @@ if __name__ == "__main__":
 
 
     # Convert to tensors
-
     labels = torch.tensor(labels, dtype=torch.float32)
     pair_one = torch.tensor(pair_one, dtype=torch.float32)
     pair_two = torch.tensor(pair_two, dtype=torch.float32)
