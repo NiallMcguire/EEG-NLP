@@ -100,10 +100,13 @@ class PreTraining():
         if loss_function == "ContrastiveLossEuclidNER":
             criterion = Loss.ContrastiveLossEuclidNER(margin=margin)
 
+
+
         # Initialize model
         model = Networks.SiameseNetwork_v3(840, 768).to(device)  # Linear = 7*vector size, Conv = hard coded for each type, LSTM = vector size 1, vector size 2
 
-        optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+        if optimizer == "Adam":
+            optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
         # Training loop
         num_epochs = 100
@@ -169,13 +172,12 @@ if __name__ == "__main__":
         'max_positive_pairs': [20000],
         'max_negative_pairs': [20000],
         'contrastive_learning_setting': ['EEGtoBERT'],  # 'EEGtoBERT', 'EEGtoEEG
-
         'batch_size': [32],
         'loss_function': ["ContrastiveLossEuclidNER"],
         'margin': [0.5],
         'optimizer': ["Adam"],
         'learning_rate': [0.0001],
-        'model_name': ['EEGToBERTModel_v4', 'EEGToBERTModel_v3']
+        'model_name': ['SiameseNetwork_v1', 'SiameseNetwork_v2', 'SiameseNetwork_v3']
     }
 
     d = data.Data()
