@@ -196,7 +196,6 @@ if __name__ == "__main__":
     pair_one_train, pair_one_val, pair_two_train, pair_two_val, labels_train, labels_val = train_test_split(pair_one_train, pair_two_train, labels_train, test_size=0.1, random_state=42)
 
     # Create datasets
-
     train_dataset = utils.EEGContrastiveDataset(pair_one_train, pair_two_train, labels_train)
     val_dataset = utils.EEGContrastiveDataset(pair_one_val, pair_two_val, labels_val)
     test_dataset = utils.EEGContrastiveDataset(pair_one_test, pair_two_test, labels_test)
@@ -215,7 +214,11 @@ if __name__ == "__main__":
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
     # Training loop
-    num_epochs = 20
+    num_epochs = 100
+    # early stopping
+    best_val_loss = float('inf')
+    patience = 5
+    counter = 0
     for epoch in range(num_epochs):
         model.train()
         total_loss = 0
@@ -232,18 +235,29 @@ if __name__ == "__main__":
 
         print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {total_loss / len(train_loader):.4f}")
 
-        # Validation
+        # validation with early stopping
         model.eval()
+        val_loss = 0
         with torch.no_grad():
-            val_loss = 0
             for batch in val_loader:
                 pair_one_batch, pair_two_batch, label_batch = batch
                 pair_one_batch, pair_two_batch, label_batch = pair_one_batch.to(device), pair_two_batch.to(device), label_batch.to(device)
+
                 output1, output2 = model(pair_one_batch, pair_two_batch)
                 loss = criterion(output1, output2, label_batch)
                 val_loss += loss.item()
 
-            print(f"Validation Loss: {val_loss / len(val_loader):.4f}")
+        val_loss /= len(val_loader)
+        print(f"Validation Loss: {val_loss:.4f}")
+
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            counter = 0
+        else:
+            counter += 1
+            if counter >= patience:
+                print(f"Early stopping at epoch {epoch + 1}")
+                break
 
 
 
