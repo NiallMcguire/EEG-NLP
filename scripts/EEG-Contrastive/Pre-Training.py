@@ -185,7 +185,7 @@ if __name__ == "__main__":
         'margin': [0.5],
         'optimizer': ["Adam"],
         'learning_rate': [0.0001],
-        'model_name': ['SiameseNetwork_v1', 'SiameseNetwork_v2', 'SiameseNetwork_v3']
+        'model_name': ['SiameseNetwork_v1']
     }
 
     d = data.Data()
@@ -194,6 +194,9 @@ if __name__ == "__main__":
     Networks = Networks
 
     NE, EEG_segments, Classes = d.NER_read_custom_files(data_path)
+
+    PreTraining = PreTraining((NE, EEG_segments, Classes), model_save_path=None, config_save_path=None, kwargs=param_grid)
+    PreTraining.train()
 
 
 
