@@ -151,17 +151,17 @@ class NER_BERT:
 
         return embedded_input
 
-class EEGToBERTContrastiveDataset(Dataset):
-    def __init__(self, eeg_data, bert_data, labels):
-        self.eeg_data = eeg_data
-        self.bert_data = bert_data
+class EEGContrastiveDataset(Dataset):
+    def __init__(self, pair_one, pair_two, labels):
+        self.pair_one = pair_one
+        self.pair_two = pair_two
         self.labels = labels
 
     def __len__(self):
         return len(self.labels)
 
     def __getitem__(self, idx):
-        eeg_vector = self.eeg_data[idx]
-        bert_vector = self.bert_data[idx]
+        pair_one = self.pair_one[idx]
+        pair_two = self.pair_two[idx]
         label = self.labels[idx]
-        return eeg_vector, bert_vector, label
+        return pair_one, pair_two, label
