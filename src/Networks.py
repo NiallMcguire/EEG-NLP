@@ -156,14 +156,17 @@ class SiameseNetwork_v1(nn.Module):
         return x
 
     def forward(self, input1, input2):
-
+        print(input1.size())
+        print(input2.size())
         if input1.size(2) == input2.size(2):
             output1 = self.forward_once(input1)
-            output2 = self.forward_second(input2)
+            output2 = self.forward_once(input2)
             return output1, output2
         else:
             output1 = self.forward_once(input1)
+            print("output 1 size:", output1.size())
             output2 = self.forward_second(input2)
+            print("output 2 size:", output2.size())
             return output1, output2
 
 
