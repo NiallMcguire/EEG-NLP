@@ -241,7 +241,7 @@ if __name__ == "__main__":
             val_loss = 0
             for batch in val_loader:
                 pair_one_batch, pair_two_batch, label_batch = batch
-                pair_one_batch, pair_two_batch, label_batch = pair_one_batch.cuda(), pair_two_batch.cuda(), label_batch.cuda()
+                pair_one_batch, pair_two_batch, label_batch = pair_one_batch.to(device), pair_two_batch.to(device), label_batch.to(device)
                 output1, output2 = model(pair_one_batch, pair_two_batch)
                 loss = criterion(output1, output2, label_batch)
                 val_loss += loss.item()
