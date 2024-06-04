@@ -151,3 +151,39 @@ class SiameseNetwork_v1(nn.Module):
         output1 = self.forward_once(input1)
         output2 = self.forward_once(input2)
         return output1, output2
+
+
+class SiameseNetwork_v2(nn.Module):
+    def __init__(self):
+        super(SiameseNetwork_v2, self).__init__()
+
+        ## Convolutional Layers
+        self.conv1 = nn.Conv1d(7, 32, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv1d(32, 64, kernel_size=3, padding=1)
+        self.conv3 = nn.Conv1d(64, 128, kernel_size=3, padding=1)
+
+        ## Fully Connected Layers
+        self.fc1 = nn.Linear(128 * 840, 512)
+        self.fc2 = nn.Linear(512, 128)
+        self.fc3 = nn.Linear(128, 64)
+
+    def forward_once(self, x):
+        ## Convolutional Layers
+        x = F.relu(self.conv1(x))
+        x = F.max_pool1d(x, kernel_size=2, stride=2)
+        x = F.relu(self.conv2(x))
+        x = F.max_pool1d(x, kernel_size=2, stride=2)
+        x = F.relu(self.conv3(x))
+        x = F.max_pool1d(x, kernel_size=2, stride=2)
+
+        ## Flatten and Fully Connected Layers
+        x = x.view(x.size(0), -1)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
+
+    def forward(self, input1, input2):
+        output1 = self.forward_once(input1)
+        output2 = self.forward_once(input2)
+        return output1, output2
