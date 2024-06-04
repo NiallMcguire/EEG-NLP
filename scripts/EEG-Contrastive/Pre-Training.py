@@ -162,7 +162,7 @@ if __name__ == "__main__":
         NE_embedded = ner_bert.get_embeddings(NE)
         NE_expanded = util.NER_expanded_NER_list(EEG_segments, NE_embedded, vector_size)
         NE_expanded = np.array(NE_expanded)
-        EEG_pair, BERT_pair, labels = NER_EEGtoBERT_create_pairs(EEG_X, NE_expanded, named_entity_class, max_positive_pairs, max_negative_pairs)
+        pair_one, pair_two, labels = NER_EEGtoBERT_create_pairs(EEG_X, NE_expanded, named_entity_class, max_positive_pairs, max_negative_pairs)
 
 
 
