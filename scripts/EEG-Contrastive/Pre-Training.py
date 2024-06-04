@@ -17,23 +17,6 @@ import datetime
 from torch.utils.data import Dataset, DataLoader
 
 
-
-
-# Contrastive Loss
-class ContrastiveLoss(nn.Module):
-    def __init__(self, margin=1.0):
-        super(ContrastiveLoss, self).__init__()
-        self.margin = margin
-
-    def forward(self, output1, output2, label):
-        euclidean_distance = F.pairwise_distance(output1, output2)
-        loss_contrastive = torch.mean(
-            (1 - label) * torch.pow(euclidean_distance, 2) +
-            (label) * torch.pow(torch.clamp(self.margin - euclidean_distance, min=0.0), 2)
-        )
-        return loss_contrastive
-
-
 class PreTraining():
     def __init__(self, Data, model_save_path, config_save_path, kwargs):
         self.parameters = kwargs
@@ -114,7 +97,8 @@ class PreTraining():
 
 
         # Initialize loss function
-        criterion = ContrastiveLoss(margin=margin)
+        if loss_function == "ContrastiveLossEuclidNER":
+            criterion = Loss.ContrastiveLossEuclidNER(margin=margin)
 
         # Initialize model
         model = Networks.SiameseNetwork_v3(840, 768).to(device)  # Linear = 7*vector size, Conv = hard coded for each type, LSTM = vector size 1, vector size 2
