@@ -195,7 +195,7 @@ if __name__ == "__main__":
 
     param_grid = {
         'epochs': [100],
-        'patience': [5],
+        'patience': [10],
         'test_size': [0.2],
         'validation_size': [0.1],
         'max_positive_pairs': [20000],
