@@ -175,7 +175,7 @@ class SiameseNetwork_v2(nn.Module):
         # Fully connected layers
         self.fc1 = nn.Linear(64 * 420, 128)
         self.relu3 = nn.ReLU()
-        self.fc2 = nn.Linear(128, 10)  # Adjust the output size based on your task
+        self.fc2 = nn.Linear(128, 64)  # Adjust the output size based on your task
 
     def forward_once(self, x):
         # Convolutional layers
