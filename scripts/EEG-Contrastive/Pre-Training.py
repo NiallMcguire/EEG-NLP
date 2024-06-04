@@ -184,7 +184,7 @@ if __name__ == "__main__":
         'max_positive_pairs': [20000],
         'max_negative_pairs': [20000],
         'contrastive_learning_setting': ['EEGtoBERT'],  # 'EEGtoBERT', 'EEGtoEEG
-        'batch_size': [32],
+        'batch_size': [64],
         'loss_function': ["ContrastiveLossEuclidNER"],
         'margin': [0.5],
         'optimizer': ["Adam"],
