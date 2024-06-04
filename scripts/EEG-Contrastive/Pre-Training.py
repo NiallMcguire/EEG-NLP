@@ -51,6 +51,7 @@ class PreTraining():
         model_name = self.parameters['model_name']
         patience = self.parameters['patience']
 
+        print(contrastive_learning_setting)
 
         ner_bert = utils.NER_BERT()
 
