@@ -184,7 +184,6 @@ class SiameseNetwork_v2(nn.Module):
         # Fully connected layers
         x = self.fc1(x)
         x = self.fc2(x)
-
         return x
 
     def forward(self, input1, input2):
