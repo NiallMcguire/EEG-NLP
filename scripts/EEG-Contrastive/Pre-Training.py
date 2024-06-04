@@ -64,8 +64,6 @@ def NER_EEGtoEEG_create_paris(EEG_X, named_entity_class, max_positive_pairs=2000
 if __name__ == "__main__":
     #data_path = r"C:\Users\gxb18167\PycharmProjects\EEG-NLP\NER.pkl"
     data_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
-    #here
-
 
     d = data.Data()
     util = utils.Utils()
