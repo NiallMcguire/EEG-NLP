@@ -154,9 +154,23 @@ if __name__ == "__main__":
     pair_one_train, pair_one_test, pair_two_train, pair_two_test, labels_train, labels_test = train_test_split(pair_one, pair_two, labels, test_size=0.2, random_state=42)
 
     # Split training data into training and validation sets using tensors
-    pair_one_train, pair_one_val, pair_two_train, pair_two_val, labels_train, labels_val = train_test_split(pair_one_train, pair_two_train, labels_train, test_size=0.2, random_state=42)
+    pair_one_train, pair_one_val, pair_two_train, pair_two_val, labels_train, labels_val = train_test_split(pair_one_train, pair_two_train, labels_train, test_size=0.1, random_state=42)
 
     # Create datasets
+
+    train_dataset = utils.EEGContrastiveDataset(pair_one_train, pair_two_train, labels_train)
+    val_dataset = utils.EEGContrastiveDataset(pair_one_val, pair_two_val, labels_val)
+    test_dataset = utils.EEGContrastiveDataset(pair_one_test, pair_two_test, labels_test)
+
+    # Create dataloaders
+    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=32, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=True)
+
+    # Print shapes
+    print("Training data shapes: ", pair_one_train.shape, pair_two_train.shape, labels_train.shape)
+
+
 
 
 
