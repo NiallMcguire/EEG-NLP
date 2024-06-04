@@ -149,9 +149,18 @@ class PreTraining():
 
         max_positive_pairs = self.parameters['max_positive_pairs']
         max_negative_pairs = self.parameters['max_negative_pairs']
-
-
         contrastive_learning_setting = self.parameters['contrastive_learning_setting']
+
+        batch_size = self.parameters['batch_size']
+        test_size = self.parameters['test_size']
+        validation_size = self.parameters['validation_size']
+
+        margin = self.parameters['margin']
+        optimizer = self.parameters['optimizer']
+        loss_function = self.parameters['loss_function']
+        learning_rate = self.parameters['learning_rate']
+
+
         ner_bert = utils.NER_BERT()
 
         EEG_X, named_entity_class = util.NER_padding_x_y(EEG_segments, Classes)
@@ -164,8 +173,6 @@ class PreTraining():
             NE_expanded = np.array(NE_expanded)
             pair_one, pair_two, labels = NER_EEGtoBERT_create_pairs(EEG_X, NE_expanded, named_entity_class,
                                                                     max_positive_pairs, max_negative_pairs)
-
-
         elif contrastive_learning_setting == "EEGtoEEG":
             pairs, labels = NER_EEGtoEEG_create_paris(EEG_X, named_entity_class, max_positive_pairs, max_negative_pairs)
             print("Created EEG to EEG pairs of shape: ", pairs.shape)
@@ -179,11 +186,11 @@ class PreTraining():
 
         # Split data into training and testing sets using tensors
         pair_one_train, pair_one_test, pair_two_train, pair_two_test, labels_train, labels_test = train_test_split(
-            pair_one, pair_two, labels, test_size=0.2, random_state=42)
+            pair_one, pair_two, labels, test_size=test_size, random_state=42)
 
         # Split training data into training and validation sets using tensors
         pair_one_train, pair_one_val, pair_two_train, pair_two_val, labels_train, labels_val = train_test_split(
-            pair_one_train, pair_two_train, labels_train, test_size=0.1, random_state=42)
+            pair_one_train, pair_two_train, labels_train, test_size=validation_size, random_state=42)
 
         # Create datasets
         train_dataset = utils.EEGContrastiveDataset(pair_one_train, pair_two_train, labels_train)
@@ -191,9 +198,9 @@ class PreTraining():
         test_dataset = utils.EEGContrastiveDataset(pair_one_test, pair_two_test, labels_test)
 
         # Create dataloaders
-        train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-        val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
-        test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+        val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+        test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
         # Print shapes
         print("Training data shapes: ", pair_one_train.shape, pair_two_train.shape, labels_train.shape)
@@ -202,8 +209,7 @@ class PreTraining():
         print("EEG input dimension: ", eeg_input_dim)
 
         # Initialize model
-        model = Networks.SiameseNetwork_v3(840, 768).to(
-            device)  # Linear = 7*vector size, Conv = hard coded for each type, LSTM = vector size 1, vector size 2
+        model = Networks.SiameseNetwork_v3(840, 768).to(device)  # Linear = 7*vector size, Conv = hard coded for each type, LSTM = vector size 1, vector size 2
         criterion = ContrastiveLoss(margin=0.5)
         optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
