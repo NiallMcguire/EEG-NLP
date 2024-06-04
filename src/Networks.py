@@ -158,7 +158,7 @@ class SiameseNetwork_v2(nn.Module):
         super(SiameseNetwork_v2, self).__init__()
 
         ## Convolutional Layers
-        self.conv1 = nn.Conv1d(7, 32, kernel_size=3, padding=1)
+        self.conv1 = nn.Conv1d(7*840, 32, kernel_size=3, padding=1)
         self.conv2 = nn.Conv1d(32, 64, kernel_size=3, padding=1)
         self.conv3 = nn.Conv1d(64, 128, kernel_size=3, padding=1)
 
