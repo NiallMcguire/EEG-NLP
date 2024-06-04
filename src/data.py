@@ -348,6 +348,103 @@ class Data:
                 tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
                 return tensor_dataset
 
+    def NER_EEGtoEEG_create_paris(self, EEG_X, named_entity_class, max_positive_pairs=20000, max_negative_pairs=20000):
+        """
+        Create pairs of EEG samples and their contrastive labels with limits on the number of positive and negative pairs.
+
+        Args:
+        - EEG_X (array-like): Array of EEG samples.
+        - named_entity_class (array-like): Array of named entity labels for EEG samples.
+        - max_positive_pairs (int): Maximum number of positive pairs to include.
+        - max_negative_pairs (int): Maximum number of negative pairs to include.
+
+        Returns:
+        - pairs (list of tuples): List of tuples where each tuple contains a pair of EEG samples.
+        - labels (array-like): Array of contrastive labels indicating similarity (1) or dissimilarity (0).
+        """
+        pairs = []
+        labels = []
+
+        num_samples = len(EEG_X)
+        positive_pairs = 0
+        negative_pairs = 0
+
+        for i in range(num_samples):
+            for j in range(i + 1, num_samples):
+                EEG_sample_i = EEG_X[i]
+                EEG_sample_j = EEG_X[j]
+                label_i = named_entity_class[i]
+                label_j = named_entity_class[j]
+
+                if label_i == label_j:
+                    # Positive pair
+                    if positive_pairs < max_positive_pairs:
+                        pairs.append((EEG_sample_i, EEG_sample_j))
+                        labels.append(1)
+                        positive_pairs += 1
+                else:
+                    # Negative pair
+                    if negative_pairs < max_negative_pairs:
+                        pairs.append((EEG_sample_i, EEG_sample_j))
+                        labels.append(0)
+                        negative_pairs += 1
+
+        return np.array(pairs), np.array(labels)
+
+    def NER_EEGtoBERT_create_pairs(self, EEG_X, NE_Expanded, named_entity_class, max_positive_pairs=20000,
+                                   max_negative_pairs=20000):
+        """
+        Create pairs of EEG samples and BERT text embeddings with contrastive labels.
+
+        Args:
+        - EEG_X (array-like): Array of EEG samples.
+        - NE_Expanded (array-like): Array of BERT embeddings corresponding to named entities.
+        - named_entity_class (array-like): Array of named entity labels for EEG samples.
+        - max_positive_pairs (int): Maximum number of positive pairs to include.
+        - max_negative_pairs (int): Maximum number of negative pairs to include.
+
+        Returns:
+        - pairs (list of tuples): List of tuples where each tuple contains an EEG sample and a BERT embedding.
+        - labels (array-like): Array of contrastive labels indicating similarity (1) or dissimilarity (0).
+        """
+        labels = []
+
+        EEG_pair = []
+        BERT_pair = []
+
+        num_samples = len(EEG_X)
+        positive_pairs = 0
+        negative_pairs = 0
+
+        for i in range(num_samples):
+            EEG_sample_i = EEG_X[i]
+            label_i = named_entity_class[i]
+
+            for j in range(num_samples):
+                BERT_embedding_j = NE_Expanded[j]
+                label_j = named_entity_class[j]
+
+                if label_i == label_j:
+                    # Positive pair
+                    if positive_pairs < max_positive_pairs:
+                        # pairs.append((EEG_sample_i, BERT_embedding_j))
+                        EEG_pair.append(EEG_sample_i)
+                        BERT_pair.append(BERT_embedding_j)
+
+                        labels.append(1)
+                        positive_pairs += 1
+                else:
+                    # Negative pair
+                    if negative_pairs < max_negative_pairs:
+                        # pairs.append((EEG_sample_i, BERT_embedding_j))
+                        EEG_pair.append(EEG_sample_i)
+                        BERT_pair.append(BERT_embedding_j)
+
+                        labels.append(0)
+                        negative_pairs += 1
+
+        return np.array(EEG_pair), np.array(BERT_pair), np.array(labels)
+
 
 
 
