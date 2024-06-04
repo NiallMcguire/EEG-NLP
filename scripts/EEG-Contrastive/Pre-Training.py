@@ -188,7 +188,7 @@ if __name__ == "__main__":
     print("Training data shapes: ", pair_one_train.shape, pair_two_train.shape, labels_train.shape)
 
     # Initialize model
-    model = Networks.SiameseNetwork_v2().to(device)
+    model = Networks.SiameseNetwork_v3().to(device)
     criterion = ContrastiveLoss(margin=0.5)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
