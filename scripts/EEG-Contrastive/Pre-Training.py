@@ -206,8 +206,8 @@ if __name__ == "__main__":
 
     # Create dataloaders
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=32, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
+    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
     # Print shapes
     print("Training data shapes: ", pair_one_train.shape, pair_two_train.shape, labels_train.shape)
