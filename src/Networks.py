@@ -165,7 +165,7 @@ class SiameseNetwork_v1(nn.Module):
         else:
             output1 = self.forward_once(input1)
             output2 = self.forward_second(input2)
-        return output1, output2
+            return output1, output2
 
 
 class SiameseNetwork_v2(nn.Module):
