@@ -17,7 +17,7 @@
 #SBATCH --account=moshfeghi-pmwc
 #
 # Specify (hard) runtime (HH:MM:SS)
-#SBATCH --time=10:00:00
+#SBATCH --time=1:00:00
 #SBATCH --mail-user=niall.mcguire@strath.ac.uk
 #SBATCH --mail-type=END
 # Job name
