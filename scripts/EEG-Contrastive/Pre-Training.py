@@ -148,7 +148,7 @@ if __name__ == "__main__":
 
     max_positive_pairs = 20000
     max_negative_pairs = 20000
-    contrastive_learning_setting = 'EEGtoEEG' #EEGtoBERT, EEGtoEEG
+    contrastive_learning_setting = 'EEGtoBERT' #EEGtoBERT, EEGtoEEG
     vector_size = 768
     parameters['vector_size'] = vector_size
     ner_bert = utils.NER_BERT()
