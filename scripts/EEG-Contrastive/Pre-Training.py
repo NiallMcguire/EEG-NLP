@@ -200,7 +200,7 @@ if __name__ == "__main__":
     print("EEG input dimension: ", eeg_input_dim)
 
     # Initialize model
-    model = Networks.SiameseNetwork_v3(7, 7).to(device) #Linear = 7*vector size, Conv = hard coded for each type, LSTM = 7?
+    model = Networks.SiameseNetwork_v3(840, 768).to(device) #Linear = 7*vector size, Conv = hard coded for each type, LSTM = 7?
     criterion = ContrastiveLoss(margin=0.5)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
