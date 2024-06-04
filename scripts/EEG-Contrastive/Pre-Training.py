@@ -104,7 +104,7 @@ def NER_EEGtoBERT_create_pairs(EEG_X, NE_Expanded, named_entity_class, max_posit
                     labels.append(0)
                     negative_pairs += 1
 
-    return np.array(pairs), np.array(labels)
+    return pairs, np.array(labels)
 
 # Contrastive Loss
 class ContrastiveLoss(nn.Module):
