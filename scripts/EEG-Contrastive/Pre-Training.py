@@ -200,13 +200,13 @@ if __name__ == "__main__":
         'validation_size': [0.1],
         'max_positive_pairs': [20000],
         'max_negative_pairs': [20000],
-        'contrastive_learning_setting': ['EEGtoBERT'],  # 'EEGtoBERT', 'EEGtoEEG
+        'contrastive_learning_setting': ['EEGtoBERT', 'EEGtoBERT'],  # 'EEGtoBERT', 'EEGtoEEG
         'batch_size': [64],
         'loss_function': ["ContrastiveLossEuclidNER"],
         'margin': [0.5],
         'optimizer': ["Adam"],
         'learning_rate': [0.0001],
-        'model_name': ['SiameseNetwork_v1']
+        'model_name': ['SiameseNetwork_v1', 'SiameseNetwork_v2', 'SiameseNetwork_v3']
     }
 
     d = data.Data()
