@@ -17,7 +17,7 @@ import datetime
 from torch.utils.data import Dataset, DataLoader
 
 
-def create_limited_contrastive_pairs(EEG_X, named_entity_class, max_positive_pairs=20000, max_negative_pairs=20000):
+def NER_EEGtoEEG_create_paris(EEG_X, named_entity_class, max_positive_pairs=20000, max_negative_pairs=20000):
     """
     Create pairs of EEG samples and their contrastive labels with limits on the number of positive and negative pairs.
 
@@ -76,23 +76,24 @@ if __name__ == "__main__":
 
     parameters = {}
 
-    num_negative_pairs_per_positive = 1
+    max_positive_pairs = 20000
+    max_negative_pairs = 20000
+    contrastive_learning_setting = 'EEGtoEEG' #EEGtoBERT
     vector_size = 768
     parameters['vector_size'] = vector_size
     ner_bert = utils.NER_BERT()
-    #NE_embedded = ner_bert.get_embeddings(NE)
 
-    #print(len(NE))
-
-    #NE_expanded = util.NER_expanded_NER_list(EEG_segments, NE_embedded, vector_size)
-    #NE_expanded = np.array(NE_expanded)
+    if contrastive_learning_setting == "EEGtoBERT":
+        NE_embedded = ner_bert.get_embeddings(NE)
+        NE_expanded = util.NER_expanded_NER_list(EEG_segments, NE_embedded, vector_size)
+        NE_expanded = np.array(NE_expanded)
 
     EEG_X, named_entity_class = util.NER_padding_x_y(EEG_segments, Classes)
     EEG_X = np.array(EEG_X)
     EEG_X = util.NER_reshape_data(EEG_X)
     named_entity_class_categorical = util.encode_labels(named_entity_class)
 
-    pairs, labels = create_limited_contrastive_pairs(EEG_X, named_entity_class)
+    pairs, labels = NER_EEGtoEEG_create_paris(EEG_X, named_entity_class, max_positive_pairs, max_negative_pairs)
 
     print(len(pairs))
 
