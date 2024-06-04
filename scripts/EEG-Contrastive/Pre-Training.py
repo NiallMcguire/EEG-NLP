@@ -148,7 +148,7 @@ if __name__ == "__main__":
 
     max_positive_pairs = 20000
     max_negative_pairs = 20000
-    contrastive_learning_setting = 'EEGtoBERT' #EEGtoBERT, EEGtoEEG
+    contrastive_learning_setting = 'EEGtoEEG' #EEGtoBERT, EEGtoEEG
     vector_size = 768
     parameters['vector_size'] = vector_size
     ner_bert = utils.NER_BERT()
@@ -200,7 +200,7 @@ if __name__ == "__main__":
     print("EEG input dimension: ", eeg_input_dim)
 
     # Initialize model
-    model = Networks.SiameseNetwork_v1(pair_one_train.shape[2], pair_two_train.shape[2]).to(device)
+    model = Networks.SiameseNetwork_v1(pair_one_train.shape[2]).to(device)
     criterion = ContrastiveLoss(margin=0.5)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
