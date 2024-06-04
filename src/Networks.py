@@ -153,41 +153,51 @@ class SiameseNetwork_v1(nn.Module):
         return output1, output2
 
 
+
+
 class SiameseNetwork_v2(nn.Module):
     def __init__(self):
         super(SiameseNetwork_v2, self).__init__()
 
-        ## Convolutional Layers
-        self.conv1 = nn.Conv1d(7*840, 32, kernel_size=3, padding=1)
-        self.conv2 = nn.Conv1d(32, 64, kernel_size=3, padding=1)
-        self.conv3 = nn.Conv1d(64, 128, kernel_size=3, padding=1)
+        # First convolutional layer
+        self.conv1 = nn.Conv1d(in_channels=7, out_channels=32, kernel_size=3, padding=1)
+        self.bn1 = nn.BatchNorm1d(32)
+        self.relu1 = nn.ReLU()
 
-        ## Fully Connected Layers
-        self.fc1 = nn.Linear(128 * 210, 512)  # Adjust the input size here
-        self.fc2 = nn.Linear(512, 128)
-        self.fc3 = nn.Linear(128, 64)
+        # Second convolutional layer
+        self.conv2 = nn.Conv1d(in_channels=32, out_channels=64, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm1d(64)
+        self.relu2 = nn.ReLU()
+
+        # Max pooling layer
+        self.max_pool = nn.MaxPool1d(kernel_size=2, stride=2)
+
+        # Fully connected layers
+        self.fc1 = nn.Linear(64 * 420, 128)
+        self.relu3 = nn.ReLU()
+        self.fc2 = nn.Linear(128, 10)  # Adjust the output size based on your task
 
     def forward_once(self, x):
-        ## Reshape input to [batch_size, 7 * 840]
-        x = x.view(x.size(0), -1)
+        # Convolutional layers
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu1(x)
 
-        print(x.size())
+        x = self.conv2(x)
+        x = self.bn2(x)
+        x = self.relu2(x)
 
+        # Max pooling
+        x = self.max_pool(x)
 
+        # Flatten the tensor
+        x = x.view(-1, 64 * 420)
 
-        ## Convolutional Layers
-        x = F.relu(self.conv1(x))
-        x = F.max_pool1d(x, kernel_size=2, stride=2)
-        x = F.relu(self.conv2(x))
-        x = F.max_pool1d(x, kernel_size=2, stride=2)
-        x = F.relu(self.conv3(x))
-        x = F.max_pool1d(x, kernel_size=2, stride=2)
+        # Fully connected layers
+        x = self.fc1(x)
+        x = self.relu3(x)
+        x = self.fc2(x)
 
-        ## Flatten and Fully Connected Layers
-        x = x.view(x.size(0), -1)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
         return x
 
     def forward(self, input1, input2):
