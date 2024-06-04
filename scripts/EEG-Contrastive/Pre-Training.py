@@ -107,9 +107,34 @@ def NER_EEGtoBERT_create_pairs(EEG_X, NE_Expanded, named_entity_class, max_posit
     return np.array(pairs), np.array(labels)
 
 
+# Siamese Network Model
+class SiameseNetwork(nn.Module):
+    def __init__(self, input_dim):
+        super(SiameseNetwork, self).__init__()
+        self.conv1 = nn.Conv1d(input_dim, 128, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv1d(128, 256, kernel_size=3, padding=1)
+        self.fc1 = nn.Linear(256 * 7, 512)
+        self.fc2 = nn.Linear(512, 128)
+
+    def forward_once(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = x.view(x.size(0), -1)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+    def forward(self, input1, input2):
+        output1 = self.forward_once(input1)
+        output2 = self.forward_once(input2)
+        return output1, output2
+
 if __name__ == "__main__":
     #data_path = r"C:\Users\gxb18167\PycharmProjects\EEG-NLP\NER.pkl"
     data_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
+
+    # Device configuration
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     d = data.Data()
     util = utils.Utils()
@@ -170,6 +195,47 @@ if __name__ == "__main__":
 
     # Print shapes
     print("Training data shapes: ", pair_one_train.shape, pair_two_train.shape, labels_train.shape)
+
+    # Initialize model
+    model = SiameseNetwork(7).to(device)
+    criterion = Loss.ContrastiveLossEuclidNER(margin=0.5)
+
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+
+    # Training loop
+    num_epochs = 20
+    for epoch in range(num_epochs):
+        model.train()
+        total_loss = 0
+        for batch in train_loader:
+            pair_one_batch, pair_two_batch, label_batch = batch
+            pair_one_batch, pair_two_batch, label_batch = pair_one_batch.cuda(), pair_two_batch.cuda(), label_batch.cuda()
+
+            optimizer.zero_grad()
+            output1, output2 = model(pair_one_batch, pair_two_batch)
+            loss = criterion(output1, output2, label_batch)
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item()
+
+        print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {total_loss / len(train_loader):.4f}")
+
+        # Validation
+        model.eval()
+        with torch.no_grad():
+            val_loss = 0
+            for batch in val_loader:
+                pair_one_batch, pair_two_batch, label_batch = batch
+                pair_one_batch, pair_two_batch, label_batch = pair_one_batch.cuda(), pair_two_batch.cuda(), label_batch.cuda()
+                output1, output2 = model(pair_one_batch, pair_two_batch)
+                loss = criterion(output1, output2, label_batch)
+                val_loss += loss.item()
+
+            print(f"Validation Loss: {val_loss / len(val_loader):.4f}")
+
+
+
+
 
 
 
