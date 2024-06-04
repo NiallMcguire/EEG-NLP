@@ -134,22 +134,30 @@ class EEGToBERTModel_v4(nn.Module):
 import torch.nn as nn
 
 class SiameseNetwork_v1(nn.Module):
-    def __init__(self, input_dim):
+    def __init__(self, pair_one_input_dim, pair_two_input_dim):
         super(SiameseNetwork_v1, self).__init__()
-        self.fc1 = nn.Linear(input_dim, 512)
+        self.fc1 = nn.Linear(pair_one_input_dim, 512)
+        self.fc2 = nn.Linear(pair_two_input_dim, 512)
         self.fc3 = nn.Linear(512, 128)
         self.fc4 = nn.Linear(128, 64)
 
     def forward_once(self, x):
         x = x.view(x.size(0), -1)
         x = F.relu(self.fc1(x))
+        x = F.relu(self.fc3(x))
+        x = self.fc4(x)
+        return x
+
+    def forward_twice(self, x):
+        x = x.view(x.size(0), -1)
         x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = F.relu(self.fc3(x))
+        x = self.fc4(x)
         return x
 
     def forward(self, input1, input2):
         output1 = self.forward_once(input1)
-        output2 = self.forward_once(input2)
+        output2 = self.forward_twice(input2)
         return output1, output2
 
 
