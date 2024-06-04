@@ -17,7 +17,7 @@
 #SBATCH --account=moshfeghi-pmwc
 #
 # Specify (hard) runtime (HH:MM:SS)
-#SBATCH --time=10:00:00
+#SBATCH --time=05:00:00
 #SBATCH --mail-user=niall.mcguire@strath.ac.uk
 #SBATCH --mail-type=END
 # Job name
@@ -42,7 +42,7 @@ module load anaconda/python-3.9.7/2021.11
 
 #Modify the line below to run your program. This is an example
 #=========================================================
-python /users/gxb18167/EEG-NLP/scripts/EEG-NER/Grid_Pre_Training_NER.py
+python /users/gxb18167/EEG-NLP/scripts/EEG-Contrastive/Pre-Training.py
 
 # Do not change the line below
 #=========================================================
