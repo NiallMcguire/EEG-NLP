@@ -163,7 +163,7 @@ class SiameseNetwork_v2(nn.Module):
         self.conv3 = nn.Conv1d(64, 128, kernel_size=3, padding=1)
 
         ## Fully Connected Layers
-        self.fc1 = nn.Linear(128 * 840, 512)
+        self.fc1 = nn.Linear(128 * 420, 512)  # Adjust the input size here
         self.fc2 = nn.Linear(512, 128)
         self.fc3 = nn.Linear(128, 64)
 
