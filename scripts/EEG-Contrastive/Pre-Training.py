@@ -38,6 +38,8 @@ class PreTraining():
         max_negative_pairs = self.parameters['max_negative_pairs']
         contrastive_learning_setting = self.parameters['contrastive_learning_setting']
 
+
+        epochs = self.parameters['epochs']
         batch_size = self.parameters['batch_size']
         test_size = self.parameters['test_size']
         validation_size = self.parameters['validation_size']
@@ -46,6 +48,8 @@ class PreTraining():
         margin = self.parameters['margin']
         optimizer = self.parameters['optimizer']
         learning_rate = self.parameters['learning_rate']
+        model_name = self.parameters['model_name']
+        patience = self.parameters['patience']
 
 
         ner_bert = utils.NER_BERT()
@@ -103,16 +107,20 @@ class PreTraining():
 
 
         # Initialize model
-        model = Networks.SiameseNetwork_v3(840, 768).to(device)  # Linear = 7*vector size, Conv = hard coded for each type, LSTM = vector size 1, vector size 2
+        if model_name == "SiameseNetwork_v1":
+            model = Networks.SiameseNetwork_v1(7*840, 7*768).to(device)
+        elif model_name == "SiameseNetwork_v2":
+            model = Networks.SiameseNetwork_v2().to(device)
+        elif model_name == "SiameseNetwork_v3":
+            model = Networks.SiameseNetwork_v3(840, 768).to(device)
 
         if optimizer == "Adam":
-            optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+            optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
         # Training loop
-        num_epochs = 100
+        num_epochs = epochs
         # early stopping
         best_val_loss = float('inf')
-        patience = 5
         counter = 0
         for epoch in range(num_epochs):
             model.train()
