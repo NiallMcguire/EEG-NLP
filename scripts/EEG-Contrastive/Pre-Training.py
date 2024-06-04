@@ -165,8 +165,6 @@ if __name__ == "__main__":
         pair_one, pair_two, labels = NER_EEGtoBERT_create_pairs(EEG_X, NE_expanded, named_entity_class, max_positive_pairs, max_negative_pairs)
 
 
-
-
     elif contrastive_learning_setting == "EEGtoEEG":
         pairs, labels = NER_EEGtoEEG_create_paris(EEG_X, named_entity_class, max_positive_pairs, max_negative_pairs)
         print("Created EEG to EEG pairs of shape: ", pairs.shape)
