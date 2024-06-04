@@ -154,16 +154,20 @@ if __name__ == "__main__":
         NE_expanded = util.NER_expanded_NER_list(EEG_segments, NE_embedded, vector_size)
         NE_expanded = np.array(NE_expanded)
         pairs, labels = NER_EEGtoBERT_create_pairs(EEG_X, NE_expanded, named_entity_class, max_positive_pairs, max_negative_pairs)
+        pair_one = pairs[0]
+        pair_two = pairs[1]
+        print("length of pair one and pair two: ", len(pair_one), len(pair_two))
 
 
     elif contrastive_learning_setting == "EEGtoEEG":
         pairs, labels = NER_EEGtoEEG_create_paris(EEG_X, named_entity_class, max_positive_pairs, max_negative_pairs)
         print("Created EEG to EEG pairs of shape: ", pairs.shape)
+        pair_one = pairs[:, 0]
+        pair_two = pairs[:, 1]
 
 
     # Convert to tensors
-    pair_one = pairs[:, 0]
-    pair_two = pairs[:, 1]
+
     labels = torch.tensor(labels, dtype=torch.float32)
     pair_one = torch.tensor(pair_one, dtype=torch.float32)
     pair_two = torch.tensor(pair_two, dtype=torch.float32)
