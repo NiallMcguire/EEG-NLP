@@ -139,21 +139,8 @@ if __name__ == "__main__":
 
     elif contrastive_learning_setting == "EEGtoEEG":
         pairs, labels = NER_EEGtoEEG_create_paris(EEG_X, named_entity_class, max_positive_pairs, max_negative_pairs)
+        print("Created EEG to EEG pairs of shape: ", pairs.shape)
 
-        print(len(pairs))
 
-
-    '''
-    if parameters['Contrastive_label_setting'] == 'EEGtoBERT':
-        # Create positive and negative pairs
-        positive_pairs = [(EEG_X[i], NE_expanded[i], 1) for i in range(len(EEG_X))]
-
-        negative_pairs = []
-        for i in range(len(EEG_X)):
-            negative_indices = sample([j for j in range(len(NE_expanded)) if j != i],
-                                      num_negative_pairs_per_positive)
-            for neg_index in negative_indices:
-                negative_pairs.append((EEG_X[i], NE_expanded[neg_index], 0))
-    '''
 
 
