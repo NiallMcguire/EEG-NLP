@@ -151,7 +151,7 @@ class PreTraining():
         max_negative_pairs = self.parameters['max_negative_pairs']
 
 
-        contrastive_learning_setting = 'EEGtoBERT'  # EEGtoBERT, EEGtoEEG
+        contrastive_learning_setting = self.parameters['contrastive_learning_setting']
         ner_bert = utils.NER_BERT()
 
         EEG_X, named_entity_class = util.NER_padding_x_y(EEG_segments, Classes)
