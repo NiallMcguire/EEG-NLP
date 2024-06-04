@@ -171,9 +171,6 @@ class SiameseNetwork_v2(nn.Module):
         ## Reshape input to [batch_size, 7 * 840]
         x = x.view(x.size(0), -1)
 
-        ## Reshape to [batch_size, 7, 840] for convolutional layers
-        x = x.view(x.size(0), 7, 840)
-
         print(x.size())
 
 
