@@ -147,29 +147,20 @@ class PreTraining():
 
         NE, EEG_segments, Classes = self.data
 
+        max_positive_pairs = self.parameters['max_positive_pairs']
+        max_negative_pairs = self.parameters['max_negative_pairs']
 
-        max_positive_pairs = 20000
-        max_negative_pairs = 20000
-        contrastive_learning_setting = 'EEGtoBERT'  # EEGtoBERT, EEGtoEEG
-        vector_size = 768
-        parameters['vector_size'] = vector_size
-        ner_bert = utils.NER_BERT()
 
-        max_positive_pairs = 20000
-        max_negative_pairs = 20000
         contrastive_learning_setting = 'EEGtoBERT'  # EEGtoBERT, EEGtoEEG
-        vector_size = 768
-        parameters['vector_size'] = vector_size
         ner_bert = utils.NER_BERT()
 
         EEG_X, named_entity_class = util.NER_padding_x_y(EEG_segments, Classes)
         EEG_X = np.array(EEG_X)
         EEG_X = util.NER_reshape_data(EEG_X)
-        named_entity_class_categorical = util.encode_labels(named_entity_class)
 
         if contrastive_learning_setting == "EEGtoBERT":
             NE_embedded = ner_bert.get_embeddings(NE)
-            NE_expanded = util.NER_expanded_NER_list(EEG_segments, NE_embedded, vector_size)
+            NE_expanded = util.NER_expanded_NER_list(EEG_segments, NE_embedded, 768)
             NE_expanded = np.array(NE_expanded)
             pair_one, pair_two, labels = NER_EEGtoBERT_create_pairs(EEG_X, NE_expanded, named_entity_class,
                                                                     max_positive_pairs, max_negative_pairs)
@@ -271,7 +262,23 @@ if __name__ == "__main__":
     #data_path = r"C:\Users\gxb18167\PycharmProjects\EEG-NLP\NER.pkl"
     data_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
 
-    parameters = {}
+
+    param_grid = {
+        'epochs': [100],
+        'patience': [5],
+        'test_size': [0.2],
+        'validation_size': [0.1],
+        'max_positive_pairs': [20000],
+        'max_negative_pairs': [20000],
+        'contrastive_learning_setting': ['EEGtoBERT'],  # 'EEGtoBERT', 'EEGtoEEG
+
+        'batch_size': [32],
+        'loss_function': ["ContrastiveLossEuclidNER"],
+        'margin': [0.5],
+        'optimizer': ["Adam"],
+        'learning_rate': [0.0001],
+        'model_name': ['EEGToBERTModel_v4', 'EEGToBERTModel_v3']
+    }
 
     d = data.Data()
     util = utils.Utils()
