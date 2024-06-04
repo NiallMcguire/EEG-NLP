@@ -111,18 +111,15 @@ def NER_EEGtoBERT_create_pairs(EEG_X, NE_Expanded, named_entity_class, max_posit
 class SiameseNetwork(nn.Module):
     def __init__(self, input_dim, hidden_dim=128):
         super(SiameseNetwork, self).__init__()
-        self.conv1 = nn.Conv1d(input_dim, 128, kernel_size=3, padding=1)
-        self.conv2 = nn.Conv1d(128, 256, kernel_size=3, padding=1)
-        self.fc1 = nn.Linear(256 * 840, 512)
+        self.fc1 = nn.Linear(input_dim, 512)
         self.fc2 = nn.Linear(512, 128)
+        self.fc3 = nn.Linear(128, 64)
 
     def forward_once(self, x):
-        x = x.permute(0, 2, 1)  # Permute to [batch_size, 840, 7] for Conv1d
-        x = F.relu(self.conv1(x))
-        x = F.relu(self.conv2(x))
-        x = x.view(x.size(0), -1)  # Flatten to [batch_size, 256 * 840]
+        x = x.view(x.size(0), -1)  # Flatten to [batch_size, 7 * 840]
         x = F.relu(self.fc1(x))
-        x = self.fc2(x)
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
         return x
 
     def forward(self, input1, input2):
