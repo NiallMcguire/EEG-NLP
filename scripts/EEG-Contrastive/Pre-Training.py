@@ -109,17 +109,18 @@ def NER_EEGtoBERT_create_pairs(EEG_X, NE_Expanded, named_entity_class, max_posit
 
 # Siamese Network Model
 class SiameseNetwork(nn.Module):
-    def __init__(self, input_dim):
+    def __init__(self, input_dim, hidden_dim=128):
         super(SiameseNetwork, self).__init__()
         self.conv1 = nn.Conv1d(input_dim, 128, kernel_size=3, padding=1)
         self.conv2 = nn.Conv1d(128, 256, kernel_size=3, padding=1)
-        self.fc1 = nn.Linear(256 * 7, 512)
+        self.fc1 = nn.Linear(256 * 840, 512)
         self.fc2 = nn.Linear(512, 128)
 
     def forward_once(self, x):
+        x = x.permute(0, 2, 1)  # Permute to [batch_size, 840, 7] for Conv1d
         x = F.relu(self.conv1(x))
         x = F.relu(self.conv2(x))
-        x = x.view(x.size(0), -1)
+        x = x.view(x.size(0), -1)  # Flatten to [batch_size, 256 * 840]
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
         return x
@@ -128,6 +129,21 @@ class SiameseNetwork(nn.Module):
         output1 = self.forward_once(input1)
         output2 = self.forward_once(input2)
         return output1, output2
+
+# Contrastive Loss
+class ContrastiveLoss(nn.Module):
+    def __init__(self, margin=1.0):
+        super(ContrastiveLoss, self).__init__()
+        self.margin = margin
+
+    def forward(self, output1, output2, label):
+        euclidean_distance = F.pairwise_distance(output1, output2)
+        loss_contrastive = torch.mean(
+            (1 - label) * torch.pow(euclidean_distance, 2) +
+            (label) * torch.pow(torch.clamp(self.margin - euclidean_distance, min=0.0), 2)
+        )
+        return loss_contrastive
+
 
 if __name__ == "__main__":
     #data_path = r"C:\Users\gxb18167\PycharmProjects\EEG-NLP\NER.pkl"
@@ -198,7 +214,7 @@ if __name__ == "__main__":
 
     # Initialize model
     model = SiameseNetwork(7).to(device)
-    criterion = Loss.ContrastiveLossEuclidNER(margin=0.5)
+    criterion = ContrastiveLoss(margin=0.5)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
     # Training loop
