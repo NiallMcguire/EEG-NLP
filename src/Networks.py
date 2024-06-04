@@ -144,13 +144,27 @@ class SiameseNetwork_v1(nn.Module):
     def forward_once(self, x):
         x = x.view(x.size(0), -1)
         x = F.relu(self.fc1(x))
+        x = F.relu(self.fc3(x))
+        x = self.fc4(x)
+        return x
+
+    def forward_second(self, x):
+        x = x.view(x.size(0), -1)
         x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = F.relu(self.fc3(x))
+        x = self.fc4(x)
         return x
 
     def forward(self, input1, input2):
-        output1 = self.forward_once(input1)
-        output2 = self.forward_once(input2)
+
+        if input1.size(2) == input2.size(2):
+            output1 = self.forward_once(input1)
+            output2 = self.forward_second(input2)
+            return output1, output2
+
+        else:
+            output1 = self.forward_once(input1)
+            output2 = self.forward_second(input2)
         return output1, output2
 
 
