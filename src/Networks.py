@@ -177,6 +177,9 @@ class SiameseNetwork_v2(nn.Module):
         # Fully connected layers
         self.fc1 = nn.Linear(64 * 420, 128)
         self.fc2 = nn.Linear(128, 64)  # Adjust the output size based on your task
+        self.fc3 = nn.Linear(64 * 384, 128)
+
+
 
     def forward_once(self, x):
         # Convolutional layers
@@ -194,10 +197,34 @@ class SiameseNetwork_v2(nn.Module):
         x = self.fc2(x)
         return x
 
+    def forward_twice(self, x):
+        # Convolutional layers
+        x = self.conv1(x)
+        x = self.conv2(x)
+
+        # Max pooling
+        x = self.max_pool(x)
+
+        # Flatten the tensor
+        x = x.view(-1, 64 * 384)  # Adjust the size based on the new input dimensions
+
+        # Fully connected layers
+        x = self.fc3(x)
+        x = self.fc2(x)
+        return x
+
+
+
     def forward(self, input1, input2):
-        output1 = self.forward_once(input1)
-        output2 = self.forward_once(input2)
-        return output1, output2
+
+        if input1.size(2) == input2.size(2):
+            output1 = self.forward_once(input1)
+            output2 = self.forward_once(input2)
+            return output1, output2
+        else:
+            output1 = self.forward_once(input1)
+            output2 = self.forward_twice(input2)
+            return output1, output2
 
 class SiameseNetwork_v3(nn.Module):
     def __init__(self, input_dim):
