@@ -172,6 +172,8 @@ class PreTraining():
 if __name__ == "__main__":
     #data_path = r"C:\Users\gxb18167\PycharmProjects\EEG-NLP\NER.pkl"
     data_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
+    model_save_path = "/users/gxb18167/configs/model_checkpoints/"
+    config_save_path = "/users/gxb18167/configs/"
 
 
     param_grid = {
@@ -202,7 +204,7 @@ if __name__ == "__main__":
     param_combinations = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
     for param in param_combinations:
-        PreTraining = PreTraining((NE, EEG_segments, Classes), model_save_path=None, config_save_path=None, kwargs=param)
+        PreTraining = PreTraining((NE, EEG_segments, Classes), model_save_path=model_save_path, config_save_path=config_save_path, kwargs=param)
         PreTraining.train()
 
 
