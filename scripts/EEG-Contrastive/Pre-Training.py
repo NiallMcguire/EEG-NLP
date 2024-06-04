@@ -199,7 +199,6 @@ if __name__ == "__main__":
     # Initialize model
     model = SiameseNetwork(7).to(device)
     criterion = Loss.ContrastiveLossEuclidNER(margin=0.5)
-
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
     # Training loop
@@ -209,7 +208,7 @@ if __name__ == "__main__":
         total_loss = 0
         for batch in train_loader:
             pair_one_batch, pair_two_batch, label_batch = batch
-            pair_one_batch, pair_two_batch, label_batch = pair_one_batch.cuda(), pair_two_batch.cuda(), label_batch.cuda()
+            pair_one_batch, pair_two_batch, label_batch = pair_one_batch.to(device), pair_two_batch.to(device), label_batch.to(device)
 
             optimizer.zero_grad()
             output1, output2 = model(pair_one_batch, pair_two_batch)
