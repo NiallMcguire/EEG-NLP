@@ -187,8 +187,9 @@ if __name__ == "__main__":
     # Print shapes
     print("Training data shapes: ", pair_one_train.shape, pair_two_train.shape, labels_train.shape)
 
+    eeg_input_dim = pair_one_train.shape[2]
     # Initialize model
-    model = Networks.SiameseNetwork_v3().to(device)
+    model = Networks.SiameseNetwork_v3(eeg_input_dim).to(device)
     criterion = ContrastiveLoss(margin=0.5)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
