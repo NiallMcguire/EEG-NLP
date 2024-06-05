@@ -19,18 +19,21 @@ from torch.utils.data import Dataset, DataLoader
 
 
 class PreTraining():
-    def __init__(self, Data, model_save_path, config_save_path, kwargs):
-        self.parameters = kwargs
-        self.data = Data
+    def __init__(self, model_save_path, config_save_path):
+        self.data = None
         self.model_save_path = model_save_path
         self.config_save_path = config_save_path
         self.model = None
         self.device = None
+        self.parameters = None
 
-    def train(self):
+    def train(self, data, parameters):
+        self.data = data
+        self.parameters = parameters
         # Device configuration
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.device = device
+
 
 
         NE, EEG_segments, Classes = self.data
@@ -220,9 +223,11 @@ if __name__ == "__main__":
     keys, values = zip(*param_grid.items())
     param_combinations = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
+    PreTraining = PreTraining(model_save_path=model_save_path,
+                              config_save_path=config_save_path)
+
     for param in param_combinations:
-        PreTraining = PreTraining((NE, EEG_segments, Classes), model_save_path=model_save_path, config_save_path=config_save_path, kwargs=param)
-        PreTraining.train()
+        PreTraining.train((NE, EEG_segments, Classes), param)
 
 
 
