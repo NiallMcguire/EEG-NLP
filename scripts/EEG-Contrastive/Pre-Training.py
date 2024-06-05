@@ -113,11 +113,17 @@ class PreTraining():
 
         # Initialize model
         if model_name == "SiameseNetwork_v1":
-            model = Networks.SiameseNetwork_v1(7*840, 7*768).to(device)
+            if contrastive_learning_setting == "EEGtoBERT":
+                model = Networks.SiameseNetwork_v1(7*840, 7*768).to(device)
+            elif contrastive_learning_setting == "EEGtoEEG":
+                model = Networks.SiameseNetwork_v1(7*840, 7*840).to(device)
         elif model_name == "SiameseNetwork_v2":
             model = Networks.SiameseNetwork_v2().to(device)
         elif model_name == "SiameseNetwork_v3":
-            model = Networks.SiameseNetwork_v3(840, 768).to(device)
+            if contrastive_learning_setting == "EEGtoBERT":
+                model = Networks.SiameseNetwork_v3(840, 768).to(device)
+            elif contrastive_learning_setting == "EEGtoEEG":
+                model = Networks.SiameseNetwork_v3(840, 840).to(device)
 
         if optimizer == "Adam":
             optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
