@@ -203,7 +203,7 @@ if __name__ == "__main__":
         'validation_size': [0.1],
         'max_positive_pairs': [20000],
         'max_negative_pairs': [20000],
-        'contrastive_learning_setting': ['EEGtoBERT', 'EEGtoBERT'],  # 'EEGtoBERT', 'EEGtoEEG
+        'contrastive_learning_setting': ['EEGtoBERT', 'EEGtoEEG'],  # 'EEGtoBERT', 'EEGtoEEG
         'batch_size': [64],
         'loss_function': ["ContrastiveLossEuclidNER"],
         'margin': [0.5],
