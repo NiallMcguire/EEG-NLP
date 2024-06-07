@@ -190,6 +190,20 @@ class NER_Estimator:
                         print("Early stopping at epoch: ", epoch)
                         break
 
+        # evaluate on test set
+        model.eval()
+        with torch.no_grad():
+            correct = 0
+            total = 0
+            for batch in test_loader:
+                batch_x, batch_NE, batch_y = batch
+                batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+                outputs = model(batch_x)
+                _, predicted = torch.max(outputs, 1)
+                total += batch_y.size(0)
+                correct += (predicted == torch.argmax(batch_y, 1)).sum().item()
+            print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
+
 
 if __name__ == "__main__":
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
