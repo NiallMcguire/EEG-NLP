@@ -157,7 +157,7 @@ class Utils:
                                     pre_trained_model_name.append(data['model_name'])
                                     contrastive_learning_setting.append(data['contrastive_learning_setting'])
 
-        return pre_training_model_paths, pre_trained_model_name
+        return pre_training_model_paths, pre_trained_model_name, contrastive_learning_setting
 
 
 
