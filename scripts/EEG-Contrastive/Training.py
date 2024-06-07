@@ -57,6 +57,12 @@ class NER_Estimator:
         train_dataset, val_dataset = torch.utils.data.random_split(train_dataset,
                                                                    [train_size, int(len(train_dataset) * 0.2)])
 
+        # Create the train loader
+        train_loader = DataLoader(dataset=train_dataset, batch_size=32, shuffle=True)
+        test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
+        val_loader = DataLoader(dataset=val_dataset, batch_size=32, shuffle=False)
+
+
 
 
 
