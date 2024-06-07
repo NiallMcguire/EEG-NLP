@@ -123,6 +123,7 @@ class NER_Estimator:
             total_loss = 0
             for batch in train_loader:
                 batch_x, batch_y = batch
+                print(batch_x.shape, batch_y.shape)
                 batch_x, batch_y = batch_x.to(device), batch_y.to(device)
                 optimizer.zero_grad()
                 outputs = model(batch_x)
