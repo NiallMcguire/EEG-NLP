@@ -95,10 +95,44 @@ class NER_Estimator:
 
         train_tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
 
+        val_aligned_EEG = torch.empty((0, 64)).to(device)
+        val_aligned_y = torch.empty((0, 3)).to(device)
+
+        with torch.no_grad():
+            for batch in val_loader:
+                batch_EEG, batch_y = batch
+                batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
+                aligned_EEG_outputs = pre_train_model(batch_EEG, None)
+                val_aligned_EEG = torch.cat((val_aligned_EEG, aligned_EEG_outputs), dim=0)
+                val_aligned_y = torch.cat((val_aligned_y, batch_y), dim=0)
+
+        val_tensor_dataset = TensorDataset(val_aligned_EEG, val_aligned_y)
+
+
+        test_aligned_EEG = torch.empty((0, 64)).to(device)
+        test_aligned_y = torch.empty((0, 3)).to(device)
+
+        with torch.no_grad():
+            for batch in test_loader:
+                batch_EEG, batch_y = batch
+                batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
+                aligned_EEG_outputs = pre_train_model(batch_EEG, None)
+                test_aligned_EEG = torch.cat((test_aligned_EEG, aligned_EEG_outputs), dim=0)
+                test_aligned_y = torch.cat((test_aligned_y, batch_y), dim=0)
+
+        test_tensor_dataset = TensorDataset(test_aligned_EEG, test_aligned_y)
+
         print('Finished pre-training')
         print('Tensors data shape:', aligned_EEG.shape, aligned_y.shape)
 
+
         train_loader = DataLoader(dataset=train_tensor_dataset, batch_size=32, shuffle=True)
+        val_loader = DataLoader(dataset=val_tensor_dataset, batch_size=32, shuffle=False)
+        test_loader = DataLoader(dataset=test_tensor_dataset, batch_size=32, shuffle=False)
+
+        print("length of train_loader", len(train_loader))
+        print("length of val_loader", len(val_loader))
+        print("length of test_loader", len(test_loader))
 
         model = LinearMLP(64, 3)
 
