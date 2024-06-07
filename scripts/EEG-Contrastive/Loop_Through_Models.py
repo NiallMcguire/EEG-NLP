@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     target_parameters = {}
 
-    target_parameters['contrastive_learning_setting'] = ['EEGtoEEG']
+    target_parameters['contrastive_learning_setting'] = ['EEGtoEEG', 'EEGtoBERT']
     target_parameters['model_name'] = ['SiameseNetwork_v1', 'SiameseNetwork_v2', 'SiameseNetwork_v3']
 
 
