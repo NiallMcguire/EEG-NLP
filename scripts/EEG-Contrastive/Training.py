@@ -72,7 +72,7 @@ class NER_Estimator:
             for batch in train_loader:
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
-                aligned_EEG_outputs = pre_train_model(batch_EEG)
+                aligned_EEG_outputs = pre_train_model(batch_EEG, None)
                 aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
@@ -105,8 +105,6 @@ if __name__ == "__main__":
     # Generate all combinations of parameters
     keys, values = zip(*param_grid.items())
     param_combinations = [dict(zip(keys, v)) for v in itertools.product(*values)]
-
-
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
