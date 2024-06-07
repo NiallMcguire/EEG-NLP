@@ -134,7 +134,7 @@ class Utils:
                             model_names.append(model)
         return model_save_paths, model_names
 
-    def fine_target_models(self, config_path, args):
+    def find_target_models(self, config_path, args):
         # print files in the directory
         pre_training_model_paths = []
         pre_trained_model_name = []
