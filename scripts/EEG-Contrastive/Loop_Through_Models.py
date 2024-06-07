@@ -7,7 +7,6 @@ def fine_target_models(config_path, args):
     # print files in the directory
     pre_training_model_paths = []
 
-
     for file in os.listdir(config_path):
         # if file contains EEG_NER_Pre_Training and json file
         if 'EEG_NER_Pre_Training' in file and '.json' in file:

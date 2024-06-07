@@ -134,6 +134,27 @@ class Utils:
                             model_names.append(model)
         return model_save_paths, model_names
 
+    def fine_target_models(self, config_path, args):
+        # print files in the directory
+        pre_training_model_paths = []
+
+        for file in os.listdir(config_path):
+            # if file contains EEG_NER_Pre_Training and json file
+            if 'EEG_NER_Pre_Training' in file and '.json' in file:
+                # load json file
+                with open(config_path + file, 'r') as doc:
+                    data = json.load(doc)
+                    # check if the file contains the target parameters
+                    for key in args.keys():
+                        if key in data.keys():
+                            for value in args[key]:
+                                if value in data[key]:
+                                    # print model_save_path
+                                    print("Model matching target parameters saved @", data['model_save_path'])
+                                    pre_training_model_paths.append(data['model_save_path'])
+
+        return pre_training_model_paths
+
 
 
 class NER_BERT:
