@@ -39,7 +39,7 @@ class NER_Estimator:
         X = util.NER_reshape_data(X)
         y_categorical = util.encode_labels(y)
 
-        pre_train_model = Networks.SiameseNetwork_v3()
+        pre_train_model = Networks.SiameseNetwork_v2()
 
         # train test split
         X_train, X_test, y_train, y_test = train_test_split(X, y_categorical, test_size=0.2, random_state=42)
@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
     pre_training_target_parameters = {}
     pre_training_target_parameters['contrastive_learning_setting'] = ['EEGtoEEG']  # 'EEGtoBERT'
-    pre_training_target_parameters['model_name'] = ['SiameseNetwork_v3']
+    pre_training_target_parameters['model_name'] = ['SiameseNetwork_v2']
     list_of_pre_trained_models, pre_trained_model_names, contrastive_learning_setting = util.find_target_models(
         config_save_path, pre_training_target_parameters)
     param_grid['pre_trained_model_path'] = list_of_pre_trained_models
