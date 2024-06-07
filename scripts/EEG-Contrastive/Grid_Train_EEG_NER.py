@@ -312,7 +312,7 @@ if __name__ == "__main__":
 
     if param_grid['pre_training'] == [True]:
         pre_training_target_parameters = {}
-        pre_training_target_parameters['contrastive_learning_setting'] = ['EEGtoEEG'] #'EEGtoBERT'
+        pre_training_target_parameters['contrastive_learning_setting'] = ['EEGtoBERT'] #'EEGtoBERT'
         pre_training_target_parameters['model_name'] = ['SiameseNetwork_v1', 'SiameseNetwork_v2', 'SiameseNetwork_v3']
         list_of_pre_trained_models, pre_trained_model_names, contrastive_learning_setting = util.find_target_models(config_save_path, pre_training_target_parameters)
         param_grid['pre_trained_model_path'] = list_of_pre_trained_models

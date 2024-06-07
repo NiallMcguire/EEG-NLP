@@ -157,8 +157,11 @@ class SiameseNetwork_v1(nn.Module):
 
     def forward(self, input1, input2):
         output1 = self.forward_once(input1)
-        output2 = self.forward_twice(input2)
-        return output1, output2
+
+        if input2 is not None:
+            output2 = self.forward_twice(input2)
+            return output1, output2
+        return output1
 
 
 class SiameseNetwork_v2(nn.Module):
@@ -219,13 +222,19 @@ class SiameseNetwork_v2(nn.Module):
 
         if input1.size(2) == input2.size(2):
             output1 = self.forward_once(input1)
-            output2 = self.forward_once(input2)
-            return output1, output2
+
+            if input2 is not None:
+                output2 = self.forward_once(input2)
+                return output1, output2
+            return output1
         else:
             output1 = self.forward_once(input1)
-            output2 = self.forward_twice(input2)
-            return output1, output2
 
+            if input2 is not None:
+                output2 = self.forward_twice(input2)
+                return output1, output2
+
+            return output1
 class SiameseNetwork_v3(nn.Module):
     def __init__(self, pair_one_input_dim, pair_two_input_dim):
         super(SiameseNetwork_v3, self).__init__()
@@ -251,5 +260,8 @@ class SiameseNetwork_v3(nn.Module):
 
     def forward(self, input1, input2):
         output1 = self.forward_once(input1)
-        output2 = self.forward_twice(input2)
-        return output1, output2
+
+        if input2 is not None:
+            output2 = self.forward_twice(input2)
+            return output1, output2
+        return output1
