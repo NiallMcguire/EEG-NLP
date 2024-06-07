@@ -58,12 +58,21 @@ class NER_Estimator():
 
             # load pre-training config
             pre_trained_model_path = parameters['pre_trained_model_path']
+            pre_trained_model_name = parameters['pre_trained_model_name']
 
             # load pre-trained model
-            if parameters['pre_trained_model_name'] == 'EEGToBERTModel_v4':
-                pre_train_model = Networks.EEGToBERTModel_v4(input_size, 768)
-            elif parameters['pre_trained_model_name'] == 'EEGToBERTModel_v3':
-                pre_train_model = Networks.EEGToBERTModel_v3(input_size, 768)
+            if pre_trained_model_name == "SiameseNetwork_v1":
+                if contrastive_learning_setting == "EEGtoBERT":
+                    pre_train_model = Networks.SiameseNetwork_v1(7 * 840, 7 * 768).to(device)
+                elif contrastive_learning_setting == "EEGtoEEG":
+                    pre_train_model = Networks.SiameseNetwork_v1(7 * 840, 7 * 840).to(device)
+            elif pre_trained_model_name == "SiameseNetwork_v2":
+                pre_train_model = Networks.SiameseNetwork_v2().to(device)
+            elif pre_trained_model_name == "SiameseNetwork_v3":
+                if contrastive_learning_setting == "EEGtoBERT":
+                    pre_train_model = Networks.SiameseNetwork_v3(840, 768).to(device)
+                elif contrastive_learning_setting == "EEGtoEEG":
+                    pre_train_model = Networks.SiameseNetwork_v3(840, 840).to(device)
 
             pre_train_model.load_state_dict(torch.load(pre_trained_model_path))
 
@@ -272,10 +281,6 @@ class NER_Estimator():
 
 if __name__ == "__main__":
     # Define parameter grid for grid search
-
-
-
-
     param_grid = {
         'pre_training': [True],
         'evaluation': [True],
@@ -307,10 +312,12 @@ if __name__ == "__main__":
 
     if param_grid['pre_training'] == [True]:
         pre_training_target_parameters = {}
-        pre_training_target_parameters['contrastive_learning_setting'] = ['EEGtoEEG', 'EEGtoBERT']
+        pre_training_target_parameters['contrastive_learning_setting'] = ['EEGtoEEG'] #'EEGtoBERT'
         pre_training_target_parameters['model_name'] = ['SiameseNetwork_v1', 'SiameseNetwork_v2', 'SiameseNetwork_v3']
-        list_of_pre_trained_models = util.fine_target_models(config_save_path, param_grid)
+        list_of_pre_trained_models, pre_trained_model_names, contrastive_learning_setting = util.fine_target_models(config_save_path, param_grid)
         param_grid['pre_trained_model_path'] = list_of_pre_trained_models
+        param_grid['pre_trained_model_name'] = pre_trained_model_names
+        param_grid['contrastive_learning_setting'] = contrastive_learning_setting
 
 
     # Generate all combinations of parameters

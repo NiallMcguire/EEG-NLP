@@ -137,6 +137,8 @@ class Utils:
     def fine_target_models(self, config_path, args):
         # print files in the directory
         pre_training_model_paths = []
+        pre_trained_model_name = []
+        contrastive_learning_setting = []
 
         for file in os.listdir(config_path):
             # if file contains EEG_NER_Pre_Training and json file
@@ -152,8 +154,10 @@ class Utils:
                                     # print model_save_path
                                     print("Model matching target parameters saved @", data['model_save_path'])
                                     pre_training_model_paths.append(data['model_save_path'])
+                                    pre_trained_model_name.append(data['model_name'])
+                                    contrastive_learning_setting.append(data['contrastive_learning_setting'])
 
-        return pre_training_model_paths
+        return pre_training_model_paths, pre_trained_model_name
 
 
 
