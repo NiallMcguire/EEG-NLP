@@ -24,6 +24,11 @@ class NER_Estimator:
 
     def fit(self, NE, EEG_segments, Classes):
 
+        if torch.cuda.is_available():
+            device = torch.device("cuda")
+        else:
+            device = torch.device("cpu")
+
 
         EEG_X, named_entity_class = util.NER_padding_x_y(EEG_segments, Classes)
         EEG_X = np.array(EEG_X)
@@ -33,6 +38,24 @@ class NER_Estimator:
         X = np.array(X)
         X = util.NER_reshape_data(X)
         y_categorical = util.encode_labels(y)
+
+        pre_train_model = Networks.SiameseNetwork_v2()
+
+        # train test split
+        X_train, X_test, y_train, y_test = train_test_split(X, y_categorical, test_size=0.2, random_state=42)
+
+        # Convert numpy arrays to PyTorch tensors
+        x_train_tensor = torch.tensor(X_train, dtype=torch.float32)
+        y_train_tensor = torch.tensor(y_train, dtype=torch.float32)  # Assuming your labels are integers
+
+        x_test_tensor = torch.tensor(X_test, dtype=torch.float32)
+        y_test_tensor = torch.tensor(y_test, dtype=torch.float32)  # Assuming your labels are integers
+
+        train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
+        test_dataset = TensorDataset(x_test_tensor, y_test_tensor)
+        train_size = len(train_dataset) - int(len(train_dataset) * 0.2)
+        train_dataset, val_dataset = torch.utils.data.random_split(train_dataset,
+                                                                   [train_size, int(len(train_dataset) * 0.2)])
 
 
 
@@ -56,7 +79,7 @@ if __name__ == "__main__":
     param_grid = {}
 
     pre_training_target_parameters = {}
-    pre_training_target_parameters['contrastive_learning_setting'] = ['EEGtoBERT']  # 'EEGtoBERT'
+    pre_training_target_parameters['contrastive_learning_setting'] = ['EEGtoEEG']  # 'EEGtoBERT'
     pre_training_target_parameters['model_name'] = ['SiameseNetwork_v2']
     list_of_pre_trained_models, pre_trained_model_names, contrastive_learning_setting = util.find_target_models(
         config_save_path, pre_training_target_parameters)
