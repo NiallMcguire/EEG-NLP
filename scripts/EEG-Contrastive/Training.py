@@ -77,6 +77,8 @@ class NER_Estimator:
         test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
         val_loader = DataLoader(dataset=val_dataset, batch_size=32, shuffle=False)
 
+        print("length of train_loader", len(train_loader))
+
         pre_train_model.to(device)
         pre_train_model.eval()
 
@@ -117,8 +119,11 @@ class NER_Estimator:
         val_tensor_dataset = TensorDataset(val_aligned_EEG, val_aligned_y)
         test_tensor_dataset = TensorDataset(test_aligned_EEG, test_aligned_y)
 
+
+
         print('Finished pre-training')
-        print(' Tensors data shape:', aligned_EEG.shape, aligned_y.shape)
+        print('Tensors data shape:', aligned_EEG.shape, aligned_y.shape)
+        print('Tensors data shape:', val_aligned_EEG.shape, val_aligned_y.shape)
 
         train_loader = DataLoader(dataset=train_tensor_dataset, batch_size=32, shuffle=True)
         val_loader = DataLoader(dataset=val_tensor_dataset, batch_size=32, shuffle=False)
