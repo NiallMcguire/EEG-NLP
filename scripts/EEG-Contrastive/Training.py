@@ -73,6 +73,7 @@ class NER_Estimator:
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG, None)
+                print(aligned_EEG_outputs.shape)
                 aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
