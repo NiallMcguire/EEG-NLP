@@ -73,15 +73,115 @@ class NER_Estimator:
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
                 aligned_EEG_outputs = pre_train_model(batch_EEG, None)
-                print(aligned_EEG_outputs.shape)
                 aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
                 aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
-        tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
+        val_aligned_EEG = torch.empty((0, 64)).to(device)
+        val_aligned_y = torch.empty((0, 3)).to(device)
+
+        with torch.no_grad():
+            for batch in val_loader:
+                batch_EEG, batch_y = batch
+                batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
+                aligned_EEG_outputs = pre_train_model(batch_EEG, None)
+                aligned_EEG = torch.cat((val_aligned_EEG, aligned_EEG_outputs), dim=0)
+                aligned_y = torch.cat((val_aligned_y, batch_y), dim=0)
+
+        test_aligned_EEG = torch.empty((0, 64)).to(device)
+        test_aligned_y = torch.empty((0, 3)).to(device)
+
+        with torch.no_grad():
+            for batch in test_loader:
+                batch_EEG, batch_y = batch
+                batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
+                aligned_EEG_outputs = pre_train_model(batch_EEG, None)
+                aligned_EEG = torch.cat((test_aligned_EEG, aligned_EEG_outputs), dim=0)
+                aligned_y = torch.cat((test_aligned_y, batch_y), dim=0)
+
+        train_tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
+        val_tensor_dataset = TensorDataset(val_aligned_EEG, val_aligned_y)
+        test_tensor_dataset = TensorDataset(test_aligned_EEG, test_aligned_y)
 
         print('Finished pre-training')
         print(' Tensors data shape:', aligned_EEG.shape, aligned_y.shape)
 
+        train_loader = DataLoader(dataset=train_tensor_dataset, batch_size=32, shuffle=True)
+        val_loader = DataLoader(dataset=val_tensor_dataset, batch_size=32, shuffle=False)
+        test_loader = DataLoader(dataset=test_tensor_dataset, batch_size=32, shuffle=False)
+
+        model = Networks.BLSTM(aligned_EEG.shape[2], 64, 3, 1, 0.1)
+
+        # Move the model to the GPU if available
+        model.to(device)
+
+        # Define loss function and optimizer
+        criterion = nn.CrossEntropyLoss()
+
+        optimizer = optim.Adam(model.parameters(), lr=0.0001)
+
+
+        patience = 10
+        counter = 0
+        best_val_loss = None
+        loss_over_batches = []
+        for epoch in range(100):
+            model.train()
+            total_loss = 0
+            for batch in train_loader:
+                batch_x, batch_y = batch
+                batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+                optimizer.zero_grad()
+                outputs = model(batch_x)
+
+                # Convert class probabilities to class indices
+                _, predicted = torch.max(outputs, 1)
+
+                loss = criterion(outputs, batch_y.squeeze())  # Ensure target tensor is Long type
+                loss_over_batches.append(loss.item())
+
+                loss.backward()
+                optimizer.step()
+
+                total_loss += loss.item()
+
+            avg_loss = total_loss / len(train_loader)
+            print(f'Epoch [{epoch + 1}/{100}], Loss: {avg_loss:.4f}')
+
+            # early stopping
+            model.eval()
+            with torch.no_grad():
+                val_loss = 0
+                for batch in val_loader:
+                    batch_x, batch_y = batch
+                    batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+                    outputs = model(batch_x)
+                    loss = criterion(outputs, batch_y.squeeze())
+                    val_loss += loss.item()
+                print(f'Validation loss: {val_loss:.4f}')
+                if best_val_loss is None:
+                    best_val_loss = val_loss
+                elif val_loss < best_val_loss:
+                    best_val_loss = val_loss
+                    counter = 0
+                else:
+                    counter += 1
+                    if counter > patience:
+                        print("Early stopping at epoch: ", epoch)
+                        break
+
+
+        model.eval()
+        with torch.no_grad():
+            correct = 0
+            total = 0
+            for batch in test_loader:
+                batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+                outputs = model(batch_x)
+                _, predicted = torch.max(outputs, 1)
+                total += batch_y.size(0)
+                correct += (predicted == torch.argmax(batch_y, 1)).sum().item()
+            print('Accuracy of the model on the test set: {}%'.format(100 * correct / total))
+            #parameters['Accuracy'] = 100 * correct / total
 
 if __name__ == "__main__":
     train_path = r"/users/gxb18167/EEG-NLP/NER.pkl"
