@@ -79,6 +79,7 @@ class NER_Estimator:
         tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
 
         print('Finished pre-training')
+        print(' Tensors data shape:', aligned_EEG.shape, aligned_y.shape)
 
 
 if __name__ == "__main__":
