@@ -62,14 +62,23 @@ class NER_Estimator:
         test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
         val_loader = DataLoader(dataset=val_dataset, batch_size=32, shuffle=False)
 
+        pre_train_model.to(device)
+        pre_train_model.eval()
 
+        aligned_EEG = torch.empty((0, 7, 64)).to(device)
+        aligned_y = torch.empty((0, 3)).to(device)
 
+        with torch.no_grad():
+            for batch in train_loader:
+                batch_EEG, batch_y = batch
+                batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
+                aligned_EEG_outputs = pre_train_model(batch_EEG)
+                aligned_EEG = torch.cat((aligned_EEG, aligned_EEG_outputs), dim=0)
+                aligned_y = torch.cat((aligned_y, batch_y), dim=0)
 
+        tensor_dataset = TensorDataset(aligned_EEG, aligned_y)
 
-
-
-
-
+        print('Finished pre-training')
 
 
 if __name__ == "__main__":
