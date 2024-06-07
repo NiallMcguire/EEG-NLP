@@ -229,7 +229,6 @@ class SiameseNetwork_v2(nn.Module):
             return output1
         else:
             output1 = self.forward_once(input1)
-
             if input2 is not None:
                 output2 = self.forward_twice(input2)
                 return output1, output2
