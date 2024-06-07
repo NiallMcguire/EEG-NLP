@@ -19,7 +19,7 @@ if __name__ == "__main__":
         # if file contains EEG_NER_Pre_Training and json file
         if 'EEG_NER_Pre_Training' in file and '.json' in file:
             #load json file
-            with open(file, 'r') as doc:
+            with open(config_save_path + file, 'r') as doc:
                 data = json.load(doc)
                 # check if the file contains the target parameters
                 for key in target_parameters.keys():
