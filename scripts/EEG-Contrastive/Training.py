@@ -149,7 +149,8 @@ class NER_Estimator:
         counter = 0
         best_val_loss = None
         loss_over_batches = []
-        for epoch in range(100):
+        num_epochs = 1000
+        for epoch in range(num_epochs):
             model.train()
             total_loss = 0
             for batch in train_loader:
@@ -166,7 +167,7 @@ class NER_Estimator:
                 total_loss += loss.item()
 
             avg_loss = total_loss / len(train_loader)
-            print(f'Epoch [{epoch + 1}/{100}], Loss: {avg_loss:.4f}')
+            print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_loss:.4f}')
 
             # early stopping
             model.eval()
@@ -196,7 +197,7 @@ class NER_Estimator:
             correct = 0
             total = 0
             for batch in test_loader:
-                batch_x, batch_NE, batch_y = batch
+                batch_x, batch_y = batch
                 batch_x, batch_y = batch_x.to(device), batch_y.to(device)
                 outputs = model(batch_x)
                 _, predicted = torch.max(outputs, 1)
