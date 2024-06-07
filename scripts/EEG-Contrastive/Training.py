@@ -16,6 +16,21 @@ import torch.nn as nn
 import torch.optim as optim
 import datetime
 
+
+class LinearMLP(nn.Module):
+
+    def __init__(self, input_dim, output_dim):
+        super(LinearMLP, self).__init__()
+        self.fc1 = nn.Linear(input_dim, 64)
+        self.fc2 = nn.Linear(64, output_dim)
+
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+
+
 class NER_Estimator:
     def __init__(self, model_save_path, config_save_path, params):
         self.model_save_path = model_save_path
@@ -109,7 +124,7 @@ class NER_Estimator:
         val_loader = DataLoader(dataset=val_tensor_dataset, batch_size=32, shuffle=False)
         test_loader = DataLoader(dataset=test_tensor_dataset, batch_size=32, shuffle=False)
 
-        model = Networks.BLSTM(aligned_EEG.shape[2], 64, 3, 1, 0.1)
+        model = LinearMLP(64, 3)
 
         # Move the model to the GPU if available
         model.to(device)
