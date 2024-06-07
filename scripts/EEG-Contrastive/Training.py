@@ -24,16 +24,22 @@ class NER_Estimator:
 
     def fit(self, NE, EEG_segments, Classes):
 
-        ner_bert = utils.NER_BERT()
 
         EEG_X, named_entity_class = util.NER_padding_x_y(EEG_segments, Classes)
         EEG_X = np.array(EEG_X)
         EEG_X = util.NER_reshape_data(EEG_X)
 
-        pairs, labels = d.NER_EEGtoEEG_create_paris(EEG_X, named_entity_class, max_positive_pairs, max_negative_pairs)
-        print("Created EEG to EEG pairs of shape: ", pairs.shape)
-        pair_one = pairs[:, 0]
-        pair_two = pairs[:, 1]
+        X, y = util.NER_padding_x_y(train_EEG_segments, train_Classes)
+        X = np.array(X)
+        X = util.NER_reshape_data(X)
+        y_categorical = util.encode_labels(y)
+
+
+
+
+
+
+
 
 
 
@@ -51,7 +57,7 @@ if __name__ == "__main__":
 
     pre_training_target_parameters = {}
     pre_training_target_parameters['contrastive_learning_setting'] = ['EEGtoBERT']  # 'EEGtoBERT'
-    pre_training_target_parameters['model_name'] = ['SiameseNetwork_v1', 'SiameseNetwork_v2', 'SiameseNetwork_v3']
+    pre_training_target_parameters['model_name'] = ['SiameseNetwork_v2']
     list_of_pre_trained_models, pre_trained_model_names, contrastive_learning_setting = util.find_target_models(
         config_save_path, pre_training_target_parameters)
     param_grid['pre_trained_model_path'] = list_of_pre_trained_models
@@ -66,6 +72,7 @@ if __name__ == "__main__":
 
     train_NE, train_EEG_segments, train_Classes = d.NER_read_custom_files(train_path)
 
-    for params in param_combinations:
+    for i in range(1):
+        params = param_combinations[i]
         train_model = NER_Estimator(model_save_path, config_save_path, params)
         train_model.fit(train_NE, train_EEG_segments, train_Classes)
