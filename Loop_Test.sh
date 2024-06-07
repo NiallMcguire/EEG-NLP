@@ -11,13 +11,13 @@
 #SBATCH --export=ALL
 #
 # Run in the gpu partition (queue) with any GPU
-#SBATCH --partition=standard --mem-per-cpu=9600
+#SBATCH --partition=gpu --gres=gpu:A100 --mem-per-cpu=9600
 #
 # Specify project account (replace as required)
 #SBATCH --account=moshfeghi-pmwc
 #
 # Specify (hard) runtime (HH:MM:SS)
-#SBATCH --time=01:00:00
+#SBATCH --time=1:00:00
 #SBATCH --mail-user=niall.mcguire@strath.ac.uk
 #SBATCH --mail-type=END
 # Job name
@@ -42,7 +42,7 @@ module load anaconda/python-3.9.7/2021.11
 
 #Modify the line below to run your program. This is an example
 #=========================================================
-python /users/gxb18167/EEG-NLP/scripts/EEG-Contrastive/Loop_Through_Models.py
+python /users/gxb18167/EEG-NLP/scripts/EEG-Contrastive/Training.py
 
 # Do not change the line below
 #=========================================================
