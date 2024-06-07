@@ -152,16 +152,12 @@ class NER_Estimator:
                 batch_x, batch_y = batch_x.to(device), batch_y.to(device)
                 optimizer.zero_grad()
                 outputs = model(batch_x)
-
                 # Convert class probabilities to class indices
                 _, predicted = torch.max(outputs, 1)
-
                 loss = criterion(outputs, batch_y.squeeze())  # Ensure target tensor is Long type
                 loss_over_batches.append(loss.item())
-
                 loss.backward()
                 optimizer.step()
-
                 total_loss += loss.item()
 
             avg_loss = total_loss / len(train_loader)
@@ -195,6 +191,7 @@ class NER_Estimator:
             correct = 0
             total = 0
             for batch in test_loader:
+                batch_x, batch_NE, batch_y = batch
                 batch_x, batch_y = batch_x.to(device), batch_y.to(device)
                 outputs = model(batch_x)
                 _, predicted = torch.max(outputs, 1)
