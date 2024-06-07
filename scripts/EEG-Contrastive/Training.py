@@ -65,7 +65,7 @@ class NER_Estimator:
         pre_train_model.to(device)
         pre_train_model.eval()
 
-        aligned_EEG = torch.empty((0, 7, 64)).to(device)
+        aligned_EEG = torch.empty((0, 64)).to(device)
         aligned_y = torch.empty((0, 3)).to(device)
 
         with torch.no_grad():
