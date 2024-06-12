@@ -86,7 +86,7 @@ class NER_Estimator:
         aligned_EEG = torch.empty((0, 64)).to(device)
         aligned_y = torch.empty((0, 3)).to(device)
 
-        with torch.no_grad(
+        with torch.no_grad(stuff
             for batch in train_loader:
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
