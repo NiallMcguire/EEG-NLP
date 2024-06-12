@@ -77,6 +77,7 @@ class NER_Estimator:
         test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
         val_loader = DataLoader(dataset=val_dataset, batch_size=32, shuffle=False)
 
+        '''
         print("length of train_loader", len(train_loader))
 
         pre_train_model.to(device)
@@ -85,7 +86,7 @@ class NER_Estimator:
         aligned_EEG = torch.empty((0, 64)).to(device)
         aligned_y = torch.empty((0, 3)).to(device)
 
-        with torch.no_grad():
+        with torch.no_grad(
             for batch in train_loader:
                 batch_EEG, batch_y = batch
                 batch_EEG, batch_y = batch_EEG.to(device), batch_y.to(device)
@@ -133,8 +134,9 @@ class NER_Estimator:
         print("length of train_loader", len(train_loader))
         print("length of val_loader", len(val_loader))
         print("length of test_loader", len(test_loader))
+        '''
 
-        model = LinearMLP(64, 3)
+        model = LinearMLP(7*840, 3)
 
         # Move the model to the GPU if available
         model.to(device)
