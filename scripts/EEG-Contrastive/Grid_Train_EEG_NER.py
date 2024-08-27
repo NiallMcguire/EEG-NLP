@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 
 sys.path.append('/users/gxb18167/EEG-NLP')
 from src import data
-from src import utils
+from src import utils # as utils
 from src import Networks
 from src import Loss
 
